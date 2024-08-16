@@ -16,18 +16,20 @@ import { getResaData } from 'src/lib/resa';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
-import TableNoData from '../table-no-data';
+import { emptyRows } from '../utils';
+// import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
-import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+// import UserTableToolbar from '../user-table-toolbar';
+// import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
 export default function ResaPage() {
   const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
 
   const [order, setOrder] = useState('asc');
 
@@ -35,28 +37,32 @@ export default function ResaPage() {
 
   const [orderBy, setOrderBy] = useState('name');
 
-  const [filterName, setFilterName] = useState('');
+  // const [filterName, setFilterName] = useState('');
 
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
 
   useEffect(() => {
     const getResa = async () => {
-      const resa = await getResaData();
-      console.log(resa);
-      if (resa === 500) {
-        alert('NetWork Error');
+      const params = {
+        page: page + 1, // Adjust page number for the backend (1-based index)
+        limit: rowsPerPage,
+      };
+      const resa = await getResaData(params);
+      if (resa.status === 500) {
+        alert('Network Error');
       } else {
-        setResaData(resa);
+        setResaData(resa.data);
+        setTotalItems(resa.totalItems);
       }
     };
     getResa();
-  }, [setResaData]);
+  }, [page, rowsPerPage]);
 
-  const handleSort = (event, _id) => {
-    const isAsc = orderBy === _id && order === 'asc';
-    if (_id !== '') {
+  const handleSort = (event, id) => {
+    const isAsc = orderBy === id && order === 'asc';
+    if (id !== '') {
       setOrder(isAsc ? 'desc' : 'asc');
-      setOrderBy(_id);
+      setOrderBy(id);
     }
   };
 
@@ -96,18 +102,18 @@ export default function ResaPage() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
+  // const handleFilterByName = (event) => {
+  //   setPage(0);
+  //   setFilterName(event.target.value);
+  // };
 
-  const dataFiltered = applyFilter({
-    inputData: resaData,
-    comparator: getComparator(order, orderBy),
-    filterName,
-  });
+  // const dataFiltered = applyFilter({
+  //   inputData: resaData,
+  //   comparator: getComparator(order, orderBy),
+  //   filterName,
+  // });
 
-  const notFound = !dataFiltered.length && !!filterName;
+  // const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container maxWidth="xl">
@@ -120,11 +126,11 @@ export default function ResaPage() {
       </Stack>
 
       <Card>
-        <UserTableToolbar
+        {/* <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
-        />
+        /> */}
 
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
@@ -175,57 +181,52 @@ export default function ResaPage() {
                 ]}
               />
               <TableBody>
-                {dataFiltered
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row) => (
-                    <UserTableRow
-                      key={row._id}
-                      id={row._id}
-                      dossier_no={row.dossier_no}
-                      service_type={row.service_type}
-                      arb_dep={row.arb_dep}
-                      client={row.client}
-                      agency={row.agency}
-                      from={row.from}
-                      hotel={row.hotel}
-                      htl_region={row.htl_region}
-                      service_date={row.service_date}
-                      endofservice={row.endofservice}
-                      no_of_ngts={row.no_of_ngts}
-                      adult={row.adult}
-                      child={row.child}
-                      infant={row.infant}
-                      teen={row.teen}
-                      free={row.free}
-                      flight_no={row.flight_no}
-                      flight_time={row.flight_time}
-                      resa_remark={row.resa_remark}
-                      service={row.service}
-                      service_detail={row.service_detail}
-                      adult_price={row.adult_price}
-                      child_price={row.child_price}
-                      teen_price={row.teen_price}
-                      total_price={row.total_price}
-                      discount={row.discount}
-                      net_price={row.net_price}
-                      cash_credit={row.cash_credit}
-                      cur={row.cur}
-                      roe={row.roe}
-                      invoce_on={row.invoce_on}
-                      status={row.status}
-                      effect_date={row.effect_date}
-                      inv_no={row.inv_no}
-                      selected={selected.indexOf(row.id) !== -1}
-                      handleClick={(event) => handleClick(event, row.id)}
-                    />
-                  ))}
+                {resaData.map((row) => (
+                  <UserTableRow
+                    key={row._id}
+                    id={row._id}
+                    dossier_no={row.dossier_no}
+                    service_type={row.service_type}
+                    arb_dep={row.arb_dep}
+                    client={row.client}
+                    agency={row.agency}
+                    from={row.from}
+                    hotel={row.hotel}
+                    htl_region={row.htl_region}
+                    service_date={row.service_date}
+                    endofservice={row.endofservice}
+                    no_of_ngts={row.no_of_ngts}
+                    adult={row.adult}
+                    child={row.child}
+                    infant={row.infant}
+                    teen={row.teen}
+                    free={row.free}
+                    flight_no={row.flight_no}
+                    flight_time={row.flight_time}
+                    resa_remark={row.resa_remark}
+                    service={row.service}
+                    service_detail={row.service_detail}
+                    adult_price={row.adult_price}
+                    child_price={row.child_price}
+                    teen_price={row.teen_price}
+                    total_price={row.total_price}
+                    discount={row.discount}
+                    net_price={row.net_price}
+                    cash_credit={row.cash_credit}
+                    cur={row.cur}
+                    roe={row.roe}
+                    invoce_on={row.invoce_on}
+                    status={row.status}
+                    effect_date={row.effect_date}
+                    inv_no={row.inv_no}
+                    selected={selected.indexOf(row.id) !== -1}
+                    handleClick={(event) => handleClick(event, row.id)}
+                  />
+                ))}
 
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, resaData.length)}
-                />
+                <TableEmptyRows height={77} emptyRows={emptyRows(page, rowsPerPage, totalItems)} />
 
-                {notFound && <TableNoData query={filterName} />}
+                {/* {notFound && <TableNoData query={filterName} />} */}
               </TableBody>
             </Table>
           </TableContainer>
@@ -234,10 +235,10 @@ export default function ResaPage() {
         <TablePagination
           page={page}
           component="div"
-          count={resaData.length}
+          count={totalItems}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
