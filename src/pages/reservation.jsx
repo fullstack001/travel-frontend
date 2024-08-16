@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from 'src/sections/user/view';
+import { ResaView } from 'src/sections/resa/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function ReservationPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Reservations </title>
       </Helmet>
 
-      <UserView />
+      <ResaView />
     </>
   );
 }

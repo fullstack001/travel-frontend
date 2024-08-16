@@ -3,16 +3,17 @@ import { useState } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { users } from 'src/_mock/user';
+// import { users } from 'src/_mock/user';
+import { getDailyData } from 'src/lib/resa';
 
-import Iconify from 'src/components/iconify';
+// import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
 import TableNoData from '../table-no-data';
@@ -24,7 +25,8 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function DailyPlanningPage() {
+  const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -37,6 +39,18 @@ export default function UserPage() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
+  // useEffect(() => {
+  //   const getResa = async () => {
+  //     const resa = await getResaData();
+  //     if (resa === 500) {
+  //       alert('NetWork Error');
+  //     } else {
+  //       setResaData(resa);
+  //     }
+  //   };
+  //   getResa();
+  // }, [setResaData]);
+
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -47,18 +61,18 @@ export default function UserPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = users.map((n) => n.name);
+      const newSelecteds = resaData.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
     let newSelected = [];
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, id);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -87,21 +101,32 @@ export default function UserPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: users,
+    inputData: resaData,
     comparator: getComparator(order, orderBy),
     filterName,
   });
 
+  const handleDailyData = async (date) => {
+    console.log(date);
+    const resa = await getDailyData(date);
+    console.log(resa);
+    if (resa === 500) {
+      alert('NetWork Error');
+    } else {
+      setResaData(resa);
+    }
+  };
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container>
+    <Container maxWidth="xl">
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">Daily Planning</Typography>
 
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
-        </Button>
+        {/* <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+          New Reservation
+        </Button> */}
       </Stack>
 
       <Card>
@@ -109,6 +134,7 @@ export default function UserPage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          onGetDate={handleDailyData}
         />
 
         <Scrollbar>
@@ -117,17 +143,27 @@ export default function UserPage() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
+                rowCount={resaData.length}
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
-                  { id: '' },
+                  { id: 'client', label: 'Client Name' },
+                  { id: 'from', label: 'From' },
+                  { id: 'hotel', label: 'To' },
+                  { id: 'service_type', label: 'Service Type' },
+                  { id: 'service_date', label: 'Date Service' },
+                  { id: 'arb_dep', label: 'Arv / Dep' },
+                  { id: 'flight_no', label: 'Flight No' },
+                  { id: 'flight_time', label: 'flgt Time' },
+                  { id: 'pickup_time', label: 'Pick up Time' },
+                  { id: 'no_of_ngts', label: 'Refrence No' },
+                  { id: 'agency', label: 'Agency', align: 'center' },
+                  { id: 'adult', label: 'Adult' },
+                  { id: 'driver', label: 'Driver' },
+                  { id: 'guid', label: 'Guid' },
+                  { id: 'remarks', label: 'Remarks' },
+                  { id: '', label: '' },
                 ]}
               />
               <TableBody>
@@ -135,21 +171,31 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      key={row.id}
-                      name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
-                      avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event) => handleClick(event, row.name)}
+                      key={row._id}
+                      id={row._id}
+                      client={row.client}
+                      from={row.from}
+                      hotel={row.hotel}
+                      service_type={row.service_type}
+                      service_date={row.service_date}
+                      arb_dep={row.arb_dep}
+                      flight_no={row.flight_no}
+                      flight_time={row.flight_time}
+                      pickup_time="Pickup time"
+                      no_of_ngts={row.no_of_ngts}
+                      agency={row.agency}
+                      adult={row.adult}
+                      driver="Driver"
+                      guid="Guid"
+                      remarks={row.resa_remark}
+                      selected={selected.indexOf(row.id) !== -1}
+                      handleClick={(event) => handleClick(event, row.id)}
                     />
                   ))}
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, resaData.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -161,10 +207,10 @@ export default function UserPage() {
         <TablePagination
           page={page}
           component="div"
-          count={users.length}
+          count={resaData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[5, 10, 25, 50, 100]}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>

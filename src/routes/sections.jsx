@@ -7,7 +7,8 @@ import DashboardLayout from 'src/layouts/dashboard';
 
 export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
+export const ReservationPage = lazy(() => import('src/pages/reservation'));
+export const DailyPlanningPage = lazy(() => import('src/pages/daily-plannig'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const LogoutPage = lazy(() => import('src/pages/logout'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
@@ -39,7 +40,8 @@ export default function Router() {
       ),
       children: [
         { element: <PrivateRoute element={<IndexPage />} />, index: true },
-        { path: 'user', element: <PrivateRoute element={<UserPage />} /> },
+        { path: 'reservation', element: <PrivateRoute element={<ReservationPage />} /> },
+        { path: 'daily-planning', element: <PrivateRoute element={<DailyPlanningPage />} /> },
         { path: 'products', element: <PrivateRoute element={<ProductsPage />} /> },
         { path: 'blog', element: <PrivateRoute element={<BlogPage />} /> },
         { path: 'logout', element: <PrivateRoute element={<LogoutPage />} /> },
