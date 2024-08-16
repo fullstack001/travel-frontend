@@ -1,8 +1,13 @@
 import axios from 'axios';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+const requestAddress = import.meta.env.VITE_API_URL_ADDRESS;
 
 export const getResaData = async () => {
   try {
-    const records = await axios.get(`http://127.0.0.1:5005/api/resa/getresadata`);
+    const records = await axios.get(`${requestAddress}/api/resa/getresadata`);
     return records.data;
   } catch (error) {
     return 500;
@@ -11,7 +16,9 @@ export const getResaData = async () => {
 
 export const getDailyData = async (date) => {
   try {
-    const records = await axios.post(`http://127.0.0.1:5005/api/resa/getdailydata`, { date });
+    const records = await axios.post(`${requestAddress}/api/resa/getdailydata`, {
+      date,
+    });
     return records.data;
   } catch (error) {
     return 500;

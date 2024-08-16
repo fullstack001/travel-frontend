@@ -137,6 +137,7 @@ export default function ResaPage() {
                 onRequestSort={handleSort}
                 onSelectAllClick={handleSelectAllClick}
                 headLabel={[
+                  { id: 'dossier_no', label: 'Dossier No' },
                   { id: 'service_type', label: 'Service Type' },
                   { id: 'arb_dep', label: 'Arv / Dep' },
                   { id: 'client', label: 'Client ' },

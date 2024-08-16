@@ -74,6 +74,13 @@ export default function UserTableRow({
 
         <TableCell component="th" scope="row">
           <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {dossier_no}
+            </Typography>
+          </Stack>
+        </TableCell>
+        <TableCell component="th" scope="row">
+          <Stack direction="row" alignItems="center" spacing={2}>
             {/* <Avatar alt={name} src={avatarUrl} /> */}
             <Typography variant="subtitle2" noWrap>
               {service_type}
