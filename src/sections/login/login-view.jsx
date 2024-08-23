@@ -120,10 +120,13 @@ export default function LoginView() {
           sx={{
             p: 5,
             width: 1,
-            maxWidth: 420,
+            maxWidth: 700,
+            text: 'center',
           }}
         >
-          <Typography variant="h4">Sign in to Escapadezanzibar Booking management</Typography>
+          <Typography variant="h4" alignItems="center" justifyContent="center">
+            Sign in to Escapadezanzibar Booking management
+          </Typography>
 
           {/* <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Don’t have an account?

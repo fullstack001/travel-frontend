@@ -14,6 +14,14 @@ import IconButton from '@mui/material/IconButton';
 // import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
+function formatDateToString(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = d.getFullYear();
+  return `${year}-${month}-${day}`;
+}
+
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
@@ -64,7 +72,7 @@ export default function UserTableRow({
         <TableCell>{from}</TableCell>
         <TableCell>{hotel}</TableCell>
         <TableCell>{service_type}</TableCell>
-        <TableCell>{service_date}</TableCell>
+        <TableCell>{formatDateToString(service_date)}</TableCell>
         <TableCell>{arb_dep}</TableCell>
         <TableCell>{flight_no}</TableCell>
         <TableCell>{flight_time}</TableCell>

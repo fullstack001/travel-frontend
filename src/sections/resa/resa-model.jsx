@@ -86,14 +86,6 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
     return `${hours}:${minutes}`;
   };
 
-  function formatDateToString(date) {
-    const d = new Date(date);
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const year = d.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
-
   function formatTimeToString(time) {
     const d = new Date(time);
     let hours = d.getHours();
@@ -119,34 +111,15 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    // let formattedValue = value;
-
-    // if (type === 'date') {
-    //   const date = new Date(value);
-    //   formattedValue = date.toLocaleDateString('en-GB'); // dd/mm/YYYY
-    // } else if (type === 'time') {
-    //   const time = new Date(`1970-01-01T${value}:00Z`);
-    //   formattedValue = time.toLocaleTimeString('en-US', {
-    //     hour: '2-digit',
-    //     minute: '2-digit',
-    //     hour12: true,
-    //   }); // hh:mm AM/PM
-    // }
-
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSave = () => {
     const savedData = formData;
     Object.entries(savedData).forEach(([key, value]) => {
-      if (value instanceof Date) {
-        // Check if it's a date and format accordingly
-        savedData[key] = formatDateToString(value);
-      } else {
-        const time = Date.parse(`1970-01-01T${value}`);
-        if (!Number.isNaN(time)) {
-          savedData[key] = formatTimeToString(value);
-        }
+      const time = Date.parse(`1970-01-01T${value}`);
+      if (!Number.isNaN(time)) {
+        savedData[key] = formatTimeToString(value);
       }
     });
 

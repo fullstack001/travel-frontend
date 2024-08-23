@@ -1,4 +1,4 @@
-// import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -15,16 +15,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import Iconify from 'src/components/iconify';
 
-// import Iconify from 'src/components/iconify';
-
 // ----------------------------------------------------------------------
 
 export default function UserTableToolbar({ onGetDate, NewAction, showButton }) {
   const [open, setOpen] = useState(null);
 
   const handleDateChange = (newDate) => {
-    const formattedDate = newDate.format('MM/DD/YYYY');
-    onGetDate(formattedDate);
+    const dateObject = dayjs(newDate).toDate();
+    console.log(dateObject);
+    onGetDate(dateObject);
   };
 
   const handleOpenMenu = (event) => {
@@ -44,7 +43,7 @@ export default function UserTableToolbar({ onGetDate, NewAction, showButton }) {
           justifyContent: 'space-between',
           p: (theme) => theme.spacing(0, 1, 0, 3),
           color: 'primary.main',
-          bgcolor: 'primary.lighter',
+          bgcolor: '#aaf4ff',
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>

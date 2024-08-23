@@ -14,6 +14,14 @@ import IconButton from '@mui/material/IconButton';
 // import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
+function formatDateToString(date) {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const year = d.getFullYear();
+  return `${year}-${month}-${day}`;
+}
+
 // ----------------------------------------------------------------------
 
 export default function UserTableRow({
@@ -108,8 +116,8 @@ export default function UserTableRow({
         <TableCell>{from}</TableCell>
         <TableCell>{hotel}</TableCell>
         <TableCell>{htl_region}</TableCell>
-        <TableCell>{service_date}</TableCell>
-        <TableCell>{endofservice}</TableCell>
+        <TableCell>{formatDateToString(service_date)}</TableCell>
+        <TableCell>{formatDateToString(endofservice)}</TableCell>
         <TableCell>{no_of_ngts}</TableCell>
         <TableCell>{adult}</TableCell>
         <TableCell>{child}</TableCell>
@@ -132,7 +140,7 @@ export default function UserTableRow({
         <TableCell>{roe}</TableCell>
         <TableCell>{invoce_on}</TableCell>
         <TableCell>{status}</TableCell>
-        <TableCell>{effect_date}</TableCell>
+        <TableCell>{formatDateToString(effect_date)}</TableCell>
         <TableCell>{inv_no}</TableCell>
       </TableRow>
 
