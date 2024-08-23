@@ -53,7 +53,8 @@ export default function UserTableRow({
   status,
   effect_date,
   inv_no,
-  handleClick,
+  editAction,
+  deleteAction,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -65,9 +66,23 @@ export default function UserTableRow({
     setOpen(null);
   };
 
+  const handleEdit = () => {
+    editAction();
+    setOpen(null);
+  };
+  const handleDelete = () => {
+    deleteAction();
+    setOpen(null);
+  };
+
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+        <TableCell align="right">
+          <IconButton onClick={handleOpenMenu}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
         {/* <TableCell padding="checkbox">
           <Checkbox disableRipple checked={selected} onChange={handleClick} />
         </TableCell> */}
@@ -119,30 +134,24 @@ export default function UserTableRow({
         <TableCell>{status}</TableCell>
         <TableCell>{effect_date}</TableCell>
         <TableCell>{inv_no}</TableCell>
-
-        <TableCell align="right">
-          <IconButton onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
-        </TableCell>
       </TableRow>
 
       <Popover
         open={!!open}
         anchorEl={open}
         onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'top', horizontal: 'right' }}
         PaperProps={{
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleEdit}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
@@ -188,5 +197,6 @@ UserTableRow.propTypes = {
   effect_date: PropTypes.any,
   inv_no: PropTypes.any,
   selected: PropTypes.any,
-  handleClick: PropTypes.func,
+  editAction: PropTypes.func,
+  deleteAction: PropTypes.func,
 };

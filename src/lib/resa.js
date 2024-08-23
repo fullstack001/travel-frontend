@@ -14,6 +14,24 @@ export const getResaData = async (params) => {
   }
 };
 
+export const putResaData = async (data) => {
+  try {
+    const records = await axios.post(`${requestAddress}/api/resa/putresadata`, data);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};
+
+export const deleteData = async (data) => {
+  try {
+    const records = await axios.post(`${requestAddress}/api/resa/deletedata`, data);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};
+
 export const getDailyData = async (date) => {
   try {
     const records = await axios.post(`${requestAddress}/api/resa/getdailydata`, {

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
-// import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
@@ -13,9 +12,9 @@ import TablePagination from '@mui/material/TablePagination';
 // import { users } from 'src/_mock/user';
 import { getDailyData } from 'src/lib/resa';
 
-// import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 
+import ResaModal from '../resa-model';
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
@@ -28,28 +27,14 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 export default function DailyPlanningPage() {
   const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('asc');
-
   const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState('name');
-
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // useEffect(() => {
-  //   const getResa = async () => {
-  //     const resa = await getResaData();
-  //     if (resa === 500) {
-  //       alert('NetWork Error');
-  //     } else {
-  //       setResaData(resa);
-  //     }
-  //   };
-  //   getResa();
-  // }, [setResaData]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
+  const [current, setCurrent] = useState(null);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -66,24 +51,6 @@ export default function DailyPlanningPage() {
       return;
     }
     setSelected([]);
-  };
-
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -107,7 +74,7 @@ export default function DailyPlanningPage() {
   });
 
   const handleDailyData = async (date) => {
-    console.log(date);
+    setCurrent(date);
     const resa = await getDailyData(date);
     console.log(resa);
     if (resa === 500) {
@@ -117,16 +84,41 @@ export default function DailyPlanningPage() {
     }
   };
 
+  const handleNewReservation = () => {
+    setCurrentRow(null); // Clear current row data
+    setIsModalOpen(true); // Open modal
+  };
+
+  const handleEdit = (rowData) => {
+    setCurrentRow(rowData); // Set current row data
+    setIsModalOpen(true); // Open modal
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSave = (formData) => {
+    if (currentRow) {
+      // Update existing reservation
+      const updatedData = resaData.map((row) => (row._id === currentRow._id ? formData : row));
+      setResaData(updatedData);
+    } else {
+      // Add new reservation
+      setResaData([...resaData, { ...formData, _id: new Date().getTime() }]);
+    }
+  };
+
+  const handleDelete = (data) => {
+    console.log(data);
+  };
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Daily Planning</Typography>
-
-        {/* <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Reservation
-        </Button> */}
       </Stack>
 
       <Card>
@@ -135,6 +127,8 @@ export default function DailyPlanningPage() {
           filterName={filterName}
           onFilterName={handleFilterByName}
           onGetDate={handleDailyData}
+          showButton={current}
+          NewAction={handleNewReservation}
         />
 
         <Scrollbar>
@@ -188,8 +182,8 @@ export default function DailyPlanningPage() {
                       driver="Driver"
                       guid="Guid"
                       remarks={row.resa_remark}
-                      selected={selected.indexOf(row.id) !== -1}
-                      handleClick={(event) => handleClick(event, row.id)}
+                      deleteAction={() => handleDelete(row)}
+                      editAction={() => handleEdit(row)}
                     />
                   ))}
 
@@ -214,6 +208,13 @@ export default function DailyPlanningPage() {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>
+
+      <ResaModal
+        open={isModalOpen}
+        onClose={handleModalClose}
+        onSave={handleModalSave}
+        initialData={currentRow}
+      />
     </Container>
   );
 }

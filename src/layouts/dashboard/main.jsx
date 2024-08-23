@@ -20,6 +20,7 @@ export default function Main({ children, sx, ...other }) {
         flexGrow: 1,
         minHeight: 1,
         display: 'flex',
+        paddingBottom: '0 !important',
         flexDirection: 'column',
         py: `${HEADER.H_MOBILE + SPACING}px`,
         ...(lgUp && {

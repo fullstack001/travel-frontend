@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
 // import Checkbox from '@mui/material/Checkbox';
 import TableHead from '@mui/material/TableHead';
@@ -8,6 +9,13 @@ import TableCell from '@mui/material/TableCell';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
 import { visuallyHidden } from './utils';
+
+const StickyTableHead = styled(TableHead)(({ theme }) => ({
+  position: 'sticky',
+  top: 0,
+  backgroundColor: '#ddf4ff',
+  zIndex: theme.zIndex.appBar,
+}));
 
 // ----------------------------------------------------------------------
 
@@ -25,22 +33,18 @@ export default function UserTableHead({
   };
 
   return (
-    <TableHead>
+    <StickyTableHead>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell> */}
-
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
             align={headCell.align || 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
-            sx={{ width: headCell.width, minWidth: headCell.minWidth }}
+            sx={{
+              width: headCell.width,
+              minWidth: headCell.minWidth,
+              backgroundColor: '#aaf4ff',
+            }}
           >
             <TableSortLabel
               hideSortIcon
@@ -58,7 +62,7 @@ export default function UserTableHead({
           </TableCell>
         ))}
       </TableRow>
-    </TableHead>
+    </StickyTableHead>
   );
 }
 
