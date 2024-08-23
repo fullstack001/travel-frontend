@@ -44,6 +44,10 @@ export default function UserTableHead({
               width: headCell.width,
               minWidth: headCell.minWidth,
               backgroundColor: '#aaf4ff',
+              whiteSpace: 'nowrap', // Prevents text wrapping
+              overflow: 'hidden', // Ensures that text is clipped if it overflows
+              textOverflow: 'ellipsis', // Adds ellipsis if text overflows
+              padding: '8px', // Adjust padding as needed
             }}
           >
             <TableSortLabel
