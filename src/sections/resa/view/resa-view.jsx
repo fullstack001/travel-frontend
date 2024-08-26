@@ -220,7 +220,6 @@ export default function ResaPage() {
                 { id: 'child_price', label: 'Child Price' },
                 { id: 'teen_price', label: 'Teen Price' },
                 { id: 'total_price', label: 'Total Price' },
-                { id: 'discount', label: 'Discount' },
                 { id: 'net_price', label: 'Net Price' },
                 { id: 'cash_credit', label: 'Cash / Credit' },
                 { id: 'cur', label: 'Cur' },
@@ -261,7 +260,6 @@ export default function ResaPage() {
                   child_price={row.child_price}
                   teen_price={row.teen_price}
                   total_price={row.total_price}
-                  discount={row.discount}
                   net_price={row.net_price}
                   cash_credit={row.cash_credit}
                   cur={row.cur}

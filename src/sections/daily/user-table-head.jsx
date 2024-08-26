@@ -1,13 +1,20 @@
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
+import { styled } from '@mui/material/styles';
 import TableRow from '@mui/material/TableRow';
-// import Checkbox from '@mui/material/Checkbox';
 import TableHead from '@mui/material/TableHead';
 import TableCell from '@mui/material/TableCell';
 import TableSortLabel from '@mui/material/TableSortLabel';
 
 import { visuallyHidden } from './utils';
+
+const StickyTableHead = styled(TableHead)(({ theme }) => ({
+  position: 'sticky',
+  top: 0,
+  backgroundColor: '#ddf4ff',
+  zIndex: theme.zIndex.appBar,
+}));
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +32,7 @@ export default function UserTableHead({
   };
 
   return (
-    <TableHead>
+    <StickyTableHead>
       <TableRow>
         {/* <TableCell padding="checkbox">
           <Checkbox
@@ -68,7 +75,7 @@ export default function UserTableHead({
           </TableCell>
         ))}
       </TableRow>
-    </TableHead>
+    </StickyTableHead>
   );
 }
 

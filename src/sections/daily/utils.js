@@ -1,3 +1,7 @@
+import 'jspdf-autotable';
+import jsPDF from 'jspdf';
+import * as XLSX from 'xlsx';
+
 export const visuallyHidden = {
   border: 0,
   margin: -1,
@@ -54,3 +58,105 @@ export function applyFilter({ inputData, comparator, filterName }) {
 
   return inputData;
 }
+
+export const handleExportExcel = (resaData) => {
+  // Create a new workbook and a new worksheet
+  const workbook = XLSX.utils.book_new();
+  const worksheetData = [
+    [
+      'Client Name',
+      'From',
+      'To',
+      'Service Type',
+      'Date Service',
+      'Arv / Dep',
+      'Flight No',
+      'Flight Time',
+      'Pick up Time',
+      'Reference No',
+      'Agency',
+      'Adult',
+      'Driver',
+      'Guid',
+      'Remarks',
+    ],
+    ...resaData.map((row) => [
+      row.client,
+      row.from,
+      row.hotel,
+      row.service_type,
+      row.service_date,
+      row.arb_dep,
+      row.flight_no,
+      row.flight_time,
+      row.pickup_time,
+      row.no_of_ngts,
+      row.agency,
+      row.adult,
+      row.driver,
+      row.guid,
+      row.resa_remark,
+    ]),
+  ];
+  const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+  // Append the worksheet to the workbook
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Planning');
+
+  // Export the workbook to Excel
+  XLSX.writeFile(workbook, 'daily_planning.xlsx');
+};
+
+export const handleExportPdf = (resaData) => {
+  const doc = new jsPDF({
+    orientation: 'landscape', // Change orientation to landscape
+    unit: 'pt', // Unit: 'pt' (points), 'mm', 'cm', 'in'
+    format: [1500, 600], // Custom width and height in points
+  });
+  // Define the columns
+  const columns = [
+    { header: 'Client Name', dataKey: 'client' },
+    { header: 'From', dataKey: 'from' },
+    { header: 'To', dataKey: 'hotel' },
+    { header: 'Service Type', dataKey: 'service_type' },
+    { header: 'Date Service', dataKey: 'service_date' },
+    { header: 'Arv / Dep', dataKey: 'arb_dep' },
+    { header: 'Flight No', dataKey: 'flight_no' },
+    { header: 'Flight Time', dataKey: 'flight_time' },
+    { header: 'Pick up Time', dataKey: 'pickup_time' },
+    { header: 'Reference No', dataKey: 'no_of_ngts' },
+    { header: 'Agency', dataKey: 'agency' },
+    { header: 'Adult', dataKey: 'adult' },
+    { header: 'Driver', dataKey: 'driver' },
+    { header: 'Guid', dataKey: 'guid' },
+    { header: 'Remarks', dataKey: 'remarks' },
+  ];
+
+  // Map data to rows
+  const rows = resaData.map((row) => ({
+    client: row.client,
+    from: row.from,
+    hotel: row.hotel,
+    service_type: row.service_type,
+    service_date: row.service_date,
+    arb_dep: row.arb_dep,
+    flight_no: row.flight_no,
+    flight_time: row.flight_time,
+    pickup_time: row.pickup_time,
+    no_of_ngts: row.no_of_ngts,
+    agency: row.agency,
+    adult: row.adult,
+    driver: row.driver,
+    guid: row.guid,
+    remarks: row.resa_remark,
+  }));
+
+  // Add table to the PDF
+  doc.autoTable({
+    head: [columns.map((col) => col.header)],
+    body: rows.map((row) => columns.map((col) => row[col.dataKey])),
+  });
+
+  // Save the PDF
+  doc.save('daily_planning.pdf');
+};

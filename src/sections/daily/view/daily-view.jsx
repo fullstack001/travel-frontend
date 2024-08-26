@@ -20,7 +20,13 @@ import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, applyFilter, getComparator } from '../utils';
+import {
+  emptyRows,
+  applyFilter,
+  getComparator,
+  handleExportPdf,
+  handleExportExcel,
+} from '../utils';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +37,7 @@ export default function DailyPlanningPage() {
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(15);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const [current, setCurrent] = useState(null);
@@ -113,6 +119,14 @@ export default function DailyPlanningPage() {
     console.log(data);
   };
 
+  const handlePdf = () => {
+    handleExportPdf(resaData);
+  };
+
+  const handleExcel = () => {
+    handleExportExcel(resaData);
+  };
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
@@ -129,10 +143,12 @@ export default function DailyPlanningPage() {
           onGetDate={handleDailyData}
           showButton={current}
           NewAction={handleNewReservation}
+          pdfAction={handlePdf}
+          excelAction={handleExcel}
         />
 
         <Scrollbar>
-          <TableContainer sx={{ overflow: 'unset' }}>
+          <TableContainer sx={{ overflow: 'auto', height: '76vh' }}>
             <Table sx={{ minWidth: 800 }}>
               <UserTableHead
                 order={order}
@@ -204,7 +220,7 @@ export default function DailyPlanningPage() {
           count={resaData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25, 50, 100]}
+          rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>

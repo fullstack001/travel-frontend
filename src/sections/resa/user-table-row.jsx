@@ -15,6 +15,7 @@ import IconButton from '@mui/material/IconButton';
 import Iconify from 'src/components/iconify';
 
 function formatDateToString(date) {
+  if (!date) return '';
   const d = new Date(date);
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
@@ -52,7 +53,6 @@ export default function UserTableRow({
   child_price,
   teen_price,
   total_price,
-  discount,
   net_price,
   cash_credit,
   cur,
@@ -133,7 +133,6 @@ export default function UserTableRow({
         <TableCell>{child_price}</TableCell>
         <TableCell>{teen_price}</TableCell>
         <TableCell>{total_price}</TableCell>
-        <TableCell>{discount}</TableCell>
         <TableCell>{net_price}</TableCell>
         <TableCell>{cash_credit}</TableCell>
         <TableCell>{cur}</TableCell>
@@ -195,7 +194,6 @@ UserTableRow.propTypes = {
   child_price: PropTypes.any,
   teen_price: PropTypes.any,
   total_price: PropTypes.any,
-  discount: PropTypes.any,
   net_price: PropTypes.any,
   cash_credit: PropTypes.any,
   cur: PropTypes.any,

@@ -17,7 +17,13 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ onGetDate, NewAction, showButton }) {
+export default function UserTableToolbar({
+  onGetDate,
+  NewAction,
+  showButton,
+  pdfAction,
+  excelAction,
+}) {
   const [open, setOpen] = useState(null);
 
   const handleDateChange = (newDate) => {
@@ -31,6 +37,16 @@ export default function UserTableToolbar({ onGetDate, NewAction, showButton }) {
   };
 
   const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const exportPdf = () => {
+    pdfAction();
+    setOpen(null);
+  };
+
+  const exportExcel = () => {
+    excelAction();
     setOpen(null);
   };
 
@@ -92,12 +108,12 @@ export default function UserTableToolbar({ onGetDate, NewAction, showButton }) {
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={exportPdf}>
           {/* <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} /> */}
           PDF
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={exportExcel} sx={{ color: 'error.main' }}>
           {/* <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} /> */}
           EXCEL
         </MenuItem>
@@ -110,4 +126,6 @@ UserTableToolbar.propTypes = {
   onGetDate: PropTypes.func,
   NewAction: PropTypes.func,
   showButton: PropTypes.any,
+  pdfAction: PropTypes.func,
+  excelAction: PropTypes.func,
 };

@@ -24,7 +24,6 @@ const initData = {
   client: '',
   cur: '',
   date: '',
-  discount: '',
   dossier_no: '',
   effect_date: '',
   endofservice: '',
@@ -402,16 +401,7 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Discount"
-                name="discount"
-                value={formData.discount}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
+
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Cash/Credit"
