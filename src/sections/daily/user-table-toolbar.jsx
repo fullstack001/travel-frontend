@@ -65,7 +65,6 @@ export default function UserTableToolbar({
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Select Date"
-            // value={selectedDate}
             onChange={handleDateChange}
             renderInput={(params) => <TextField {...params} />}
           />

@@ -42,3 +42,21 @@ export const getDailyData = async (date) => {
     return 500;
   }
 };
+
+export const putDailyData = async (data) => {
+  try {
+    const records = await axios.post(`${requestAddress}/api/resa/putdailydata`, data);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};
+
+export const deleteDailyData = async (data) => {
+  try {
+    const records = await axios.post(`${requestAddress}/api/resa/deletedailydata`, data);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};

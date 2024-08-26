@@ -13,47 +13,47 @@ import {
   DialogActions,
 } from '@mui/material';
 
+const initData = {
+  adult: '',
+  adult_price: '',
+  agency: '',
+  arb_dep: '',
+  cash_credit: '',
+  child: '',
+  child_price: '',
+  client: '',
+  cur: '',
+  date: '',
+  dossier_no: '',
+  effect_date: '',
+  endofservice: '',
+  flight_no: '',
+  flight_time: '',
+  free: '',
+  from: '',
+  hotel: '',
+  htl_region: '',
+  infant: '',
+  inv_no: '',
+  invoce_on: '',
+  net_price: '',
+  no_of_ngts: '',
+  resa_remark: '',
+  roe: '',
+  service: '',
+  service_date: '',
+  service_detail: '',
+  service_type: '',
+  status: '',
+  teen: '',
+  teen_price: '',
+  total_price: '',
+  driver: '',
+  _id: '',
+};
+
 export default function ResaModal({ open, onClose, onSave, initialData }) {
-  const [formData, setFormData] = useState(
-    initialData || {
-      adult: '',
-      adult_price: '',
-      agency: '',
-      arb_dep: '',
-      cash_credit: '',
-      child: '',
-      child_price: '',
-      client: '',
-      cur: '',
-      date: '',
-      discount: '',
-      dossier_no: '',
-      effect_date: '',
-      endofservice: '',
-      flight_no: '',
-      flight_time: '',
-      free: '',
-      from: '',
-      hotel: '',
-      htl_region: '',
-      infant: '',
-      inv_no: '',
-      invoce_on: '',
-      net_price: '',
-      no_of_ngts: '',
-      resa_remark: '',
-      roe: '',
-      service: '',
-      service_date: '',
-      service_detail: '',
-      service_type: '',
-      status: '',
-      teen: '',
-      teen_price: '',
-      total_price: '',
-      _id: '',
-    }
-  );
+  const [formData, setFormData] = useState(initData);
 
   const formatDate = (dateString) => {
     if (!dateString) return '';
@@ -86,6 +86,15 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
     return `${hours}:${minutes}`;
   };
 
+  function formatTimeToString(time) {
+    const d = new Date(time);
+    let hours = d.getHours();
+    const minutes = String(d.getMinutes()).padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert to 12-hour format
+    return `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+  }
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -93,8 +102,11 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
         service_date: formatDate(initialData.service_date),
         endofservice: formatDate(initialData.endofservice),
         flight_time: formatTime(initialData.flight_time),
-        invoce_on: formatDate(initialData.invoce_on),
+        effect_date: formatDate(initialData.effect_date),
+        driver: initialData.driver ? initialData.driver : '',
       });
+    } else {
+      setFormData(initData);
     }
   }, [initialData]);
 
@@ -104,7 +116,15 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
   };
 
   const handleSave = () => {
-    onSave(formData);
+    const savedData = formData;
+    Object.entries(savedData).forEach(([key, value]) => {
+      const time = Date.parse(`1970-01-01T${value}`);
+      if (!Number.isNaN(time)) {
+        savedData[key] = formatTimeToString(time);
+      }
+    });
+
+    onSave(savedData);
     onClose();
   };
 
@@ -125,6 +145,7 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
                 name="dossier_no"
                 value={formData.dossier_no}
                 onChange={handleChange}
+                type="number"
                 fullWidth
                 variant="outlined"
               />
@@ -425,9 +446,9 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Invoice On"
-                name="invoce_on"
-                value={formData.invoce_on}
+                label="Effect Date"
+                name="effect_date"
+                value={formData.effect_date}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -450,6 +471,21 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
                 label="Status"
                 name="status"
                 value={formData.status}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+          </Grid>
+          <Typography variant="h6" sx={{ mt: 2 }}>
+            Driver Information
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Driver"
+                name="driver"
+                value={formData.driver}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"

@@ -3,14 +3,20 @@ import { useState } from 'react';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
+import Dialog from '@mui/material/Dialog';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
+import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
-import { getDailyData } from 'src/lib/resa';
+import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -34,13 +40,14 @@ export default function DailyPlanningPage() {
   const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
-  const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
   const [current, setCurrent] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -48,15 +55,6 @@ export default function DailyPlanningPage() {
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(id);
     }
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = resaData.map((n) => n._id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -82,7 +80,6 @@ export default function DailyPlanningPage() {
   const handleDailyData = async (date) => {
     setCurrent(date);
     const resa = await getDailyData(date);
-    console.log(resa);
     if (resa === 500) {
       alert('NetWork Error');
     } else {
@@ -104,19 +101,51 @@ export default function DailyPlanningPage() {
     setIsModalOpen(false);
   };
 
-  const handleModalSave = (formData) => {
-    if (currentRow) {
-      // Update existing reservation
-      const updatedData = resaData.map((row) => (row._id === currentRow._id ? formData : row));
-      setResaData(updatedData);
+  const handleModalSave = async (formData) => {
+    console.log(formData);
+    const params = {
+      date: current,
+      newData: formData,
+    };
+
+    const res = await putDailyData(params);
+    if (res === 500) {
+      alert('Network Error');
     } else {
-      // Add new reservation
-      setResaData([...resaData, { ...formData, _id: new Date().getTime() }]);
+      if (currentRow) {
+        alert('A data updated successfully');
+      } else {
+        alert('A data added successfully');
+      }
+      setResaData(res);
     }
   };
 
   const handleDelete = (data) => {
-    console.log(data);
+    setDeleteId(data._id);
+    setConfirmOpen(true);
+  };
+
+  // Handle the deletion after confirmation
+  const handleConfirmDelete = async () => {
+    setConfirmOpen(false);
+    const params = {
+      date: current,
+      id: deleteId,
+    };
+
+    const res = await deleteDailyData(params);
+    if (res === 500) {
+      alert('Network Error.');
+    } else {
+      alert('A data deleted successfully.');
+      setResaData(res);
+    }
+  };
+
+  // Handle closing of the confirmation dialog
+  const handleCloseConfirm = () => {
+    setConfirmOpen(false);
   };
 
   const handlePdf = () => {
@@ -137,7 +166,6 @@ export default function DailyPlanningPage() {
 
       <Card>
         <UserTableToolbar
-          numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
           onGetDate={handleDailyData}
@@ -153,10 +181,7 @@ export default function DailyPlanningPage() {
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={resaData.length}
-                numSelected={selected.length}
                 onRequestSort={handleSort}
-                onSelectAllClick={handleSelectAllClick}
                 headLabel={[
                   { id: 'client', label: 'Client Name' },
                   { id: 'from', label: 'From' },
@@ -195,7 +220,7 @@ export default function DailyPlanningPage() {
                       no_of_ngts={row.no_of_ngts}
                       agency={row.agency}
                       adult={row.adult}
-                      driver="Driver"
+                      driver={row.driver}
                       guid="Guid"
                       remarks={row.resa_remark}
                       deleteAction={() => handleDelete(row)}
@@ -231,6 +256,28 @@ export default function DailyPlanningPage() {
         onSave={handleModalSave}
         initialData={currentRow}
       />
+
+      <Dialog
+        open={confirmOpen}
+        onClose={handleCloseConfirm}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this item? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseConfirm} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

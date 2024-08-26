@@ -118,7 +118,7 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
     Object.entries(savedData).forEach(([key, value]) => {
       const time = Date.parse(`1970-01-01T${value}`);
       if (!Number.isNaN(time)) {
-        savedData[key] = formatTimeToString(value);
+        savedData[key] = formatTimeToString(time);
       }
     });
 

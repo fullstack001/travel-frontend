@@ -42,7 +42,8 @@ export default function UserTableRow({
   driver,
   guid,
   remarks,
-  handleClick,
+  editAction,
+  deleteAction,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -51,6 +52,15 @@ export default function UserTableRow({
   };
 
   const handleCloseMenu = () => {
+    setOpen(null);
+  };
+
+  const handleEdit = () => {
+    editAction();
+    setOpen(null);
+  };
+  const handleDelete = () => {
+    deleteAction();
     setOpen(null);
   };
 
@@ -101,12 +111,12 @@ export default function UserTableRow({
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleEdit}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
@@ -133,5 +143,6 @@ UserTableRow.propTypes = {
   guid: PropTypes.any,
   remarks: PropTypes.any,
   selected: PropTypes.any,
-  handleClick: PropTypes.func,
+  editAction: PropTypes.func,
+  deleteAction: PropTypes.func,
 };
