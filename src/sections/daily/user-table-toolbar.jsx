@@ -30,10 +30,8 @@ export default function UserTableToolbar({
   const [open, setOpen] = useState(null);
 
   const handleDateChange = (newDate) => {
-    console.log(dayjs(newDate).toDate());
-    const utcDate = dayjs(newDate).utc().toDate();
-    console.log(utcDate);
-    onGetDate(utcDate);
+    const date = dayjs(newDate).toDate();
+    onGetDate(date);
   };
 
   const handleOpenMenu = (event) => {

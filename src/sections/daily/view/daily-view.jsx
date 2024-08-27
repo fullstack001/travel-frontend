@@ -86,7 +86,7 @@ export default function DailyPlanningPage() {
     let newDate;
     if (timezoneOffsetHours === 2) {
       const originalDate = new Date(dateStr);
-      const adjustedDate = new Date(originalDate.getTime() + 3600000);
+      const adjustedDate = new Date(originalDate.getTime() + 10800000);
       newDate = adjustedDate.toString();
     } else {
       newDate = dateStr;
