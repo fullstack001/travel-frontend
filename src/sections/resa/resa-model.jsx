@@ -106,11 +106,17 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
   };
 
   const handleSave = () => {
-    const savedData = formData;
+    const savedData = { ...formData }; // Ensure immutability by copying formData
     Object.entries(savedData).forEach(([key, value]) => {
-      const time = Date.parse(`1970-01-01T${value}`);
-      if (!Number.isNaN(time)) {
-        savedData[key] = formatTimeToString(time);
+      if (value instanceof Date) {
+        // Add 3 hours to the date
+        const newDate = new Date(value.getTime() + 3 * 60 * 60 * 1000);
+        savedData[key] = newDate;
+      } else {
+        const time = Date.parse(`1970-01-01T${value}`);
+        if (!Number.isNaN(time)) {
+          savedData[key] = formatTimeToString(time);
+        }
       }
     });
 
