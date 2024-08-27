@@ -79,6 +79,7 @@ export default function DailyPlanningPage() {
 
   const handleDailyData = async (date) => {
     setCurrent(date);
+    setPage(0);
     const resa = await getDailyData(date);
     if (resa === 500) {
       alert('NetWork Error');
