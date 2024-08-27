@@ -91,13 +91,13 @@ export default function DailyPlanningPage() {
     } else {
       newDate = dateStr;
     }
+    console.log(newDate);
     setCurrent(newDate);
     setPage(0);
     const resa = await getDailyData(newDate);
     if (resa === 500) {
       alert('NetWork Error');
     } else {
-      console.log(resa);
       setResaData(resa);
     }
   };
