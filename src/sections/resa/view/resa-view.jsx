@@ -18,7 +18,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 // import { users } from 'src/_mock/user';
 import { deleteData, getResaData, putResaData } from 'src/lib/resa';
 
-import Iconify from 'src/components/iconify';
+// import Iconify from 'src/components/iconify';
 // import Scrollbar from 'src/components/scrollbar';
 
 import { emptyRows } from '../utils';
@@ -27,7 +27,7 @@ import ResaModal from '../resa-model';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
-// import { emptyRows, applyFilter, getComparator } from '../utils';
+import UserTableToolbar from '../user-table-toolbar';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +41,8 @@ export default function ResaPage() {
   const [currentRow, setCurrentRow] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
+  const [filterName, setFilterName] = useState('');
+  const [maxDossierNo, setMaxDossierNo] = useState('');
 
   // const [filterName, setFilterName] = useState('');
 
@@ -49,6 +51,7 @@ export default function ResaPage() {
   useEffect(() => {
     const getResa = async () => {
       const params = {
+        filterData: filterName,
         orderKey: order,
         orderDirect: orderBy,
         page: page + 1, // Adjust page number for the backend (1-based index)
@@ -58,12 +61,13 @@ export default function ResaPage() {
       if (resa.status === 500) {
         alert('Network Error');
       } else {
+        setMaxDossierNo(resa.maxDossierNo);
         setResaData(resa.data);
         setTotalItems(resa.totalItems);
       }
     };
     getResa();
-  }, [page, rowsPerPage, order, orderBy]);
+  }, [page, rowsPerPage, order, orderBy, filterName]);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -71,6 +75,11 @@ export default function ResaPage() {
       setOrder(isAsc ? 'desc' : 'asc');
       setOrderBy(id);
     }
+  };
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
   };
 
   const handleNewReservation = () => {
@@ -89,6 +98,7 @@ export default function ResaPage() {
 
   const handleModalSave = async (formData) => {
     const params = {
+      filterData: filterName,
       orderKey: order,
       orderDirect: orderBy,
       newData: formData,
@@ -105,6 +115,7 @@ export default function ResaPage() {
       } else {
         alert('A data added successfully');
       }
+      setMaxDossierNo(res.maxDossierNo);
       setResaData(res.data);
       setTotalItems(res.totalItems);
     }
@@ -118,19 +129,6 @@ export default function ResaPage() {
     setPage(0);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
-
-  // const handleFilterByName = (event) => {
-  //   setPage(0);
-  //   setFilterName(event.target.value);
-  // };
-
-  // const dataFiltered = applyFilter({
-  //   inputData: resaData,
-  //   comparator: getComparator(order, orderBy),
-  //   filterName,
-  // });
-
-  // const notFound = !dataFiltered.length && !!filterName;
 
   const handleDelete = (data) => {
     setDeleteId(data._id);
@@ -146,6 +144,7 @@ export default function ResaPage() {
   const handleConfirmDelete = async () => {
     setConfirmOpen(false);
     const params = {
+      filterData: filterName,
       orderKey: order,
       orderDirect: orderBy,
       id: deleteId,
@@ -158,6 +157,7 @@ export default function ResaPage() {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
+      setMaxDossierNo(res.maxDossierNo);
       setResaData(res.data);
       setTotalItems(res.totalItems);
     }
@@ -167,25 +167,15 @@ export default function ResaPage() {
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
         <Typography variant="h4">Reservation</Typography>
-
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-          onClick={handleNewReservation}
-        >
-          New Reservation
-        </Button>
       </Stack>
 
       <Card>
-        {/* <UserTableToolbar
-          numSelected={selected.length}
+        <UserTableToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
-        /> */}
+          onNewResa={handleNewReservation}
+        />
 
-        {/* <Scrollbar> */}
         <TableContainer sx={{ overflow: 'auto', height: '76vh' }}>
           <Table sx={{ minWidth: 800 }}>
             <UserTableHead
@@ -296,6 +286,7 @@ export default function ResaPage() {
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
+        maxNumber={maxDossierNo}
       />
       <Dialog
         open={confirmOpen}

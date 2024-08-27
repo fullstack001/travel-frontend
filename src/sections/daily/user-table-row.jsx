@@ -35,7 +35,6 @@ export default function UserTableRow({
   arb_dep,
   flight_no,
   flight_time,
-  no_of_ngts,
   pickup_time,
   agency,
   adult,
@@ -87,7 +86,6 @@ export default function UserTableRow({
         <TableCell>{flight_no}</TableCell>
         <TableCell>{flight_time}</TableCell>
         <TableCell>{pickup_time}</TableCell>
-        <TableCell>{no_of_ngts}</TableCell>
         <TableCell>{agency}</TableCell>
         <TableCell>{adult}</TableCell>
         <TableCell>{driver}</TableCell>
@@ -130,7 +128,6 @@ UserTableRow.propTypes = {
   client: PropTypes.any,
   from: PropTypes.any,
   hotel: PropTypes.any,
-  no_of_ngts: PropTypes.any,
   service_type: PropTypes.any,
   service_date: PropTypes.any,
   arb_dep: PropTypes.any,

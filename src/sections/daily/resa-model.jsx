@@ -49,6 +49,7 @@ const initData = {
   teen_price: '',
   total_price: '',
   driver: '',
+  guid: '',
   _id: '',
 };
 
@@ -104,6 +105,7 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
         flight_time: formatTime(initialData.flight_time),
         effect_date: formatDate(initialData.effect_date),
         driver: initialData.driver ? initialData.driver : '',
+        guid: initialData.guid ? initialData.guid : '',
       });
     } else {
       setFormData(initData);
@@ -486,6 +488,16 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
                 label="Driver"
                 name="driver"
                 value={formData.driver}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Guid"
+                name="guid"
+                value={formData.guid}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"

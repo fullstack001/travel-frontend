@@ -192,7 +192,6 @@ export default function DailyPlanningPage() {
                   { id: 'flight_no', label: 'Flight No' },
                   { id: 'flight_time', label: 'flgt Time' },
                   { id: 'pickup_time', label: 'Pick up Time' },
-                  { id: 'no_of_ngts', label: 'Refrence No' },
                   { id: 'agency', label: 'Agency', align: 'center' },
                   { id: 'adult', label: 'Adult' },
                   { id: 'driver', label: 'Driver' },
@@ -217,11 +216,10 @@ export default function DailyPlanningPage() {
                       flight_no={row.flight_no}
                       flight_time={row.flight_time}
                       pickup_time="Pickup time"
-                      no_of_ngts={row.no_of_ngts}
                       agency={row.agency}
                       adult={row.adult}
                       driver={row.driver}
-                      guid="Guid"
+                      guid={row.guid}
                       remarks={row.resa_remark}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}

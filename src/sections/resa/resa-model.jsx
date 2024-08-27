@@ -51,7 +51,7 @@ const initData = {
   _id: '',
 };
 
-export default function ResaModal({ open, onClose, onSave, initialData }) {
+export default function ResaModal({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
 
   const formatDate = (dateString) => {
@@ -103,9 +103,9 @@ export default function ResaModal({ open, onClose, onSave, initialData }) {
         invoce_on: formatDate(initialData.invoce_on),
       });
     } else {
-      setFormData(initData);
+      setFormData({ ...initData, dossier_no: maxNumber + 1 });
     }
-  }, [initialData]);
+  }, [initialData, maxNumber]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -484,4 +484,5 @@ ResaModal.propTypes = {
   onClose: PropTypes.func,
   onSave: PropTypes.func,
   initialData: PropTypes.object,
+  maxNumber: PropTypes.number,
 };

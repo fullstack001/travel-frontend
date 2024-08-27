@@ -91,9 +91,7 @@ export default function UserTableRow({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
-        {/* <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
-        </TableCell> */}
+        
 
         <TableCell component="th" scope="row">
           <Stack direction="row" alignItems="center" spacing={2}>
