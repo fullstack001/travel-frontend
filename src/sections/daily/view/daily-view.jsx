@@ -84,6 +84,7 @@ export default function DailyPlanningPage() {
     if (resa === 500) {
       alert('NetWork Error');
     } else {
+      console.log(resa);
       setResaData(resa);
     }
   };
