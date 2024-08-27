@@ -2,6 +2,16 @@ import 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  console.log(date);
+  const days = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const day = date.getDate();
+  const month = days[date.getMonth()];
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 export const visuallyHidden = {
   border: 0,
   margin: -1,
@@ -85,7 +95,7 @@ export const handleExportExcel = (resaData) => {
       row.from,
       row.hotel,
       row.service_type,
-      row.service_date,
+      formatDate(row.service_date),
       row.arb_dep,
       row.flight_no,
       row.flight_time,
@@ -138,7 +148,7 @@ export const handleExportPdf = (resaData) => {
     from: row.from,
     hotel: row.hotel,
     service_type: row.service_type,
-    service_date: row.service_date,
+    service_date: formatDate(row.service_date),
     arb_dep: row.arb_dep,
     flight_no: row.flight_no,
     flight_time: row.flight_time,
