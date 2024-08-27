@@ -58,15 +58,6 @@ const initData = {
 export default function ResaModal({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
 
-  // const formatDate = (dateString) => {
-  //   if (!dateString) return '';
-  //   const date = new Date(dateString);
-  //   const year = date.getFullYear();
-  //   const month = String(date.getMonth() + 1).padStart(2, '0');
-  //   const day = String(date.getDate()).padStart(2, '0');
-  //   return `${year}-${month}-${day}`;
-  // };
-
   const formatTime = (timeString) => {
     if (!timeString) return '';
 
@@ -110,7 +101,6 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(value);
 
     setFormData({ ...formData, [name]: value });
   };
@@ -439,11 +429,11 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Invoice On"
-                  name="invoce_on"
-                  value={dayjs(formData.invoce_on)}
+                  label="Effect Date"
+                  name="effect_date"
+                  value={dayjs(formData.effect_date)}
                   onChange={(date) =>
-                    setFormData({ ...formData, invoce_on: date ? dayjs(date).toDate() : null })
+                    setFormData({ ...formData, effect_date: date ? dayjs(date).toDate() : null })
                   }
                   renderInput={(params) => <TextField {...params} />}
                 />
