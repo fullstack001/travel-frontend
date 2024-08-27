@@ -39,8 +39,8 @@ import {
 export default function DailyPlanningPage() {
   const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('name');
+  const [order, setOrder] = useState('desc');
+  const [orderBy, setOrderBy] = useState('_id');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [isModalOpen, setIsModalOpen] = useState(false);
