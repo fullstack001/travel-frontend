@@ -77,10 +77,23 @@ export default function DailyPlanningPage() {
     filterName,
   });
 
-  const handleDailyData = async (date) => {
-    setCurrent(date);
+  const handleDailyData = async (dateStr) => {
+    // Parse the date string
+    const date = new Date(dateStr);
+    const timezoneOffset = date.getTimezoneOffset();
+    const timezoneOffsetHours = -timezoneOffset / 60;
+
+    let newDate;
+    if (timezoneOffsetHours === 2) {
+      const originalDate = new Date(dateStr);
+      const adjustedDate = new Date(originalDate.getTime() + 3600000);
+      newDate = adjustedDate.toString();
+    } else {
+      newDate = dateStr;
+    }
+    setCurrent(newDate);
     setPage(0);
-    const resa = await getDailyData(date);
+    const resa = await getDailyData(newDate);
     if (resa === 500) {
       alert('NetWork Error');
     } else {
