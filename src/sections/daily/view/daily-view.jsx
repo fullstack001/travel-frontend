@@ -76,29 +76,27 @@ export default function DailyPlanningPage() {
     comparator: getComparator(order, orderBy),
     filterName,
   });
-
   const handleDailyData = async (dateStr) => {
-    // Parse the date string
     const date = new Date(dateStr);
-    const timezoneOffset = date.getTimezoneOffset();
-    const timezoneOffsetHours = -timezoneOffset / 60;
+    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    let newDate;
-    if (timezoneOffsetHours === 2) {
-      const originalDate = new Date(dateStr);
-      const adjustedDate = new Date(originalDate.getTime() + 10800000);
-      newDate = adjustedDate.toString();
-    } else {
-      newDate = dateStr;
-    }
+    const newDate =
+      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+
     console.log(newDate);
     setCurrent(newDate);
     setPage(0);
-    const resa = await getDailyData(newDate);
-    if (resa === 500) {
-      alert('NetWork Error');
-    } else {
-      setResaData(resa);
+
+    try {
+      const resa = await getDailyData(newDate);
+      if (resa === 500) {
+        alert('Network Error');
+      } else {
+        setResaData(resa);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      alert('An unexpected error occurred');
     }
   };
 

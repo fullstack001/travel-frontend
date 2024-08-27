@@ -109,8 +109,12 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
     const savedData = { ...formData }; // Ensure immutability by copying formData
     Object.entries(savedData).forEach(([key, value]) => {
       if (value instanceof Date) {
-        // Add 3 hours to the date
-        const newDate = new Date(value.getTime() + 3 * 60 * 60 * 1000);
+        const date = new Date(value);
+        const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+
+        const newDate =
+          timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : value;
+
         savedData[key] = newDate;
       } else {
         const time = Date.parse(`1970-01-01T${value}`);
@@ -119,7 +123,6 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
         }
       }
     });
-
     onSave(savedData);
     onClose();
   };
