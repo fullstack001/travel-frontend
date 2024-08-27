@@ -1,6 +1,10 @@
+import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {
   Grid,
   Stack,
@@ -54,14 +58,14 @@ const initData = {
 export default function ResaModal({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
+  // const formatDate = (dateString) => {
+  //   if (!dateString) return '';
+  //   const date = new Date(dateString);
+  //   const year = date.getFullYear();
+  //   const month = String(date.getMonth() + 1).padStart(2, '0');
+  //   const day = String(date.getDate()).padStart(2, '0');
+  //   return `${year}-${month}-${day}`;
+  // };
 
   const formatTime = (timeString) => {
     if (!timeString) return '';
@@ -97,10 +101,7 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
     if (initialData) {
       setFormData({
         ...initialData,
-        service_date: formatDate(initialData.service_date),
-        endofservice: formatDate(initialData.endofservice),
         flight_time: formatTime(initialData.flight_time),
-        invoce_on: formatDate(initialData.invoce_on),
       });
     } else {
       setFormData({ ...initData, dossier_no: maxNumber + 1 });
@@ -109,6 +110,7 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log(value);
 
     setFormData({ ...formData, [name]: value });
   };
@@ -178,28 +180,30 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Service Date"
-                name="service_date"
-                value={formData.service_date}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Service Date"
+                  name="service_date"
+                  value={dayjs(formData.service_date)}
+                  onChange={(date) =>
+                    setFormData({ ...formData, service_date: date ? dayjs(date).toDate() : null })
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="End of Service"
-                name="endofservice"
-                value={formData.endofservice}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="End of Service"
+                  name="endofservice"
+                  value={dayjs(formData.endofservice)}
+                  onChange={(date) =>
+                    setFormData({ ...formData, endofservice: date ? dayjs(date).toDate() : null })
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Grid>
           </Grid>
 
@@ -433,16 +437,17 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Invoice On"
-                name="invoce_on"
-                value={formData.invoce_on}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="date"
-                InputLabelProps={{ shrink: true }}
-              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  label="Invoice On"
+                  name="invoce_on"
+                  value={dayjs(formData.invoce_on)}
+                  onChange={(date) =>
+                    setFormData({ ...formData, invoce_on: date ? dayjs(date).toDate() : null })
+                  }
+                  renderInput={(params) => <TextField {...params} />}
+                />
+              </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField

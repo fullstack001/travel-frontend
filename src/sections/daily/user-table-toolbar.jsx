@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
@@ -15,6 +16,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import Iconify from 'src/components/iconify';
 
+dayjs.extend(utc);
+
 // ----------------------------------------------------------------------
 
 export default function UserTableToolbar({
@@ -27,9 +30,10 @@ export default function UserTableToolbar({
   const [open, setOpen] = useState(null);
 
   const handleDateChange = (newDate) => {
-    const dateObject = dayjs(newDate).toDate();
-    console.log(dateObject);
-    onGetDate(dateObject);
+    console.log(dayjs(newDate).toDate());
+    const utcDate = dayjs(newDate).utc().toDate();
+    console.log(utcDate);
+    onGetDate(utcDate);
   };
 
   const handleOpenMenu = (event) => {
