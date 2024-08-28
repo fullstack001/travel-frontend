@@ -488,5 +488,5 @@ ResaModal.propTypes = {
   onClose: PropTypes.func,
   onSave: PropTypes.func,
   initialData: PropTypes.object,
-  maxNumber: PropTypes.number,
+  maxNumber: PropTypes.any,
 };

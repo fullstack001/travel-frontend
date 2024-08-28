@@ -48,6 +48,7 @@ export default function DailyPlanningPage() {
   const [current, setCurrent] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
+  const [maxDossierNo, setMaxDossierNo] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -83,7 +84,6 @@ export default function DailyPlanningPage() {
     const newDate =
       timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
 
-    console.log(newDate);
     setCurrent(newDate);
     setPage(0);
 
@@ -92,7 +92,8 @@ export default function DailyPlanningPage() {
       if (resa === 500) {
         alert('Network Error');
       } else {
-        setResaData(resa);
+        setResaData(resa.data);
+        setMaxDossierNo(resa.max_num);
       }
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -130,7 +131,8 @@ export default function DailyPlanningPage() {
       } else {
         alert('A data added successfully');
       }
-      setResaData(res);
+      setResaData(res.data);
+      setMaxDossierNo(res.max_num);
     }
   };
 
@@ -152,7 +154,8 @@ export default function DailyPlanningPage() {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
-      setResaData(res);
+      setResaData(res.data);
+      setMaxDossierNo(res.max_num);
     }
   };
 
@@ -266,6 +269,7 @@ export default function DailyPlanningPage() {
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
+        maxNumber={maxDossierNo}
       />
 
       <Dialog

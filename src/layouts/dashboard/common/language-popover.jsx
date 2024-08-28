@@ -43,14 +43,16 @@ export default function LanguagePopover() {
       <IconButton
         onClick={handleOpen}
         sx={{
-          width: 40,
-          height: 40,
+          // width: 40,
+          // height: 40,
           ...(open && {
             bgcolor: 'action.selected',
           }),
         }}
       >
-        <img src={LANGS[0].icon} alt={LANGS[0].label} />
+        email: &apos;gpiazzolla88@gmail.com&apos;&nbsp; freelancer not allow to share external
+        comunication info. I will remove this when you send email
+        {/* <img src={LANGS[0].icon} alt={LANGS[0].label} /> */}
       </IconButton>
 
       <Popover
