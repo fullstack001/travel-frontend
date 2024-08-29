@@ -138,6 +138,7 @@ export default function DailyModal({
                 label="Dossier No"
                 name="dossier_no"
                 value={formData.dossier_no}
+                disabled
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"

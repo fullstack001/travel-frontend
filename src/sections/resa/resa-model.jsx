@@ -133,6 +133,7 @@ export default function ResaModal({
               <TextField
                 label="Dossier No"
                 name="dossier_no"
+                disabled
                 value={formData.dossier_no}
                 onChange={handleChange}
                 fullWidth
