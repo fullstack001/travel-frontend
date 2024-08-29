@@ -9,7 +9,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableToolbar({ filterName, onFilterName, onNewResa, loading }) {
+export default function UserTableToolbar({ filterName, onFilterName, onNewHotel }) {
   return (
     <Toolbar
       sx={{
@@ -22,7 +22,7 @@ export default function UserTableToolbar({ filterName, onFilterName, onNewResa, 
       <OutlinedInput
         value={filterName}
         onChange={onFilterName}
-        placeholder="Search Client Name..."
+        placeholder="Search Agency Name..."
         startAdornment={
           <InputAdornment position="start">
             <Iconify
@@ -37,10 +37,9 @@ export default function UserTableToolbar({ filterName, onFilterName, onNewResa, 
         variant="contained"
         color="inherit"
         startIcon={<Iconify icon="eva:plus-fill" />}
-        onClick={onNewResa}
-        disabled={loading}
+        onClick={onNewHotel}
       >
-        {loading ? 'Loading data...' : 'New Reservation'}
+        New Agency
       </Button>
     </Toolbar>
   );
@@ -49,6 +48,5 @@ export default function UserTableToolbar({ filterName, onFilterName, onNewResa, 
 UserTableToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  onNewResa: PropTypes.func,
-  loading: PropTypes.any,
+  onNewHotel: PropTypes.func,
 };

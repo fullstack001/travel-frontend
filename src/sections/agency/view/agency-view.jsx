@@ -16,14 +16,11 @@ import TablePagination from '@mui/material/TablePagination';
 import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
-import { getHotelData } from 'src/lib/hotel';
-import { getAgencyData } from 'src/lib/agency';
-import { getServiceData } from 'src/lib/service';
-import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
+import { getAgencyData, putAgencyData, deleteAgencyData } from 'src/lib/agency';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import DailyModal from '../daily-model';
+import AgencyModal from '../agency-model';
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
@@ -33,14 +30,14 @@ import {
   emptyRows,
   applyFilter,
   getComparator,
-  handleExportPdf,
-  handleExportExcel,
+  // handleExportPdf,
+  // handleExportExcel,
 } from '../utils';
 
 // ----------------------------------------------------------------------
 
-export default function DailyPlanningPage() {
-  const [resaData, setResaData] = useState([]);
+export default function HotelPlanningPage() {
+  const [agencyData, setAgencyData] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('_id');
@@ -48,14 +45,9 @@ export default function DailyPlanningPage() {
   const [rowsPerPage, setRowsPerPage] = useState(15);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState(null);
-  const [current, setCurrent] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
-  const [maxDossierNo, setMaxDossierNo] = useState('');
-  const [hotel, setHotel] = useState([]);
-  const [agency, setAgency] = useState([]);
-  const [service, setService] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [maxAgencyNo, setMaxAgencyNo] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -64,26 +56,6 @@ export default function DailyPlanningPage() {
       setOrderBy(id);
     }
   };
-
-
-  useEffect(() => {
-    const getListData = async () => {
-      try {
-        setLoading(true);
-        const hotelres = await getHotelData();
-        const agencyRes = await getAgencyData();
-        const serviceRes = await getServiceData();
-        setHotel(hotelres.data);
-        setAgency(agencyRes.data);
-        setService(serviceRes.data);
-      } catch {
-        alert('network Error. Refresh page');
-      } finally {
-        setLoading(false);
-      }
-    };
-    getListData();
-  }, []);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,33 +72,29 @@ export default function DailyPlanningPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: resaData,
+    inputData: agencyData,
     comparator: getComparator(order, orderBy),
     filterName,
   });
-  const handleDailyData = async (dateStr) => {
-    const date = new Date(dateStr);
-    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    const newDate =
-      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
-
-    setCurrent(newDate);
-    setPage(0);
-
-    try {
-      const resa = await getDailyData(newDate);
-      if (resa === 500) {
-        alert('Network Error');
-      } else {
-        setResaData(resa.data);
-        setMaxDossierNo(resa.max_num);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await getAgencyData();
+        if (res === 500) {
+          alert('Network Error');
+        } else {
+          setAgencyData(res.data);
+          console.log(res.max_num);
+          setMaxAgencyNo(res.max_num);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('An unexpected error occurred');
       }
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('An unexpected error occurred');
-    }
-  };
+    };
+    getData();
+  }, []);
 
   const handleNewReservation = () => {
     setCurrentRow(null); // Clear current row data
@@ -145,11 +113,10 @@ export default function DailyPlanningPage() {
   const handleModalSave = async (formData) => {
     console.log(formData);
     const params = {
-      date: current,
       newData: formData,
     };
 
-    const res = await putDailyData(params);
+    const res = await putAgencyData(params);
     if (res === 500) {
       alert('Network Error');
     } else {
@@ -158,8 +125,8 @@ export default function DailyPlanningPage() {
       } else {
         alert('A data added successfully');
       }
-      setResaData(res.data);
-      setMaxDossierNo(res.max_num);
+      setAgencyData(res.data);
+      setMaxAgencyNo(res.max_num);
     }
   };
 
@@ -172,31 +139,21 @@ export default function DailyPlanningPage() {
   const handleConfirmDelete = async () => {
     setConfirmOpen(false);
     const params = {
-      date: current,
       id: deleteId,
     };
 
-    const res = await deleteDailyData(params);
+    const res = await deleteAgencyData(params);
     if (res === 500) {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
-      setResaData(res.data);
-      setMaxDossierNo(res.max_num);
+      setAgencyData(res.data);
+      setMaxAgencyNo(res.max_num);
     }
   };
 
-  // Handle closing of the confirmation dialog
   const handleCloseConfirm = () => {
     setConfirmOpen(false);
-  };
-
-  const handlePdf = () => {
-    handleExportPdf(resaData);
-  };
-
-  const handleExcel = () => {
-    handleExportExcel(resaData);
   };
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -204,19 +161,14 @@ export default function DailyPlanningPage() {
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Daily Planning</Typography>
+        <Typography variant="h4">Agencies</Typography>
       </Stack>
 
       <Card>
         <UserTableToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
-          onGetDate={handleDailyData}
-          showButton={current}
-          NewAction={handleNewReservation}
-          pdfAction={handlePdf}
-          excelAction={handleExcel}
-          loading={loading}
+          onNewHotel={handleNewReservation}
         />
 
         <Scrollbar>
@@ -227,20 +179,15 @@ export default function DailyPlanningPage() {
                 orderBy={orderBy}
                 onRequestSort={handleSort}
                 headLabel={[
-                  { id: 'client', label: 'Client Name' },
-                  { id: 'from', label: 'From' },
-                  { id: 'hotel', label: 'To' },
-                  { id: 'service_type', label: 'Service Type' },
-                  { id: 'service_date', label: 'Date Service' },
-                  { id: 'arb_dep', label: 'Arv / Dep' },
-                  { id: 'flight_no', label: 'Flight No' },
-                  { id: 'flight_time', label: 'flgt Time' },
-                  { id: 'pickup_time', label: 'Pick up Time' },
-                  { id: 'agency', label: 'Agency', align: 'center' },
-                  { id: 'adult', label: 'Adult' },
-                  { id: 'driver', label: 'Driver' },
-                  { id: 'guid', label: 'Guid' },
-                  { id: 'remarks', label: 'Remarks' },
+                  { id: 'ageycy_id', label: 'Agency Id' },
+                  { id: 'name', label: 'Agency Name' },
+                  { id: 'country', label: 'Country' },
+                  { id: 'tel', label: 'Tel' },
+                  { id: 'name2', label: 'Name2' },
+                  { id: 'email', label: 'Email' },
+                  { id: 'website', label: 'Website' },
+                  { id: 'status', label: 'Status' },
+                  { id: 'tax', label: 'Tax' },
                   { id: '', label: '' },
                 ]}
               />
@@ -251,20 +198,15 @@ export default function DailyPlanningPage() {
                     <UserTableRow
                       key={row._id}
                       id={row._id}
-                      client={row.client}
-                      from={row.from}
-                      hotel={row.hotel}
-                      service_type={row.service_type}
-                      service_date={row.service_date}
-                      arb_dep={row.arb_dep}
-                      flight_no={row.flight_no}
-                      flight_time={row.flight_time}
-                      pickup_time={row.pickup_time}
-                      agency={row.agency}
-                      adult={row.adult}
-                      driver={row.driver}
-                      guid={row.guid}
-                      remarks={row.resa_remark}
+                      ageycy_id={row.ageycy_id}
+                      name={row.name}
+                      country={row.country}
+                      tel={row.tel}
+                      name2={row.name2}
+                      email={row.email}
+                      website={row.website}
+                      status={row.status}
+                      tax={row.tax}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
                     />
@@ -272,7 +214,7 @@ export default function DailyPlanningPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, resaData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, agencyData.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -284,7 +226,7 @@ export default function DailyPlanningPage() {
         <TablePagination
           page={page}
           component="div"
-          count={resaData.length}
+          count={agencyData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
@@ -292,15 +234,12 @@ export default function DailyPlanningPage() {
         />
       </Card>
 
-      <DailyModal
+      <AgencyModal
         open={isModalOpen}
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
-        maxNumber={maxDossierNo}
-        hotel={hotel}
-        agency={agency}
-        service={service}
+        maxNumber={maxAgencyNo}
       />
 
       <Dialog

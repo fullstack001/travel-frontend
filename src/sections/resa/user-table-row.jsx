@@ -14,6 +14,8 @@ import IconButton from '@mui/material/IconButton';
 // import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
+import { formatTime } from './utils';
+
 function formatDateToString(date) {
   if (!date) return '';
   const d = new Date(date);
@@ -32,35 +34,29 @@ export default function UserTableRow({
   service_type,
   arb_dep,
   client,
+  agency_ref_no,
   agency,
   from,
   hotel,
   htl_region,
   service_date,
   endofservice,
-  no_of_ngts,
+  type_vehicle,
   adult,
   child,
   infant,
-  teen,
-  free,
   flight_no,
   flight_time,
+  pickup_time,
   resa_remark,
   service,
-  service_detail,
   adult_price,
   child_price,
-  teen_price,
   total_price,
-  net_price,
-  cash_credit,
   cur,
-  roe,
   invoce_on,
   status,
   effect_date,
-  inv_no,
   editAction,
   deleteAction,
 }) {
@@ -91,7 +87,6 @@ export default function UserTableRow({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
-        
 
         <TableCell component="th" scope="row">
           <Stack direction="row" alignItems="center" spacing={2}>
@@ -110,35 +105,29 @@ export default function UserTableRow({
         </TableCell>
         <TableCell>{arb_dep}</TableCell>
         <TableCell>{client}</TableCell>
+        <TableCell>{agency_ref_no}</TableCell>
         <TableCell>{agency}</TableCell>
         <TableCell>{from}</TableCell>
         <TableCell>{hotel}</TableCell>
         <TableCell>{htl_region}</TableCell>
         <TableCell>{formatDateToString(service_date)}</TableCell>
         <TableCell>{formatDateToString(endofservice)}</TableCell>
-        <TableCell>{no_of_ngts}</TableCell>
         <TableCell>{adult}</TableCell>
         <TableCell>{child}</TableCell>
         <TableCell>{infant}</TableCell>
-        <TableCell>{teen}</TableCell>
-        <TableCell>{free}</TableCell>
         <TableCell>{flight_no}</TableCell>
-        <TableCell>{flight_time}</TableCell>
+        <TableCell>{formatTime(flight_time)}</TableCell>
+        <TableCell>{formatTime(pickup_time)}</TableCell>
         <TableCell>{resa_remark}</TableCell>
         <TableCell>{service}</TableCell>
-        <TableCell>{service_detail}</TableCell>
+        <TableCell>{type_vehicle}</TableCell>
         <TableCell>{adult_price}</TableCell>
         <TableCell>{child_price}</TableCell>
-        <TableCell>{teen_price}</TableCell>
         <TableCell>{total_price}</TableCell>
-        <TableCell>{net_price}</TableCell>
-        <TableCell>{cash_credit}</TableCell>
         <TableCell>{cur}</TableCell>
-        <TableCell>{roe}</TableCell>
         <TableCell>{invoce_on}</TableCell>
         <TableCell>{status}</TableCell>
         <TableCell>{formatDateToString(effect_date)}</TableCell>
-        <TableCell>{inv_no}</TableCell>
       </TableRow>
 
       <Popover
@@ -171,35 +160,29 @@ UserTableRow.propTypes = {
   service_type: PropTypes.any,
   arb_dep: PropTypes.any,
   client: PropTypes.any,
+  agency_ref_no: PropTypes.any,
   agency: PropTypes.any,
   from: PropTypes.any,
   hotel: PropTypes.any,
   htl_region: PropTypes.any,
   service_date: PropTypes.any,
   endofservice: PropTypes.any,
-  no_of_ngts: PropTypes.any,
+  type_vehicle: PropTypes.any,
+  pickup_time: PropTypes.any,
   adult: PropTypes.any,
   child: PropTypes.any,
   infant: PropTypes.any,
-  teen: PropTypes.any,
-  free: PropTypes.any,
   flight_no: PropTypes.any,
   flight_time: PropTypes.any,
   resa_remark: PropTypes.any,
   service: PropTypes.any,
-  service_detail: PropTypes.any,
   adult_price: PropTypes.any,
   child_price: PropTypes.any,
-  teen_price: PropTypes.any,
   total_price: PropTypes.any,
-  net_price: PropTypes.any,
-  cash_credit: PropTypes.any,
   cur: PropTypes.any,
-  roe: PropTypes.any,
   invoce_on: PropTypes.any,
   status: PropTypes.any,
   effect_date: PropTypes.any,
-  inv_no: PropTypes.any,
   selected: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,

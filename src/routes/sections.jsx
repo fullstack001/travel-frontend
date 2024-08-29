@@ -12,6 +12,9 @@ export const DailyPlanningPage = lazy(() => import('src/pages/daily-plannig'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const LogoutPage = lazy(() => import('src/pages/logout'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
+export const HotelPage = lazy(() => import('src/pages/hotels'));
+export const AgencyPage = lazy(() => import('src/pages/agency'));
+export const ServicePage = lazy(() => import('src/pages/service'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
@@ -44,6 +47,9 @@ export default function Router() {
         { path: 'daily-planning', element: <PrivateRoute element={<DailyPlanningPage />} /> },
         { path: 'products', element: <PrivateRoute element={<ProductsPage />} /> },
         { path: 'blog', element: <PrivateRoute element={<BlogPage />} /> },
+        { path: 'agencies', element: <PrivateRoute element={<AgencyPage />} /> },
+        { path: 'hotels', element: <PrivateRoute element={<HotelPage />} /> },
+        { path: 'services', element: <PrivateRoute element={<ServicePage />} /> },
         { path: 'logout', element: <PrivateRoute element={<LogoutPage />} /> },
       ],
     },

@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
+import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,70 +18,54 @@ import {
   DialogActions,
 } from '@mui/material';
 
+import { formatTime } from './utils';
+
 const initData = {
   adult: '',
   adult_price: '',
-  agency: '',
+  agency_ref_no: '',
+  agency: null,
   arb_dep: '',
-  cash_credit: '',
+  pickup_time: '',
   child: '',
   child_price: '',
   client: '',
   cur: '',
   date: '',
+  type_vehicle: '',
   dossier_no: '',
   effect_date: '',
   endofservice: '',
   flight_no: '',
   flight_time: '',
-  free: '',
-  from: '',
-  hotel: '',
+  from: null,
+  hotel: null,
   htl_region: '',
   infant: '',
-  inv_no: '',
   invoce_on: '',
-  net_price: '',
-  no_of_ngts: '',
   resa_remark: '',
-  roe: '',
-  service: '',
+  service: null,
   service_date: '',
   service_detail: '',
   service_type: '',
   status: '',
-  teen: '',
-  teen_price: '',
   total_price: '',
   driver: '',
   guid: '',
   _id: '',
 };
 
-export default function ResaModal({ open, onClose, onSave, initialData, maxNumber }) {
+export default function DailyModal({
+  open,
+  onClose,
+  onSave,
+  initialData,
+  maxNumber,
+  hotel,
+  agency,
+  service,
+}) {
   const [formData, setFormData] = useState(initData);
-
-  const formatTime = (timeString) => {
-    if (!timeString) return '';
-
-    // Split the time into components
-    const [time, modifier] = timeString.split(' ');
-    let [hours, minutes] = time.split(':');
-
-    // Convert to 24-hour format
-    if (modifier === 'PM' && hours !== '12') {
-      hours = String(parseInt(hours, 10) + 12);
-    }
-    if (modifier === 'AM' && hours === '12') {
-      hours = '00';
-    }
-
-    // Ensure double digits for hours and minutes
-    hours = hours.padStart(2, '0');
-    minutes = minutes.padStart(2, '0');
-
-    return `${hours}:${minutes}`;
-  };
 
   function formatTimeToString(time) {
     const d = new Date(time);
@@ -97,6 +82,7 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
       setFormData({
         ...initialData,
         flight_time: formatTime(initialData.flight_time),
+        pickup_time: formatTime(initialData.pickup_time),
         driver: initialData.driver ? initialData.driver : '',
         guid: initialData.guid ? initialData.guid : '',
       });
@@ -132,6 +118,10 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
     onClose();
   };
 
+  const agencyOptions = agency.map((item) => ({ label: item.name, value: item.name }));
+  const hotelOptions = hotel.map((item) => ({ label: item.name, value: item.name }));
+  const serviceOptions = service.map((item) => ({ label: item.name, value: item.name }));
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
@@ -149,7 +139,6 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
                 name="dossier_no"
                 value={formData.dossier_no}
                 onChange={handleChange}
-                type="number"
                 fullWidth
                 variant="outlined"
               />
@@ -166,24 +155,34 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Agency"
-                name="agency"
-                value={formData.agency}
+                label="Agency Reference no"
+                name="agency_ref_no"
+                value={formData.agency_ref_no}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Service Type"
-                name="service_type"
-                value={formData.service_type}
-                onChange={handleChange}
+              <Autocomplete
+                options={agencyOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={agencyOptions.find((option) => option.value === formData.agency) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'agency',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
                 fullWidth
-                variant="outlined"
+                renderInput={(params) => (
+                  <TextField {...params} label="Agency" variant="outlined" />
+                )}
               />
             </Grid>
+
             <Grid item xs={12} sm={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
@@ -217,6 +216,45 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={serviceOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={serviceOptions.find((option) => option.value === formData.service) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'service',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => (
+                  <TextField {...params} label="Service" variant="outlined" />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Service Type"
+                name="service_type"
+                value={formData.service_type}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Arrival/Departure"
+                name="arb_dep"
+                value={formData.arb_dep}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Flight No"
                 name="flight_no"
@@ -240,32 +278,49 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="From"
-                name="from"
-                value={formData.from}
+                label="Pickup Time"
+                name="pickup_time"
+                value={formData.pickup_time}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                type="time"
+                InputLabelProps={{ shrink: true }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Arrival/Departure"
-                name="arb_dep"
-                value={formData.arb_dep}
-                onChange={handleChange}
+              <Autocomplete
+                options={hotelOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={hotelOptions.find((option) => option.value === formData.from) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'from',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
                 fullWidth
-                variant="outlined"
+                renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
               />
             </Grid>
+
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Hotel"
-                name="hotel"
-                value={formData.hotel}
-                onChange={handleChange}
+              <Autocomplete
+                options={hotelOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={hotelOptions.find((option) => option.value === formData.hotel) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'hotel',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
                 fullWidth
-                variant="outlined"
+                renderInput={(params) => <TextField {...params} label="Hotel" variant="outlined" />}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -280,9 +335,9 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Service Detail"
-                name="service_detail"
-                value={formData.service_detail}
+                label="Type of Vehicle"
+                name="type_vehicle"
+                value={formData.type_vehicle}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -350,44 +405,11 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
                 type="number"
               />
             </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Teen"
-                name="teen"
-                value={formData.teen}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Teen Price"
-                name="teen_price"
-                value={formData.teen_price}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Total Price"
                 name="total_price"
                 value={formData.total_price}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Net Price"
-                name="net_price"
-                value={formData.net_price}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -405,36 +427,6 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
                 label="Currency"
                 name="cur"
                 value={formData.cur}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Discount"
-                name="discount"
-                value={formData.discount}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Cash/Credit"
-                name="cash_credit"
-                value={formData.cash_credit}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="ROE"
-                name="roe"
-                value={formData.roe}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -465,16 +457,6 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Free"
-                name="free"
-                value={formData.free}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
                 label="Status"
                 name="status"
                 value={formData.status}
@@ -484,6 +466,7 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
               />
             </Grid>
           </Grid>
+
           <Typography variant="h6" sx={{ mt: 2 }}>
             Driver Information
           </Typography>
@@ -523,10 +506,13 @@ export default function ResaModal({ open, onClose, onSave, initialData, maxNumbe
   );
 }
 
-ResaModal.propTypes = {
+DailyModal.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   onSave: PropTypes.func,
   initialData: PropTypes.object,
   maxNumber: PropTypes.any,
+  hotel: PropTypes.any,
+  agency: PropTypes.any,
+  service: PropTypes.any,
 };

@@ -12,28 +12,6 @@ function formatDate(dateString) {
   return `${day}/${month}/${year}`;
 }
 
-export const formatTime = (timeString) => {
-  if (!timeString) return '';
-
-  // Split the time into components
-  const [time, modifier] = timeString.split(' ');
-  let [hours, minutes] = time.split(':');
-
-  // Convert to 24-hour format
-  if (modifier === 'PM' && hours !== '12') {
-    hours = String(parseInt(hours, 10) + 12);
-  }
-  if (modifier === 'AM' && hours === '12') {
-    hours = '00';
-  }
-
-  // Ensure double digits for hours and minutes
-  hours = hours.padStart(2, '0');
-  minutes = minutes.padStart(2, '0');
-
-  return `${hours}:${minutes}`;
-};
-
 export const visuallyHidden = {
   border: 0,
   margin: -1,

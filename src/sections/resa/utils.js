@@ -10,6 +10,28 @@ export const visuallyHidden = {
   clip: 'rect(0 0 0 0)',
 };
 
+export const formatTime = (timeString) => {
+  if (!timeString) return '';
+
+  // Split the time into components
+  const [time, modifier] = timeString.split(' ');
+  let [hours, minutes] = time.split(':');
+
+  // Convert to 24-hour format
+  if (modifier === 'PM' && hours !== '12') {
+    hours = String(parseInt(hours, 10) + 12);
+  }
+  if (modifier === 'AM' && hours === '12') {
+    hours = '00';
+  }
+
+  // Ensure double digits for hours and minutes
+  hours = hours.padStart(2, '0');
+  minutes = minutes.padStart(2, '0');
+
+  return `${hours}:${minutes}`;
+};
+
 export function emptyRows(page, rowsPerPage, arrayLength) {
   return page ? Math.max(0, (1 + page) * rowsPerPage - arrayLength) : 0;
 }

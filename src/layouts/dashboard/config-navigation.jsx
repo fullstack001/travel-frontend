@@ -27,11 +27,21 @@ const navConfig = [
   //   path: '/products',
   //   icon: icon('ic_cart'),
   // },
-  // {
-  //   title: 'blog',
-  //   path: '/blog',
-  //   icon: icon('ic_blog'),
-  // },
+  {
+    title: 'Hotels',
+    path: '/hotels',
+    icon: icon('ic_blog'),
+  },
+  {
+    title: 'Agencies',
+    path: '/agencies',
+    icon: icon('ic_disabled'),
+  },
+  {
+    title: 'Services',
+    path: '/services',
+    icon: icon('ic_service'),
+  },
   // {
   //   title: 'login',
   //   path: '/login',

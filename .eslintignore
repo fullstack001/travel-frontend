@@ -21,3 +21,6 @@ src/service-worker.ts
 src/serviceWorkerRegistration.ts
 src/setupTests.ts
 src/sections/daily/utils.js
+src/sections/hotels/utils.js
+src/sections/agency/utils.js
+src/sections/service/utils.js

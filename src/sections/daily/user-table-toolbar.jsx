@@ -26,6 +26,7 @@ export default function UserTableToolbar({
   showButton,
   pdfAction,
   excelAction,
+  loading,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -81,8 +82,9 @@ export default function UserTableToolbar({
                   onClick={NewAction}
                   color="inherit"
                   startIcon={<Iconify icon="eva:plus-fill" />}
+                  disabled={loading}
                 >
-                  New Daily Data
+                  {loading ? 'Loading Data...' : 'New Daily Data'}{' '}
                 </Button>
 
                 <Button
@@ -129,4 +131,5 @@ UserTableToolbar.propTypes = {
   showButton: PropTypes.any,
   pdfAction: PropTypes.func,
   excelAction: PropTypes.func,
+  loading: PropTypes.any,
 };
