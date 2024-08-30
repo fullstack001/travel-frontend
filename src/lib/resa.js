@@ -32,10 +32,10 @@ export const deleteData = async (data) => {
   }
 };
 
-export const getDailyData = async (date) => {
+export const getDailyData = async (data) => {
   try {
     const records = await axios.post(`${requestAddress}/api/resa/getdailydata`, {
-      date,
+      data,
     });
     return records.data;
   } catch (error) {

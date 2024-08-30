@@ -22,11 +22,11 @@ const navConfig = [
     path: '/daily-planning',
     icon: icon('ic_cart'),
   },
-  // {
-  //   title: 'product',
-  //   path: '/products',
-  //   icon: icon('ic_cart'),
-  // },
+  {
+    title: 'Driver Planning',
+    path: '/driver-planning',
+    icon: <img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />,
+  },
   {
     title: 'Hotels',
     path: '/hotels',

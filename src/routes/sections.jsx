@@ -9,6 +9,7 @@ export const IndexPage = lazy(() => import('src/pages/app'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
 export const ReservationPage = lazy(() => import('src/pages/reservation'));
 export const DailyPlanningPage = lazy(() => import('src/pages/daily-plannig'));
+export const DriverPlanningPage = lazy(() => import('src/pages/driver'));
 export const LoginPage = lazy(() => import('src/pages/login'));
 export const LogoutPage = lazy(() => import('src/pages/logout'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
@@ -45,6 +46,7 @@ export default function Router() {
         { element: <PrivateRoute element={<IndexPage />} />, index: true },
         { path: 'reservation', element: <PrivateRoute element={<ReservationPage />} /> },
         { path: 'daily-planning', element: <PrivateRoute element={<DailyPlanningPage />} /> },
+        { path: 'driver-planning', element: <PrivateRoute element={<DriverPlanningPage />} /> },
         { path: 'products', element: <PrivateRoute element={<ProductsPage />} /> },
         { path: 'blog', element: <PrivateRoute element={<BlogPage />} /> },
         { path: 'agencies', element: <PrivateRoute element={<AgencyPage />} /> },

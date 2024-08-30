@@ -22,6 +22,7 @@ dayjs.extend(utc);
 
 export default function UserTableToolbar({
   onGetDate,
+  onGetEndDate,
   NewAction,
   showButton,
   pdfAction,
@@ -33,6 +34,11 @@ export default function UserTableToolbar({
   const handleDateChange = (newDate) => {
     const date = dayjs(newDate).toDate();
     onGetDate(date);
+  };
+
+  const handleEndDateChange = (newDate) => {
+    const date = dayjs(newDate).toDate();
+    onGetEndDate(date);
   };
 
   const handleOpenMenu = (event) => {
@@ -65,17 +71,28 @@ export default function UserTableToolbar({
           bgcolor: '#aaf4ff',
         }}
       >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Select Date"
-            onChange={handleDateChange}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
+        <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Select Start Date"
+              onChange={handleDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
 
-        {showButton !== null && (
+          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ ml: 4 }}>
+            <DatePicker
+              sx={{ ml: 4 }}
+              label="Select End Date"
+              onChange={handleEndDateChange}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </Box>
+
+        {showButton && (
           <Box sx={{ ml: 'auto' }}>
-            {showButton !== null && (
+            {showButton && (
               <>
                 <Button
                   variant="contained"
@@ -127,6 +144,7 @@ export default function UserTableToolbar({
 
 UserTableToolbar.propTypes = {
   onGetDate: PropTypes.func,
+  onGetEndDate: PropTypes.func,
   NewAction: PropTypes.func,
   showButton: PropTypes.any,
   pdfAction: PropTypes.func,

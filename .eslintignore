@@ -24,3 +24,4 @@ src/sections/daily/utils.js
 src/sections/hotels/utils.js
 src/sections/agency/utils.js
 src/sections/service/utils.js
+src/sections/driver/utils.js
