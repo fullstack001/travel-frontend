@@ -64,7 +64,7 @@ export default function UserTableToolbar({ onGetDate, onGetEndDate, NewAction, l
           startIcon={<Iconify icon="eva:plus-fill" />}
           disabled={loading}
         >
-          {loading ? 'Loading Data...' : 'New Daily Data'}
+          {loading ? 'Loading Data...' : 'New Driver Plan Data'}
         </Button>
       </Box>
     </Toolbar>
