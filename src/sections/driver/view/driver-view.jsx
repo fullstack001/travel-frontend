@@ -229,7 +229,7 @@ export default function DriverPlanningPage() {
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Daily Planning</Typography>
+        <Typography variant="h4">Driver Planning</Typography>
       </Stack>
 
       <Card>
