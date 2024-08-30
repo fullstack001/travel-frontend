@@ -265,8 +265,8 @@ export default function DriverPlanningPage() {
                   { id: 'infant', label: 'Infant' },
                   { id: 'teen', label: 'Teen' },
                   { id: 'resa_remark', label: 'Resa_remarks' },
-                  { id: 'veh_cat', label: 'Veh Cat' },
-                  { id: 'veh_no', label: 'Veh No.' },
+                  { id: 'veh_cat', label: 'Vehicle Category' },
+                  { id: 'veh_no', label: 'Vehicle Number' },
                   { id: 'comments', label: 'Comments' },
                   { id: '', label: '' },
                 ]}

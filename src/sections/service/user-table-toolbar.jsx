@@ -39,7 +39,7 @@ export default function UserTableToolbar({ filterName, onFilterName, onNewHotel 
         startIcon={<Iconify icon="eva:plus-fill" />}
         onClick={onNewHotel}
       >
-        New Hotel
+        New Service
       </Button>
     </Toolbar>
   );

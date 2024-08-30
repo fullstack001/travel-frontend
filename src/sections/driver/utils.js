@@ -138,8 +138,8 @@ export const handleExportPdf = (row) => {
   ];
 
   const column2 = [
-    { header: 'Veh Cat', dataKey: 'veh_cat' },
-    { header: 'Veh No.', dataKey: 'veh_no' },
+    { header: 'Vehicle Category', dataKey: 'veh_cat' },
+    { header: 'Veh Number', dataKey: 'veh_no' },
     { header: 'Driver Signature', dataKey: 'driver_sign' },
     { header: 'Comments', dataKey: 'comments' },
   ];
