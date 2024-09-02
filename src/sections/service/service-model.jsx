@@ -46,7 +46,7 @@ export default function ServiceModal({ open, onClose, onSave, initialData, maxNu
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
-        {initialData ? 'Edit Hotel' : 'New Hotel'}
+        {initialData ? 'Edit Service' : 'New Service'}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3}>

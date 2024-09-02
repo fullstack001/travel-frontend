@@ -46,7 +46,7 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
-        {initialData ? 'Edit Hotel' : 'New Hotel'}
+        {initialData ? 'Edit Guid' : 'New Guid'}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
