@@ -32,15 +32,12 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 3050,
   },
-  preview: {
-    port: 3050,
-  },
   proxy: {
     '/api': {
-      target: 'http://127.0.0.1:5005',
+      target: 'http://127.0.0.1:3000/',
       changeOrigin: true,
       secure: false,
-      rewrite: (path) => path.replace(/^\/api/, '/api'),
+      rewrite: (path) => path.replace(/^\/api/, 'api'),
     },
   },
 });
