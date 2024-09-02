@@ -188,7 +188,7 @@ export const handleExportPdf = (resaData) => {
     { datakey: 'infant', header: 'Infant' },
     { datakey: 'flight_no', header: 'Flight No' },
     { datakey: 'flight_time', header: 'Flight Time' },
-    { datakey: 'pickup_time', header: ' Pick-up Time' },
+    { datakey: 'pickup_time', header: 'Pick-up Time' },
     { datakey: 'resa_remark', header: 'Remarks' },
     { datakey: 'service', header: 'Service' },
     { datakey: 'type_vehicle', header: 'Type of Vehicle' },

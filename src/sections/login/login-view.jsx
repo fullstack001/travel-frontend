@@ -55,7 +55,7 @@ export default function LoginView() {
       <Stack spacing={3}>
         <TextField
           name="email"
-          label="Email address"
+          label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />

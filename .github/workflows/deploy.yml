@@ -1,0 +1,39 @@
+name: Deploy React App to Ubuntu Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Specify your Node.js version
+
+      - name: Install dependencies
+        env:
+          VITE_API_URL_ADDRESS: ${{ secrets.VITE_API_URL_ADDRESS }}
+        run: npm install
+
+      - name: Build the React app
+        run: npm run build
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no user@your_server_ip << 'EOF'
+            rm -rf /var/www/travel-frontend/dist
+          EOF
+          scp -r ./build/* root@92.113.31.176:/var/www/travel-frontend/dist
