@@ -96,7 +96,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Agency');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'Agencies.xlsx');
+  XLSX.writeFile(workbook, `Agencies${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -138,5 +138,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('Agencies.pdf');
+  doc.save(`Agencies${Date.now()}.pdf`);
 };

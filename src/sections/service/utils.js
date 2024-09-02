@@ -82,7 +82,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'service');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'Services.xlsx');
+  XLSX.writeFile(workbook, `Services${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -109,5 +109,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('Services.pdf');
+  doc.save(`Services${Date.now()}.pdf`);
 };

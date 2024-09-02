@@ -72,7 +72,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'vehicle');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'vehicles.xlsx');
+  XLSX.writeFile(workbook, `vehicles${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -99,5 +99,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('vehicles.pdf');
+  doc.save(`vehicles${Date.now()}.pdf`);
 };

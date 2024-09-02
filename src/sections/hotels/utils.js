@@ -89,7 +89,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'hotel');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'Hotels.xlsx');
+  XLSX.writeFile(workbook, `Hotels${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -124,5 +124,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('Hotels.pdf');
+  doc.save(`Hotels${Date.now()}.pdf`);
 };

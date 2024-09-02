@@ -20,18 +20,24 @@ import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
-import { deleteData, getResaData, putResaData, getResaDataWithDate } from 'src/lib/resa';
+import {
+  deleteData,
+  getResaData,
+  putResaData,
+  getExportResa,
+  getResaDataWithDate,
+} from 'src/lib/resa';
 
 // import Iconify from 'src/components/iconify';
 // import Scrollbar from 'src/components/scrollbar';
 
-import { emptyRows } from '../utils';
 import ResaModal from '../resa-model';
 // import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
+import { emptyRows, handleExportPdf, handleExportExcel } from '../utils';
 
 // ----------------------------------------------------------------------
 
@@ -55,30 +61,7 @@ export default function ResaPage() {
   const [current, setCurrent] = useState(null);
   const [currentEnd, setCurrentEnd] = useState(null);
 
-  // const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(15);
-
-  // useEffect(() => {
-  //   const getResa = async () => {
-  //     const params = {
-  //       filterData: filterName,
-  //       orderKey: order,
-  //       orderDirect: orderBy,
-  //       page: page + 1, // Adjust page number for the backend (1-based index)
-  //       limit: rowsPerPage,
-  //     };
-  //     const resa = await getResaData(params);
-  //     if (resa.status === 500) {
-  //       alert('Network Error');
-  //     } else {
-  //       setMaxDossierNo(resa.maxDossierNo);
-  //       setResaData(resa.data);
-  //       setTotalItems(resa.totalItems);
-  //     }
-  //   };
-  //   getResa();
-  // }, [page, rowsPerPage, order, orderBy, filterName]);
 
   useEffect(() => {
     const getListData = async () => {
@@ -265,6 +248,25 @@ export default function ResaPage() {
     confirmGetData();
   }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName]);
 
+  const getExportData = async () => {
+    const data = {
+      start: current,
+      end: currentEnd,
+    };
+    const res = await getExportResa(data);
+    return res.data;
+  };
+
+  const handlePdf = async () => {
+    const exportData = await getExportData();
+    handleExportPdf(exportData);
+  };
+
+  const handleExcel = async () => {
+    const exportData = await getExportData();
+    handleExportExcel(exportData);
+  };
+
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -279,6 +281,8 @@ export default function ResaPage() {
           loading={loading}
           onGetDate={handleDailyData}
           onGetEndDate={handleEndDailyDate}
+          pdfAction={handlePdf}
+          excelAction={handleExcel}
         />
 
         <TableContainer sx={{ overflow: 'auto', height: '76vh' }}>

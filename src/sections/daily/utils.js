@@ -135,7 +135,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Planning');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'daily_planning.xlsx');
+  XLSX.writeFile(workbook, `daily_planning${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -188,5 +188,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('daily_planning.pdf');
+  doc.save(`daily_planning${Date.now()}.pdf`);
 };

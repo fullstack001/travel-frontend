@@ -181,5 +181,5 @@ export const handleExportPdf = (row) => {
   doc.text('Date: ', 10, pageHeight - 35);
 
   // Save the PDF
-  doc.save(`driver_planning_${formatDate(Date.now())} .pdf`);
+  doc.save(`driver_planning_${Date.now()} .pdf`);
 };

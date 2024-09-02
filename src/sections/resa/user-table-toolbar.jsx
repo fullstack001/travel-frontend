@@ -43,9 +43,9 @@ export default function UserTableToolbar({
     onGetEndDate(date);
   };
 
-  // const handleOpenMenu = (event) => {
-  //   setOpen(event.currentTarget);
-  // };
+  const handleOpenMenu = (event) => {
+    setOpen(event.currentTarget);
+  };
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -110,10 +110,10 @@ export default function UserTableToolbar({
         >
           {loading ? 'Loading data...' : 'New Reservation'}
         </Button>
-        {/* <Button onClick={handleOpenMenu} sx={{ ml: 2 }} variant="contained" color="secondary">
+        <Button onClick={handleOpenMenu} sx={{ ml: 2 }} variant="contained" color="secondary">
           <Iconify icon="eva:more-vertical-fill" />
           Export Data
-        </Button> */}
+        </Button>
       </Toolbar>
       <Popover
         open={!!open}
