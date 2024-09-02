@@ -1,4 +1,4 @@
-// import Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
@@ -23,8 +23,7 @@ export const Page404 = lazy(() => import('src/pages/page-not-found'));
 // ----------------------------------------------------------------------
 
 function isAuthenticated() {
-  // return !!Cookies.get('token');
-  return true;
+  return !!Cookies.get('token');
 }
 
 function PrivateRoute({ element }) {
