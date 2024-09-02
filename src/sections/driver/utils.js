@@ -88,6 +88,7 @@ export function applyFilter({ inputData, comparator, filterName }) {
 }
 
 export const handleExportPdf = (row) => {
+  console.log(row);
   const doc = new jsPDF({
     orientation: 'landscape', // Change orientation to landscape
     unit: 'mm', // Unit: 'pt' (points), 'mm', 'cm', 'in'
@@ -96,14 +97,14 @@ export const handleExportPdf = (row) => {
 
   doc.setFontSize(12);
   doc.text('Transfer order for', 10, 20); // (text, x, y)
-  doc.text(formatDate(row[0].service_date), 170, 20); // (text, x, y)
+  doc.text(formatDate(row.service_date), 170, 20); // (text, x, y)
   doc.text('CLIENT NAME : ', 10, 35);
   doc.text('AGENCY:', 10, 50);
   doc.setFontSize(20);
-  doc.text(row[0].order_for, 100, 20); // (text, x, y)
+  doc.text(row.order_for, 100, 20); // (text, x, y)
   doc.setFontSize(18);
-  doc.text(row[0].client, 100, 35);
-  doc.text(row[0].agency, 100, 50);
+  doc.text(row.client || '', 100, 35);
+  doc.text(row.agency || '', 100, 50);
   // Define the columns
   const column1 = [
     { header: 'Client Name', dataKey: 'client' },
@@ -122,18 +123,18 @@ export const handleExportPdf = (row) => {
   // Map data to rows
   const row1 = [
     {
-      client: row[0].client,
-      from: row[0].from,
-      to: row[0].to,
-      pickup_time: formatTime(row[0].pickup_time),
-      flight_no: row[0].fligth_no,
-      arb_dep: row[0].arb_dep,
-      service_date: formatDate(row[0].service_date),
-      adult: row[0].adult,
-      child: row[0].child,
-      infant: row[0].infant,
-      teen: row[0].teen,
-      resa_remark: row[0].resa_remark,
+      client: row.client,
+      from: row.from,
+      to: row.to,
+      pickup_time: formatTime(row.pickup_time),
+      flight_no: row.fligth_no,
+      arb_dep: row.arb_dep,
+      service_date: formatDate(row.service_date),
+      adult: row.adult,
+      child: row.child,
+      infant: row.infant,
+      teen: row.teen,
+      resa_remark: row.resa_remark,
     },
   ];
 
@@ -146,10 +147,10 @@ export const handleExportPdf = (row) => {
 
   const row2 = [
     {
-      veh_cat: row[0].veh_cat,
-      veh_no: row[0].veh_no,
+      veh_cat: row.veh_cat,
+      veh_no: row.veh_no,
       driver_sign: '',
-      comments: row[0].comments,
+      comments: row.comments,
     },
   ];
   // Add table to the PDF
@@ -180,5 +181,5 @@ export const handleExportPdf = (row) => {
   doc.text('Date: ', 10, pageHeight - 35);
 
   // Save the PDF
-  doc.save('driver_planning.pdf');
+  doc.save(`driver_planning_${formatDate(Date.now())} .pdf`);
 };

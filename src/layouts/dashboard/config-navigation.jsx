@@ -42,6 +42,16 @@ const navConfig = [
     path: '/services',
     icon: icon('ic_service'),
   },
+  {
+    title: 'Vehicles',
+    path: '/vehicle',
+    icon: icon('ic_vehicle'),
+  },
+  {
+    title: 'Guides',
+    path: '/guid',
+    icon: icon('ic_guid'),
+  },
   // {
   //   title: 'login',
   //   path: '/login',

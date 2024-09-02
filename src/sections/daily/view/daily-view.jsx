@@ -16,9 +16,11 @@ import TablePagination from '@mui/material/TablePagination';
 import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
+import { getGuidData } from 'src/lib/guid';
 import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
+import { getVehicleData } from 'src/lib/vehicle';
 import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -55,9 +57,10 @@ export default function DailyPlanningPage() {
   const [maxDossierNo, setMaxDossierNo] = useState('');
   const [hotel, setHotel] = useState([]);
   const [agency, setAgency] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
   const [service, setService] = useState([]);
+  const [guid, setGuid] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showButton, setShowButton] = useState(false);
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -74,9 +77,14 @@ export default function DailyPlanningPage() {
         const hotelres = await getHotelData();
         const agencyRes = await getAgencyData();
         const serviceRes = await getServiceData();
+        const vehicleRes = await getVehicleData();
+        const guidRes = await getGuidData();
+
         setHotel(hotelres.data);
         setAgency(agencyRes.data);
         setService(serviceRes.data);
+        setVehicle(vehicleRes.data);
+        setGuid(guidRes.data);
       } catch {
         alert('network Error. Refresh page');
       } finally {
@@ -127,8 +135,6 @@ export default function DailyPlanningPage() {
   };
 
   useEffect(() => {
-    setShowButton(false);
-
     const confirmGetData = async () => {
       if (!current || !currentEnd) return;
       if (current > currentEnd) {
@@ -150,8 +156,6 @@ export default function DailyPlanningPage() {
       } catch (error) {
         console.error('Error fetching data:', error);
         alert('An unexpected error occurred');
-      } finally {
-        setShowButton(true);
       }
     };
     confirmGetData();
@@ -243,7 +247,6 @@ export default function DailyPlanningPage() {
           onFilterName={handleFilterByName}
           onGetDate={handleDailyData}
           onGetEndDate={handleEndDailyDate}
-          showButton={showButton}
           NewAction={handleNewReservation}
           pdfAction={handlePdf}
           excelAction={handleExcel}
@@ -269,6 +272,8 @@ export default function DailyPlanningPage() {
                   { id: 'pickup_time', label: 'Pick up Time' },
                   { id: 'agency', label: 'Agency', align: 'center' },
                   { id: 'adult', label: 'Adult' },
+                  { id: 'child', label: 'Child' },
+                  { id: 'type_vehicle', label: 'Vehicle Type' },
                   { id: 'driver', label: 'Driver' },
                   { id: 'guid', label: 'Guid' },
                   { id: 'remarks', label: 'Remarks' },
@@ -293,6 +298,8 @@ export default function DailyPlanningPage() {
                       pickup_time={row.pickup_time}
                       agency={row.agency}
                       adult={row.adult}
+                      type_vehicle={row.type_vehicle}
+                      child={row.child}
                       driver={row.driver}
                       guid={row.guid}
                       remarks={row.resa_remark}
@@ -332,6 +339,8 @@ export default function DailyPlanningPage() {
         hotel={hotel}
         agency={agency}
         service={service}
+        vehicle={vehicle}
+        guid={guid}
       />
 
       <Dialog

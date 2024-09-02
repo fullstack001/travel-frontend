@@ -64,6 +64,8 @@ export default function DailyModal({
   hotel,
   agency,
   service,
+  vehicle,
+  guid,
 }) {
   const [formData, setFormData] = useState(initData);
 
@@ -121,6 +123,8 @@ export default function DailyModal({
   const agencyOptions = agency.map((item) => ({ label: item.name, value: item.name }));
   const hotelOptions = hotel.map((item) => ({ label: item.name, value: item.name }));
   const serviceOptions = service.map((item) => ({ label: item.name, value: item.name }));
+  const vehicleOptions = vehicle.map((item) => ({ label: item.name, value: item.name }));
+  const guidOptions = guid.map((item) => ({ label: item.name, value: item.name }));
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
@@ -335,13 +339,24 @@ export default function DailyModal({
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Type of Vehicle"
-                name="type_vehicle"
-                value={formData.type_vehicle}
-                onChange={handleChange}
+              <Autocomplete
+                options={vehicleOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={
+                  vehicleOptions.find((option) => option.value === formData.type_vehicle) || null
+                }
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'type_vehicle',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
                 fullWidth
-                variant="outlined"
+                renderInput={(params) => (
+                  <TextField {...params} label="Type of Vehicle" variant="outlined" />
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -483,6 +498,21 @@ export default function DailyModal({
               />
             </Grid>
             <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={guidOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={guidOptions.find((option) => option.value === formData.guid) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'guid',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => <TextField {...params} label="Guid" variant="outlined" />}
+              />
               <TextField
                 label="Guid"
                 name="guid"
@@ -516,4 +546,6 @@ DailyModal.propTypes = {
   hotel: PropTypes.any,
   agency: PropTypes.any,
   service: PropTypes.any,
+  vehicle: PropTypes.any,
+  guid: PropTypes.any,
 };

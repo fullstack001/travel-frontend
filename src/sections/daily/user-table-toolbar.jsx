@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
 // import Tooltip from '@mui/material/Tooltip';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Toolbar from '@mui/material/Toolbar';
@@ -24,7 +23,6 @@ export default function UserTableToolbar({
   onGetDate,
   onGetEndDate,
   NewAction,
-  showButton,
   pdfAction,
   excelAction,
   loading,
@@ -71,52 +69,39 @@ export default function UserTableToolbar({
           bgcolor: '#aaf4ff',
         }}
       >
-        <Box>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="Select Start Date"
-              onChange={handleDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            label="Select Start Date"
+            onChange={handleDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ ml: 4 }}>
-            <DatePicker
-              sx={{ ml: 4 }}
-              label="Select End Date"
-              onChange={handleEndDateChange}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </LocalizationProvider>
-        </Box>
+        <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ ml: 4 }}>
+          <DatePicker
+            sx={{ ml: 4 }}
+            label="Select End Date"
+            onChange={handleEndDateChange}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
 
-        {showButton && (
-          <Box sx={{ ml: 'auto' }}>
-            {showButton && (
-              <>
-                <Button
-                  variant="contained"
-                  onClick={NewAction}
-                  color="inherit"
-                  startIcon={<Iconify icon="eva:plus-fill" />}
-                  disabled={loading}
-                >
-                  {loading ? 'Loading Data...' : 'New Daily Data'}{' '}
-                </Button>
+        <>
+          <Button
+            variant="contained"
+            onClick={NewAction}
+            color="inherit"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+            disabled={loading}
+          >
+            {loading ? 'Loading Data...' : 'New Daily Data'}{' '}
+          </Button>
 
-                <Button
-                  onClick={handleOpenMenu}
-                  sx={{ ml: 2 }}
-                  variant="contained"
-                  color="secondary"
-                >
-                  <Iconify icon="eva:more-vertical-fill" />
-                  Export Data
-                </Button>
-              </>
-            )}
-          </Box>
-        )}
+          <Button onClick={handleOpenMenu} sx={{ ml: 2 }} variant="contained" color="secondary">
+            <Iconify icon="eva:more-vertical-fill" />
+            Export Data
+          </Button>
+        </>
       </Toolbar>
       <Popover
         open={!!open}
@@ -146,7 +131,6 @@ UserTableToolbar.propTypes = {
   onGetDate: PropTypes.func,
   onGetEndDate: PropTypes.func,
   NewAction: PropTypes.func,
-  showButton: PropTypes.any,
   pdfAction: PropTypes.func,
   excelAction: PropTypes.func,
   loading: PropTypes.any,

@@ -19,7 +19,8 @@ import DialogContentText from '@mui/material/DialogContentText';
 import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
-import { deleteData, getResaData, putResaData } from 'src/lib/resa';
+import { getVehicleData } from 'src/lib/vehicle';
+import { deleteData, getResaData, putResaData, getResaDataWithDate } from 'src/lib/resa';
 
 // import Iconify from 'src/components/iconify';
 // import Scrollbar from 'src/components/scrollbar';
@@ -49,32 +50,35 @@ export default function ResaPage() {
   const [hotel, setHotel] = useState([]);
   const [agency, setAgency] = useState([]);
   const [service, setService] = useState([]);
+  const [vehicle, setVehicle] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [current, setCurrent] = useState(null);
+  const [currentEnd, setCurrentEnd] = useState(null);
 
   // const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(15);
 
-  useEffect(() => {
-    const getResa = async () => {
-      const params = {
-        filterData: filterName,
-        orderKey: order,
-        orderDirect: orderBy,
-        page: page + 1, // Adjust page number for the backend (1-based index)
-        limit: rowsPerPage,
-      };
-      const resa = await getResaData(params);
-      if (resa.status === 500) {
-        alert('Network Error');
-      } else {
-        setMaxDossierNo(resa.maxDossierNo);
-        setResaData(resa.data);
-        setTotalItems(resa.totalItems);
-      }
-    };
-    getResa();
-  }, [page, rowsPerPage, order, orderBy, filterName]);
+  // useEffect(() => {
+  //   const getResa = async () => {
+  //     const params = {
+  //       filterData: filterName,
+  //       orderKey: order,
+  //       orderDirect: orderBy,
+  //       page: page + 1, // Adjust page number for the backend (1-based index)
+  //       limit: rowsPerPage,
+  //     };
+  //     const resa = await getResaData(params);
+  //     if (resa.status === 500) {
+  //       alert('Network Error');
+  //     } else {
+  //       setMaxDossierNo(resa.maxDossierNo);
+  //       setResaData(resa.data);
+  //       setTotalItems(resa.totalItems);
+  //     }
+  //   };
+  //   getResa();
+  // }, [page, rowsPerPage, order, orderBy, filterName]);
 
   useEffect(() => {
     const getListData = async () => {
@@ -83,9 +87,11 @@ export default function ResaPage() {
         const hotelres = await getHotelData();
         const agencyRes = await getAgencyData();
         const serviceRes = await getServiceData();
+        const vehicleRes = await getVehicleData();
         setHotel(hotelres.data);
         setAgency(agencyRes.data);
         setService(serviceRes.data);
+        setVehicle(vehicleRes.data);
       } catch {
         alert('network Error. Refresh page');
       } finally {
@@ -189,6 +195,76 @@ export default function ResaPage() {
     }
   };
 
+  const handleDailyData = async (dateStr) => {
+    const date = new Date(dateStr);
+    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+
+    const newDate =
+      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+
+    setCurrent(newDate);
+  };
+
+  const handleEndDailyDate = async (dateStr) => {
+    const date = new Date(dateStr);
+    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+
+    const newDate =
+      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+
+    setCurrentEnd(newDate);
+  };
+
+  useEffect(() => {
+    const confirmGetData = async () => {
+      if (!current || !currentEnd) {
+        const params = {
+          filterData: filterName,
+          orderKey: order,
+          orderDirect: orderBy,
+          page: page + 1,
+          limit: rowsPerPage,
+        };
+        const resa = await getResaData(params);
+        if (resa.status === 500) {
+          alert('Network Error');
+        } else {
+          setMaxDossierNo(resa.maxDossierNo);
+          setResaData(resa.data);
+          setTotalItems(resa.totalItems);
+        }
+      } else {
+        if (current > currentEnd) {
+          alert('Input currece Date!');
+          return;
+        }
+        try {
+          const data = {
+            start: current,
+            end: currentEnd,
+            filterData: filterName,
+            orderKey: order,
+            orderDirect: orderBy,
+            page: page + 1,
+            limit: rowsPerPage,
+          };
+          const res = await getResaDataWithDate(data);
+          if (res === 500) {
+            alert('Network Error');
+          } else {
+            setMaxDossierNo(res.maxDossierNo);
+            setResaData(res.data);
+            setTotalItems(res.totalItems);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          alert('An unexpected error occurred');
+        }
+      }
+    };
+    confirmGetData();
+  }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName]);
+
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
@@ -201,6 +277,8 @@ export default function ResaPage() {
           onFilterName={handleFilterByName}
           onNewResa={handleNewReservation}
           loading={loading}
+          onGetDate={handleDailyData}
+          onGetEndDate={handleEndDailyDate}
         />
 
         <TableContainer sx={{ overflow: 'auto', height: '76vh' }}>
@@ -306,6 +384,7 @@ export default function ResaPage() {
         hotel={hotel}
         agency={agency}
         service={service}
+        vehicle={vehicle}
       />
       <Dialog
         open={confirmOpen}

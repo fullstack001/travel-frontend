@@ -30,8 +30,8 @@ import {
   emptyRows,
   applyFilter,
   getComparator,
-  // handleExportPdf,
-  // handleExportExcel,
+  handleExportPdf,
+  handleExportExcel,
 } from '../utils';
 
 // ----------------------------------------------------------------------
@@ -156,12 +156,20 @@ export default function ServicePage() {
     setConfirmOpen(false);
   };
 
+  const handlePdf = () => {
+    handleExportPdf(serviceData);
+  };
+
+  const handleExcel = () => {
+    handleExportExcel(serviceData);
+  };
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Hotels</Typography>
+        <Typography variant="h4">Services</Typography>
       </Stack>
 
       <Card>
@@ -169,6 +177,8 @@ export default function ServicePage() {
           filterName={filterName}
           onFilterName={handleFilterByName}
           onNewHotel={handleNewReservation}
+          pdfAction={handlePdf}
+          excelAction={handleExcel}
         />
 
         <Scrollbar>

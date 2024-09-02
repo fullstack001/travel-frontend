@@ -220,8 +220,8 @@ export default function DriverPlanningPage() {
     setConfirmOpen(false);
   };
 
-  const handlePdf = () => {
-    handleExportPdf(driverData);
+  const handlePdf = (row) => {
+    handleExportPdf(row);
   };
 
   const notFound = !dataFiltered.length && !!filterName;

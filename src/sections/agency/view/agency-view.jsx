@@ -30,8 +30,8 @@ import {
   emptyRows,
   applyFilter,
   getComparator,
-  // handleExportPdf,
-  // handleExportExcel,
+  handleExportPdf,
+  handleExportExcel,
 } from '../utils';
 
 // ----------------------------------------------------------------------
@@ -156,6 +156,13 @@ export default function HotelPlanningPage() {
     setConfirmOpen(false);
   };
 
+  const handlePdf = () => {
+    handleExportPdf(agencyData);
+  };
+
+  const handleExcel = () => {
+    handleExportExcel(agencyData);
+  };
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
@@ -169,6 +176,8 @@ export default function HotelPlanningPage() {
           filterName={filterName}
           onFilterName={handleFilterByName}
           onNewHotel={handleNewReservation}
+          pdfAction={handlePdf}
+          excelAction={handleExcel}
         />
 
         <Scrollbar>

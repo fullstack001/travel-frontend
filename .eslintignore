@@ -25,3 +25,5 @@ src/sections/hotels/utils.js
 src/sections/agency/utils.js
 src/sections/service/utils.js
 src/sections/driver/utils.js
+src/sections/vehicle/utils.js
+src/sections/guid/utils.js

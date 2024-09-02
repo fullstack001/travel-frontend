@@ -2,16 +2,6 @@ import 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  console.log(date);
-  const days = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = date.getDate();
-  const month = days[date.getMonth()];
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
 export const visuallyHidden = {
   border: 0,
   margin: -1,
@@ -72,17 +62,14 @@ export function applyFilter({ inputData, comparator, filterName }) {
 export const handleExportExcel = (resaData) => {
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
-  const worksheetData = [
-    ['Service ID', 'Service Name'],
-    ...resaData.map((row) => [row.service_id, row.name]),
-  ];
+  const worksheetData = [['Guid Id', 'Guid'], ...resaData.map((row) => [row.guid_id, row.name])];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
   // Append the worksheet to the workbook
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'service');
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'guid');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'Services.xlsx');
+  XLSX.writeFile(workbook, 'vehicles.xlsx');
 };
 
 export const handleExportPdf = (resaData) => {
@@ -92,13 +79,13 @@ export const handleExportPdf = (resaData) => {
   });
   // Define the columns
   const columns = [
-    { header: 'Service ID', dataKey: 'service_id' },
-    { header: 'Service Name', dataKey: 'name' },
+    { header: 'Guid Id', dataKey: 'guid_id' },
+    { header: 'Guid', dataKey: 'name' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
-    service_id: row.service_id,
+    guid_id: row.guid_id,
     name: row.name,
   }));
 
@@ -109,5 +96,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('Services.pdf');
+  doc.save('vehicles.pdf');
 };

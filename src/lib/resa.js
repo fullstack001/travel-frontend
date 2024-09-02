@@ -14,6 +14,15 @@ export const getResaData = async (params) => {
   }
 };
 
+export const getResaDataWithDate = async (params) => {
+  try {
+    const records = await axios.post(`${requestAddress}/api/resa/getresadata-date`, params);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};
+
 export const putResaData = async (data) => {
   try {
     const records = await axios.post(`${requestAddress}/api/resa/putresadata`, data);

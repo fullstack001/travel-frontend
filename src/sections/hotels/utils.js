@@ -73,88 +73,48 @@ export const handleExportExcel = (resaData) => {
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
-    [
-      'Client Name',
-      'From',
-      'To',
-      'Service Type',
-      'Date Service',
-      'Arv / Dep',
-      'Flight No',
-      'Flight Time',
-      'Pick up Time',
-      'Agency',
-      'Adult',
-      'Driver',
-      'Guid',
-      'Remarks',
-    ],
+    ['Hotel Id', 'Hotel Name', 'Hotel Group', 'Hotel Address', 'Hotel Region', 'Hotel Plan Region'],
     ...resaData.map((row) => [
-      row.client,
-      row.from,
-      row.hotel,
-      row.service_type,
-      formatDate(row.service_date),
-      row.arb_dep,
-      row.flight_no,
-      row.flight_time,
-      row.pickup_time,
-      row.agency,
-      row.adult,
-      row.driver,
-      row.guid,
-      row.resa_remark,
+      row.hotel_id,
+      row.name,
+      row.h_group,
+      row.h_addr,
+      row.h_region,
+      row.h_plan_region,
     ]),
   ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
   // Append the worksheet to the workbook
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Planning');
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'hotel');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, 'daily_planning.xlsx');
+  XLSX.writeFile(workbook, 'Hotels.xlsx');
 };
 
 export const handleExportPdf = (resaData) => {
   const doc = new jsPDF({
-    orientation: 'landscape', // Change orientation to landscape
     unit: 'pt', // Unit: 'pt' (points), 'mm', 'cm', 'in'
     format: [1500, 600], // Custom width and height in points
   });
   // Define the columns
   const columns = [
-    { header: 'Client Name', dataKey: 'client' },
-    { header: 'From', dataKey: 'from' },
-    { header: 'To', dataKey: 'hotel' },
-    { header: 'Service Type', dataKey: 'service_type' },
-    { header: 'Date Service', dataKey: 'service_date' },
-    { header: 'Arv / Dep', dataKey: 'arb_dep' },
-    { header: 'Flight No', dataKey: 'flight_no' },
-    { header: 'Flight Time', dataKey: 'flight_time' },
-    { header: 'Pick up Time', dataKey: 'pickup_time' },
-    { header: 'Agency', dataKey: 'agency' },
-    { header: 'Adult', dataKey: 'adult' },
-    { header: 'Driver', dataKey: 'driver' },
-    { header: 'Guid', dataKey: 'guid' },
-    { header: 'Remarks', dataKey: 'remarks' },
+    { header: 'Hotel Id', dataKey: 'hotel_id' },
+    { header: 'Hotel Name', dataKey: 'name' },
+    { header: 'Hotel Group', dataKey: 'h_group' },
+    { header: 'Hotel Address', dataKey: 'h_addr' },
+    { header: 'Hotel Region', dataKey: 'h_region' },
+    { header: 'Hotel Plan Region', dataKey: 'h_plan_region' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
-    client: row.client,
-    from: row.from,
-    hotel: row.hotel,
-    service_type: row.service_type,
-    service_date: formatDate(row.service_date),
-    arb_dep: row.arb_dep,
-    flight_no: row.flight_no,
-    flight_time: row.flight_time,
-    pickup_time: row.pickup_time,
-    agency: row.agency,
-    adult: row.adult,
-    driver: row.driver,
-    guid: row.guid,
-    remarks: row.resa_remark,
+    hotel_id: row.hotel_id,
+    name: row.name,
+    h_group: row.h_group,
+    h_addr: row.h_addr,
+    h_region: row.h_region,
+    h_plan_region: row.h_plan_region,
   }));
 
   // Add table to the PDF
@@ -164,5 +124,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save('daily_planning.pdf');
+  doc.save('Hotels.pdf');
 };

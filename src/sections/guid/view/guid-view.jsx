@@ -16,11 +16,11 @@ import TablePagination from '@mui/material/TablePagination';
 import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
-import { getHotelData, putHotelData, deleteHotelData } from 'src/lib/hotel';
+import { deleteData, getGuidData, putGuidData } from 'src/lib/guid';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import HotelModal from '../hotel-model';
+import GuidModal from '../guid-model';
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
@@ -36,8 +36,8 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function HotelPlanningPage() {
-  const [hotelData, setHotelData] = useState([]);
+export default function GuidPage() {
+  const [guidData, setGuidData] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('_id');
@@ -47,7 +47,7 @@ export default function HotelPlanningPage() {
   const [currentRow, setCurrentRow] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
-  const [maxHotelNo, setMaxHotelrNo] = useState('');
+  const [maxGuidNo, setMaxGuidNo] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -72,7 +72,7 @@ export default function HotelPlanningPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: hotelData,
+    inputData: guidData,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -80,13 +80,13 @@ export default function HotelPlanningPage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await getHotelData();
+        const res = await getGuidData();
         if (res === 500) {
           alert('Network Error');
         } else {
-          setHotelData(res.data);
+          setGuidData(res.data);
           console.log(res.max_num);
-          setMaxHotelrNo(res.max_num);
+          setMaxGuidNo(res.max_num);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -116,7 +116,7 @@ export default function HotelPlanningPage() {
       newData: formData,
     };
 
-    const res = await putHotelData(params);
+    const res = await putGuidData(params);
     if (res === 500) {
       alert('Network Error');
     } else {
@@ -125,8 +125,8 @@ export default function HotelPlanningPage() {
       } else {
         alert('A data added successfully');
       }
-      setHotelData(res.data);
-      setMaxHotelrNo(res.max_num);
+      setGuidData(res.data);
+      setMaxGuidNo(res.max_num);
     }
   };
 
@@ -142,13 +142,13 @@ export default function HotelPlanningPage() {
       id: deleteId,
     };
 
-    const res = await deleteHotelData(params);
+    const res = await deleteData(params);
     if (res === 500) {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
-      setHotelData(res.data);
-      setMaxHotelrNo(res.max_num);
+      setGuidData(res.data);
+      setMaxGuidNo(res.max_num);
     }
   };
 
@@ -157,11 +157,11 @@ export default function HotelPlanningPage() {
   };
 
   const handlePdf = () => {
-    handleExportPdf(hotelData);
+    handleExportPdf(guidData);
   };
 
   const handleExcel = () => {
-    handleExportExcel(hotelData);
+    handleExportExcel(guidData);
   };
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -169,7 +169,7 @@ export default function HotelPlanningPage() {
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Hotels</Typography>
+        <Typography variant="h4">Guids</Typography>
       </Stack>
 
       <Card>
@@ -189,12 +189,8 @@ export default function HotelPlanningPage() {
                 orderBy={orderBy}
                 onRequestSort={handleSort}
                 headLabel={[
-                  { id: 'hotel_id', label: 'Hotel Id' },
-                  { id: 'name', label: 'Hotel Name' },
-                  { id: 'h_group', label: 'Hotel Group' },
-                  { id: 'h_addr', label: 'Hotel Address' },
-                  { id: 'h_region', label: 'Hotel Region' },
-                  { id: 'h_plan_region', label: 'Hotel Plan Region' },
+                  { id: 'guid_id', label: 'Guid Id', align: 'center' },
+                  { id: 'name', label: 'Guid Type', align: 'center' },
                   { id: '', label: '' },
                 ]}
               />
@@ -206,11 +202,7 @@ export default function HotelPlanningPage() {
                       key={row._id}
                       id={row._id}
                       name={row.name}
-                      hotel_id={row.hotel_id}
-                      h_group={row.h_group}
-                      h_addr={row.h_addr}
-                      h_region={row.h_region}
-                      h_plan_region={row.h_plan_region}
+                      guid_id={row.guid_id}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
                     />
@@ -218,7 +210,7 @@ export default function HotelPlanningPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, hotelData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, guidData.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -230,7 +222,7 @@ export default function HotelPlanningPage() {
         <TablePagination
           page={page}
           component="div"
-          count={hotelData.length}
+          count={guidData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
@@ -238,12 +230,12 @@ export default function HotelPlanningPage() {
         />
       </Card>
 
-      <HotelModal
+      <GuidModal
         open={isModalOpen}
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
-        maxNumber={maxHotelNo}
+        maxNumber={maxGuidNo}
       />
 
       <Dialog

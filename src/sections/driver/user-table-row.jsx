@@ -70,7 +70,7 @@ export default function UserTableRow({
   };
 
   const handleexport = () => {
-    exportAction();
+    exportAction(id);
     setOpen(null);
   };
 

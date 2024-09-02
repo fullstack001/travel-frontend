@@ -14,40 +14,9 @@ import IconButton from '@mui/material/IconButton';
 // import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
-import { formatTime } from './utils';
-
-function formatDateToString(date) {
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = d.getFullYear();
-  return `${year}-${month}-${day}`;
-}
-
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
-  selected,
-  id,
-  client,
-  from,
-  hotel,
-  service_type,
-  service_date,
-  arb_dep,
-  flight_no,
-  flight_time,
-  pickup_time,
-  agency,
-  adult,
-  driver,
-  guid,
-  remarks,
-  editAction,
-  deleteAction,
-  type_vehicle,
-  child,
-}) {
+export default function UserTableRow({ id, name, vehicle_id, editAction, deleteAction }) {
   const [open, setOpen] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -69,24 +38,20 @@ export default function UserTableRow({
 
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell>{client}</TableCell>
-        <TableCell>{from}</TableCell>
-        <TableCell>{hotel}</TableCell>
-        <TableCell>{service_type}</TableCell>
-        <TableCell>{formatDateToString(service_date)}</TableCell>
-        <TableCell>{arb_dep}</TableCell>
-        <TableCell>{flight_no}</TableCell>
-        <TableCell>{formatTime(flight_time)}</TableCell>
-        <TableCell>{formatTime(pickup_time)}</TableCell>
-        <TableCell>{agency}</TableCell>
-        <TableCell>{adult}</TableCell>
-        <TableCell>{child}</TableCell>
-        <TableCell>{type_vehicle}</TableCell>
-        <TableCell>{driver}</TableCell>
-        <TableCell>{guid}</TableCell>
-        <TableCell>{remarks}</TableCell>
+      <TableRow hover tabIndex={-1} role="checkbox">
+        {/* <TableCell padding="checkbox">
+          <Checkbox disableRipple checked={selected} onChange={handleClick} />
+        </TableCell>
 
+        <TableCell component="th" scope="row">
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Typography variant="subtitle2" noWrap>
+              {service_type}
+            </Typography>
+          </Stack>
+        </TableCell> */}
+        <TableCell align="center">{vehicle_id}</TableCell>
+        <TableCell align="center">{name}</TableCell>
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -120,23 +85,8 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   id: PropTypes.any,
-  client: PropTypes.any,
-  from: PropTypes.any,
-  hotel: PropTypes.any,
-  service_type: PropTypes.any,
-  service_date: PropTypes.any,
-  arb_dep: PropTypes.any,
-  flight_no: PropTypes.any,
-  flight_time: PropTypes.any,
-  pickup_time: PropTypes.any,
-  agency: PropTypes.any,
-  adult: PropTypes.any,
-  driver: PropTypes.any,
-  guid: PropTypes.any,
-  remarks: PropTypes.any,
-  selected: PropTypes.any,
-  type_vehicle: PropTypes.any,
-  child: PropTypes.any,
+  vehicle_id: PropTypes.any,
+  name: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
 };

@@ -1,51 +1,29 @@
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 
-// import Tooltip from '@mui/material/Tooltip';
 import Button from '@mui/material/Button';
 import Popover from '@mui/material/Popover';
 import Toolbar from '@mui/material/Toolbar';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 
 import Iconify from 'src/components/iconify';
-
-dayjs.extend(utc);
 
 // ----------------------------------------------------------------------
 
 export default function UserTableToolbar({
-  onGetDate,
-  onGetEndDate,
   filterName,
   onFilterName,
-  onNewResa,
-  loading,
-  excelAction,
+  onNewHotel,
   pdfAction,
+  excelAction,
 }) {
   const [open, setOpen] = useState(null);
 
-  const handleDateChange = (newDate) => {
-    const date = dayjs(newDate).toDate();
-    onGetDate(date);
+  const handleOpenMenu = (event) => {
+    setOpen(event.currentTarget);
   };
-
-  const handleEndDateChange = (newDate) => {
-    const date = dayjs(newDate).toDate();
-    onGetEndDate(date);
-  };
-
-  // const handleOpenMenu = (event) => {
-  //   setOpen(event.currentTarget);
-  // };
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -60,7 +38,6 @@ export default function UserTableToolbar({
     excelAction();
     setOpen(null);
   };
-
   return (
     <>
       <Toolbar
@@ -74,7 +51,7 @@ export default function UserTableToolbar({
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search Client Name..."
+          placeholder="Search Vehicle Type..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify
@@ -84,36 +61,19 @@ export default function UserTableToolbar({
             </InputAdornment>
           }
         />
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="Select Start Date"
-            onChange={handleDateChange}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-
-        <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ ml: 4 }}>
-          <DatePicker
-            sx={{ ml: 4 }}
-            label="Select End Date"
-            onChange={handleEndDateChange}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
 
         <Button
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="eva:plus-fill" />}
-          onClick={onNewResa}
-          disabled={loading}
+          onClick={onNewHotel}
         >
-          {loading ? 'Loading data...' : 'New Reservation'}
+          New Guid
         </Button>
-        {/* <Button onClick={handleOpenMenu} sx={{ ml: 2 }} variant="contained" color="secondary">
+        <Button onClick={handleOpenMenu} sx={{ ml: 2 }} variant="contained" color="secondary">
           <Iconify icon="eva:more-vertical-fill" />
           Export Data
-        </Button> */}
+        </Button>
       </Toolbar>
       <Popover
         open={!!open}
@@ -142,10 +102,7 @@ export default function UserTableToolbar({
 UserTableToolbar.propTypes = {
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  onNewResa: PropTypes.func,
-  loading: PropTypes.any,
+  onNewHotel: PropTypes.func,
   pdfAction: PropTypes.func,
   excelAction: PropTypes.func,
-  onGetDate: PropTypes.func,
-  onGetEndDate: PropTypes.func,
 };
