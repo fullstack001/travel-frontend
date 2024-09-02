@@ -93,7 +93,6 @@ export function applyFilter({ inputData, comparator, filterName }) {
 
 export const handleExportExcel = (resaData) => {
   resaData.sort((a, b) => new Date(a.service_date) - new Date(b.service_date));
-  // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
     [
