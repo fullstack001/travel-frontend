@@ -1,4 +1,3 @@
-import Cookies from 'js-cookie';
 import PropTypes from 'prop-types';
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
@@ -22,12 +21,27 @@ export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // ----------------------------------------------------------------------
 
-function isAuthenticated() {
-  return !!Cookies.get('token');
+function isAuthenticated(key) {
+  const tokenString = localStorage.getItem(key);
+
+  if (!tokenString) {
+    return null;
+  }
+
+  const tokenObject = JSON.parse(tokenString);
+  const now = new Date();
+
+  // Check if the token has expired
+  if (now.getTime() > tokenObject.expiry) {
+    localStorage.removeItem(key); // Remove expired token
+    return null;
+  }
+
+  return tokenObject.token;
 }
 
 function PrivateRoute({ element }) {
-  return isAuthenticated() ? element : <Navigate to="/login" replace />;
+  return isAuthenticated('token') ? element : <Navigate to="/login" replace />;
 }
 
 PrivateRoute.propTypes = {
