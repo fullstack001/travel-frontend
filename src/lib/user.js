@@ -22,6 +22,7 @@ export const signUp = async (user) => {
 export const signIn = async (user) => {
   try {
     const response = await axios.post(`${requestAddress}/api/auth/signin`, user);
+    console.log(response.data);
     Cookies.set('token', response.data.token, { expires: 7, secure: true, sameSite: 'strict' });
     return 200;
   } catch (error) {
