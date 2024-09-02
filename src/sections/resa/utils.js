@@ -92,7 +92,7 @@ export function applyFilter({ inputData, comparator, filterName }) {
 }
 
 export const handleExportExcel = (resaData) => {
-  resaData.sort((a, b) => new Date(b.service_date) - new Date(a.service_date));
+  resaData.sort((a, b) => new Date(a.service_date) - new Date(b.service_date));
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
@@ -165,7 +165,7 @@ export const handleExportExcel = (resaData) => {
 };
 
 export const handleExportPdf = (resaData) => {
-  resaData.sort((a, b) => new Date(b.service_date) - new Date(a.service_date));
+  resaData.sort((a, b) => new Date(a.service_date) - new Date(b.service_date));
   const doc = new jsPDF({
     orientation: 'landscape', // Change orientation to landscape
     unit: 'pt', // Unit: 'pt' (points), 'mm', 'cm', 'in'
