@@ -184,6 +184,7 @@ export default function ResaPage() {
 
     const newDate =
       timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+    console.log(newDate);
 
     setCurrent(newDate);
   };

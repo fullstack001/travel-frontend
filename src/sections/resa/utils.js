@@ -151,7 +151,7 @@ export const handleExportExcel = (resaData) => {
       row.cur,
       row.invoce_on,
       row.status,
-      row.effect_date,
+      formatDate(row.effect_date),
     ]),
   ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
