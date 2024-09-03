@@ -131,11 +131,6 @@ export default function DriverPlanningPage() {
           setMaxDossierNo(res.max_num);
         }
       } else {
-        if (current > currentEnd) {
-          alert('Input currece Date!');
-          return;
-        }
-
         setPage(0);
 
         try {

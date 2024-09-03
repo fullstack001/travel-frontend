@@ -137,10 +137,6 @@ export default function DailyPlanningPage() {
   useEffect(() => {
     const confirmGetData = async () => {
       if (!current || !currentEnd) return;
-      if (current > currentEnd) {
-        alert('Input currece Date!');
-        return;
-      }
 
       setPage(0);
 

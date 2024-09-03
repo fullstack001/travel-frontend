@@ -217,10 +217,6 @@ export default function ResaPage() {
           setTotalItems(resa.totalItems);
         }
       } else {
-        if (current > currentEnd) {
-          alert('Input currece Date!');
-          return;
-        }
         try {
           const data = {
             start: current,

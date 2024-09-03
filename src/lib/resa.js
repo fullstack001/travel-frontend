@@ -80,3 +80,12 @@ export const deleteDailyData = async (data) => {
     return 500;
   }
 };
+
+export const getDashboardData = async () => {
+  try {
+    const record = await axios.get(`${requestAddress}/api/resa/dashboarddata`);
+    return record.data;
+  } catch (error) {
+    return 500;
+  }
+};
