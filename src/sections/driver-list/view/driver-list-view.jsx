@@ -16,12 +16,12 @@ import TablePagination from '@mui/material/TablePagination';
 import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
-import { deleteData, getGuidData, putGuidData } from 'src/lib/guid';
+import { getDriverListData, putDriverListData, deleteDriverListData } from 'src/lib/driverList';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import GuidModal from '../guid-model';
 import TableNoData from '../table-no-data';
+import VehicleModal from '../vehicle-model';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
@@ -36,8 +36,8 @@ import {
 
 // ----------------------------------------------------------------------
 
-export default function GuidPage() {
-  const [guidData, setGuidData] = useState([]);
+export default function DriverListPage() {
+  const [driverData, setDriverData] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('_id');
@@ -47,7 +47,7 @@ export default function GuidPage() {
   const [currentRow, setCurrentRow] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
-  const [maxGuidNo, setMaxGuidNo] = useState('');
+  const [maxDriverNo, setMaxDriverNo] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -72,7 +72,7 @@ export default function GuidPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: guidData,
+    inputData: driverData,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -80,13 +80,13 @@ export default function GuidPage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await getGuidData();
+        const res = await getDriverListData();
         if (res === 500) {
           alert('Network Error');
         } else {
-          setGuidData(res.data);
+          setDriverData(res.data);
           console.log(res.max_num);
-          setMaxGuidNo(res.max_num);
+          setMaxDriverNo(res.max_num);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -116,7 +116,7 @@ export default function GuidPage() {
       newData: formData,
     };
 
-    const res = await putGuidData(params);
+    const res = await putDriverListData(params);
     if (res === 500) {
       alert('Network Error');
     } else {
@@ -125,8 +125,8 @@ export default function GuidPage() {
       } else {
         alert('A data added successfully');
       }
-      setGuidData(res.data);
-      setMaxGuidNo(res.max_num);
+      setDriverData(res.data);
+      setMaxDriverNo(res.max_num);
     }
   };
 
@@ -142,13 +142,13 @@ export default function GuidPage() {
       id: deleteId,
     };
 
-    const res = await deleteData(params);
+    const res = await deleteDriverListData(params);
     if (res === 500) {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
-      setGuidData(res.data);
-      setMaxGuidNo(res.max_num);
+      setDriverData(res.data);
+      setMaxDriverNo(res.max_num);
     }
   };
 
@@ -157,11 +157,11 @@ export default function GuidPage() {
   };
 
   const handlePdf = () => {
-    handleExportPdf(guidData);
+    handleExportPdf(driverData);
   };
 
   const handleExcel = () => {
-    handleExportExcel(guidData);
+    handleExportExcel(driverData);
   };
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -169,7 +169,7 @@ export default function GuidPage() {
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Guids</Typography>
+        <Typography variant="h4">Vehicles</Typography>
       </Stack>
 
       <Card>
@@ -189,10 +189,8 @@ export default function GuidPage() {
                 orderBy={orderBy}
                 onRequestSort={handleSort}
                 headLabel={[
-                  { id: 'guid_id', label: 'Guid Id', align: 'center' },
-                  { id: 'name', label: 'Guid Name', align: 'center' },
-                  { id: 'language', label: 'Language Spoken', align: 'center' },
-                  { id: 'license', label: 'License No', align: 'center' },
+                  { id: 'driver_id', label: 'Driver Id', align: 'center' },
+                  { id: 'name', label: 'Driver Name', align: 'center' },
                   { id: '', label: '' },
                 ]}
               />
@@ -204,9 +202,7 @@ export default function GuidPage() {
                       key={row._id}
                       id={row._id}
                       name={row.name}
-                      language={row.language}
-                      license={row.license}
-                      guid_id={row.guid_id}
+                      driver_id={row.driver_id}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
                     />
@@ -214,7 +210,7 @@ export default function GuidPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, guidData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, driverData.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -226,7 +222,7 @@ export default function GuidPage() {
         <TablePagination
           page={page}
           component="div"
-          count={guidData.length}
+          count={driverData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
@@ -234,12 +230,12 @@ export default function GuidPage() {
         />
       </Card>
 
-      <GuidModal
+      <VehicleModal
         open={isModalOpen}
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
-        maxNumber={maxGuidNo}
+        maxNumber={maxDriverNo}
       />
 
       <Dialog

@@ -190,13 +190,11 @@ export default function HotelPlanningPage() {
                 headLabel={[
                   { id: 'ageycy_id', label: 'Agency Id' },
                   { id: 'name', label: 'Agency Name' },
+                  { id: 'ref', label: 'AgencyRef' },
                   { id: 'country', label: 'Country' },
                   { id: 'tel', label: 'Tel' },
-                  { id: 'name2', label: 'Name2' },
                   { id: 'email', label: 'Email' },
                   { id: 'website', label: 'Website' },
-                  { id: 'status', label: 'Status' },
-                  { id: 'tax', label: 'Tax' },
                   { id: '', label: '' },
                 ]}
               />
@@ -209,13 +207,11 @@ export default function HotelPlanningPage() {
                       id={row._id}
                       ageycy_id={row.ageycy_id}
                       name={row.name}
+                      reff={row.ref}
                       country={row.country}
                       tel={row.tel}
-                      name2={row.name2}
                       email={row.email}
                       website={row.website}
-                      status={row.status}
-                      tax={row.tax}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
                     />

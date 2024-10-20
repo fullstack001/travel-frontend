@@ -45,7 +45,7 @@ export const signUp = async (user) => {
   try {
     const response = await axiosApi.post('/auth/signup', user);
     setTokenWithExpiry('token', response.data.token, 60); // Token expires in 60 minutes
-    return 200;
+    return { status: 200, user: response.data.user };
   } catch (error) {
     console.error('Sign Up Error:', error.response?.data || error.message);
     return error.response?.data || { error: 'An error occurred during sign up' };
@@ -56,7 +56,7 @@ export const signIn = async (user) => {
   try {
     const response = await axios.post(`${requestAddress}/api/auth/signin`, user);
     setTokenWithExpiry('token', response.data.token, 60); // Token expires in 60 minutes
-    return 200;
+    return { status: 200, user: response.data.user };
   } catch (error) {
     console.error('Sign In Error:', error.response?.data || error.message);
     return error.response?.data || { error: 'An error occurred during sign in' };

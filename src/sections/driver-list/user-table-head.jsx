@@ -54,7 +54,9 @@ export default function UserTableHead({
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              padding: '10px 15px',
+              padding: '15px',
+              paddingTop: '10px',
+              paddingBottom: '10px',
             }}
           >
             <TableSortLabel

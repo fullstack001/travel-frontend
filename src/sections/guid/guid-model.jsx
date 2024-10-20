@@ -2,7 +2,9 @@ import PropTypes from 'prop-types';
 import React, { useState, useEffect } from 'react';
 
 import {
+  Box,
   Grid,
+  Chip,
   Stack,
   Dialog,
   Button,
@@ -15,11 +17,15 @@ import {
 const initData = {
   guid_id: '',
   name: '',
+  language: [],
+  license: [],
   _id: '',
 };
 
 export default function GuidModal({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
+  const [newLanguage, setNewLanguage] = useState('');
+  const [newLicense, setNewLicense] = useState('');
 
   useEffect(() => {
     console.log(maxNumber);
@@ -35,6 +41,28 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleAddLanguage = () => {
+    if (newLanguage && !formData.language.includes(newLanguage)) {
+      setFormData({ ...formData, language: [...formData.language, newLanguage] });
+      setNewLanguage('');
+    }
+  };
+
+  const handleDeleteLanguage = (lang) => {
+    setFormData({ ...formData, language: formData.language.filter((l) => l !== lang) });
+  };
+
+  const handleAddLicense = () => {
+    if (newLicense && !formData.license.includes(newLicense)) {
+      setFormData({ ...formData, license: [...formData.license, newLicense] });
+      setNewLicense('');
+    }
+  };
+
+  const handleDeleteLicense = (lic) => {
+    setFormData({ ...formData, license: formData.license.filter((l) => l !== lic) });
   };
 
   const handleSave = () => {
@@ -73,6 +101,42 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
               />
             </Grid>
           </Grid>
+
+          <Box>
+            <TextField
+              label="Add Language"
+              value={newLanguage}
+              onChange={(e) => setNewLanguage(e.target.value)}
+              variant="outlined"
+              size="small"
+            />
+            <Button onClick={handleAddLanguage} variant="contained" sx={{ ml: 1 }}>
+              Add
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {formData.language.map((lang) => (
+              <Chip key={lang} label={lang} onDelete={() => handleDeleteLanguage(lang)} />
+            ))}
+          </Box>
+
+          <Box>
+            <TextField
+              label="Add License"
+              value={newLicense}
+              onChange={(e) => setNewLicense(e.target.value)}
+              variant="outlined"
+              size="small"
+            />
+            <Button onClick={handleAddLicense} variant="contained" sx={{ ml: 1 }}>
+              Add
+            </Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {formData.license.map((lic) => (
+              <Chip key={lic} label={lic} onDelete={() => handleDeleteLicense(lic)} />
+            ))}
+          </Box>
         </Stack>
       </DialogContent>
       <DialogActions>

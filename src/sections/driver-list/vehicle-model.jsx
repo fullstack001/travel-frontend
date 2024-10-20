@@ -28,7 +28,7 @@ export default function VehicleModal({ open, onClose, onSave, initialData, maxNu
         ...initialData,
       });
     } else {
-      setFormData({ ...initData, vehicle_id: maxNumber + 1 });
+      setFormData({ ...initData, driver_id: maxNumber + 1 });
     }
   }, [initialData, maxNumber]);
 
@@ -46,25 +46,26 @@ export default function VehicleModal({ open, onClose, onSave, initialData, maxNu
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
-        {initialData ? 'Edit Vehicle' : 'New Vehicle'}
+        {initialData ? 'Edit Driver' : 'New Driver'}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
-                label="Service No"
-                name="vehicle_id"
-                value={formData.vehicle_id}
+                label="Driver Id"
+                name="driver_id"
+                value={formData.driver_id}
                 onChange={handleChange}
                 type="number"
                 fullWidth
                 variant="outlined"
+                disabled
               />
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                label="Type of Vehicle"
+                label="Driver Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}

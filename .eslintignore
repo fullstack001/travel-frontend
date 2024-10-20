@@ -28,3 +28,5 @@ src/sections/driver/utils.js
 src/sections/vehicle/utils.js
 src/sections/guid/utils.js
 src/sections/resa/utils.js
+src/sections/driver-list/utils.js
+src/sections/excursion/utils.js

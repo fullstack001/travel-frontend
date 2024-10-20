@@ -45,7 +45,6 @@ export default function UserTableHead({
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.align || 'left'}
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{
               width: headCell.width,
@@ -54,9 +53,7 @@ export default function UserTableHead({
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              padding: '4px',
-              paddingTop: '10px',
-              paddingBottom: '10px',
+              padding: '10px 15px',
             }}
           >
             <TableSortLabel

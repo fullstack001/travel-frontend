@@ -18,10 +18,11 @@ import Iconify from 'src/components/iconify';
 
 export default function UserTableRow({
   id,
+  excursion_id,
   name,
-  guid_id,
-  language,
-  license,
+  type,
+  lunch,
+  remark,
   editAction,
   deleteAction,
 }) {
@@ -58,10 +59,12 @@ export default function UserTableRow({
             </Typography>
           </Stack>
         </TableCell> */}
-        <TableCell align="left">{guid_id}</TableCell>
-        <TableCell align="left">{name}</TableCell>
-        <TableCell align="left">{language.join(', ')}</TableCell>
-        <TableCell align="left">{license.join(', ')}</TableCell>
+        <TableCell>{excursion_id}</TableCell>
+        <TableCell>{name}</TableCell>
+        <TableCell>{type}</TableCell>
+        <TableCell>{lunch}</TableCell>
+        <TableCell>{remark}</TableCell>
+
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -95,10 +98,11 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   id: PropTypes.any,
-  guid_id: PropTypes.any,
+  excursion_id: PropTypes.any,
   name: PropTypes.any,
-  language: PropTypes.any,
-  license: PropTypes.any,
+  type: PropTypes.any,
+  lunch: PropTypes.any,
+  remark: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
 };

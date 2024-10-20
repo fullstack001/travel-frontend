@@ -16,15 +16,7 @@ import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function UserTableRow({
-  id,
-  name,
-  guid_id,
-  language,
-  license,
-  editAction,
-  deleteAction,
-}) {
+export default function UserTableRow({ id, name, driver_id, editAction, deleteAction }) {
   const [open, setOpen] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -58,10 +50,8 @@ export default function UserTableRow({
             </Typography>
           </Stack>
         </TableCell> */}
-        <TableCell align="left">{guid_id}</TableCell>
-        <TableCell align="left">{name}</TableCell>
-        <TableCell align="left">{language.join(', ')}</TableCell>
-        <TableCell align="left">{license.join(', ')}</TableCell>
+        <TableCell align="center">{driver_id}</TableCell>
+        <TableCell align="center">{name}</TableCell>
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -95,10 +85,8 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   id: PropTypes.any,
-  guid_id: PropTypes.any,
+  driver_id: PropTypes.any,
   name: PropTypes.any,
-  language: PropTypes.any,
-  license: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
 };

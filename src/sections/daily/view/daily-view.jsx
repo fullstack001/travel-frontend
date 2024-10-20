@@ -21,6 +21,7 @@ import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
+import { getDriverListData } from 'src/lib/driverList';
 import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -60,6 +61,7 @@ export default function DailyPlanningPage() {
   const [vehicle, setVehicle] = useState([]);
   const [service, setService] = useState([]);
   const [guid, setGuid] = useState([]);
+  const [driver, setDriver] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const handleSort = (event, id) => {
@@ -79,12 +81,14 @@ export default function DailyPlanningPage() {
         const serviceRes = await getServiceData();
         const vehicleRes = await getVehicleData();
         const guidRes = await getGuidData();
+        const driverRes = await getDriverListData();
 
         setHotel(hotelres.data);
         setAgency(agencyRes.data);
         setService(serviceRes.data);
         setVehicle(vehicleRes.data);
         setGuid(guidRes.data);
+        setDriver(driverRes.data);
       } catch {
         alert('network Error. Refresh page');
       } finally {
@@ -257,23 +261,30 @@ export default function DailyPlanningPage() {
                 orderBy={orderBy}
                 onRequestSort={handleSort}
                 headLabel={[
+                  { id: '' },
+                  { id: 'dossier_no', label: 'File No' },
                   { id: 'client', label: 'Client Name' },
+                  { id: 'agency_ref', label: 'Agency Reference' },
+                  { id: 'agency', label: 'Agency' },
                   { id: 'from', label: 'From' },
-                  { id: 'hotel', label: 'To' },
+                  { id: 'to', label: 'To' },
+                  { id: 'excursion', label: 'Excursion' },
+                  { id: 'service', label: 'Service' },
+                  { id: 'service_date', label: 'Service Date' },
                   { id: 'service_type', label: 'Service Type' },
-                  { id: 'service_date', label: 'Date Service' },
-                  { id: 'arb_dep', label: 'Arv / Dep' },
                   { id: 'flight_no', label: 'Flight No' },
-                  { id: 'flight_time', label: 'flgt Time' },
-                  { id: 'pickup_time', label: 'Pick up Time' },
-                  { id: 'agency', label: 'Agency', align: 'center' },
+                  { id: 'flight_time', label: 'Flight Time' },
+                  { id: 'pickup_time', label: 'Pickup Time' },
                   { id: 'adult', label: 'Adult' },
-                  { id: 'child', label: 'Child' },
-                  { id: 'type_vehicle', label: 'Vehicle Type' },
+                  { id: 'child', label: 'Child(3-11)' },
+                  { id: 'infant', label: 'Infant(0-2)' },
+                  { id: 'teen', label: 'Teen(12-18)' },
+                  { id: 'type_vehicle', label: 'Type of Vehicle' },
                   { id: 'driver', label: 'Driver' },
                   { id: 'guid', label: 'Guid' },
-                  { id: 'remarks', label: 'Remarks' },
-                  { id: '', label: '' },
+                  { id: 'resa_remark', label: 'Remarks' },
+                  { id: 'by', label: 'By' },
+                  { id: 'status', label: 'Status' },
                 ]}
               />
               <TableBody>
@@ -283,19 +294,37 @@ export default function DailyPlanningPage() {
                     <UserTableRow
                       key={row._id}
                       id={row._id}
-                      client={row.client}
-                      from={row.from}
-                      hotel={row.hotel}
+                      verified={row.verified}
+                      dossier_no={row.dossier_no}
+                      by={row.by}
+                      status={row.status}
+                      service={row.service}
                       service_type={row.service_type}
+                      agency_ref={row.agency_ref}
+                      client={row.client}
+                      agency={row.agency}
+                      from={row.from}
+                      to={row.to}
+                      excursion={row.excursion}
                       service_date={row.service_date}
-                      arb_dep={row.arb_dep}
                       flight_no={row.flight_no}
                       flight_time={row.flight_time}
-                      pickup_time={row.pickup_time}
-                      agency={row.agency}
                       adult={row.adult}
-                      type_vehicle={row.type_vehicle}
                       child={row.child}
+                      infant={row.infant}
+                      pickup_time={row.pickup_time}
+                      teen={row.teen}
+                      resa_remark={row.resa_remark}
+                      from_region={row.from_region}
+                      to_region={row.to_region}
+                      vehicle_type={row.vehicle_type}
+                      invoce_no={row.invoce_no}
+                      amount={row.amount}
+                      adult_price={row.adult_price}
+                      child_price={row.child_price}
+                      teen_price={row.teen_price}
+                      total_price={row.total_price}
+                      cur={row.cur}
                       driver={row.driver}
                       guid={row.guid}
                       remarks={row.resa_remark}
@@ -337,6 +366,7 @@ export default function DailyPlanningPage() {
         service={service}
         vehicle={vehicle}
         guid={guid}
+        driver={driver}
       />
 
       <Dialog

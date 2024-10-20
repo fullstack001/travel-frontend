@@ -16,14 +16,14 @@ import TablePagination from '@mui/material/TablePagination';
 import DialogContentText from '@mui/material/DialogContentText';
 
 // import { users } from 'src/_mock/user';
-import { deleteData, getGuidData, putGuidData } from 'src/lib/guid';
+import { getExcursionData, putExcursionData, deleteExcursionData } from 'src/lib/excursion';
 
 import Scrollbar from 'src/components/scrollbar';
 
-import GuidModal from '../guid-model';
 import TableNoData from '../table-no-data';
 import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
+import ExcursionModal from '../excursion-model';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import {
@@ -33,11 +33,10 @@ import {
   handleExportPdf,
   handleExportExcel,
 } from '../utils';
-
 // ----------------------------------------------------------------------
 
-export default function GuidPage() {
-  const [guidData, setGuidData] = useState([]);
+export default function ExcursionPage() {
+  const [excursionData, setExcursionData] = useState([]);
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('_id');
@@ -47,7 +46,7 @@ export default function GuidPage() {
   const [currentRow, setCurrentRow] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
-  const [maxGuidNo, setMaxGuidNo] = useState('');
+  const [maxExcursionNo, setMaxExcursionNo] = useState('');
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -72,7 +71,7 @@ export default function GuidPage() {
   };
 
   const dataFiltered = applyFilter({
-    inputData: guidData,
+    inputData: excursionData,
     comparator: getComparator(order, orderBy),
     filterName,
   });
@@ -80,13 +79,12 @@ export default function GuidPage() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await getGuidData();
+        const res = await getExcursionData();
         if (res === 500) {
           alert('Network Error');
         } else {
-          setGuidData(res.data);
-          console.log(res.max_num);
-          setMaxGuidNo(res.max_num);
+          setExcursionData(res.data);
+          setMaxExcursionNo(res.max_num);
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -97,6 +95,7 @@ export default function GuidPage() {
   }, []);
 
   const handleNewReservation = () => {
+    console.log('click new button');
     setCurrentRow(null); // Clear current row data
     setIsModalOpen(true); // Open modal
   };
@@ -116,7 +115,7 @@ export default function GuidPage() {
       newData: formData,
     };
 
-    const res = await putGuidData(params);
+    const res = await putExcursionData(params);
     if (res === 500) {
       alert('Network Error');
     } else {
@@ -125,8 +124,8 @@ export default function GuidPage() {
       } else {
         alert('A data added successfully');
       }
-      setGuidData(res.data);
-      setMaxGuidNo(res.max_num);
+      setExcursionData(res.data);
+      setMaxExcursionNo(res.max_num);
     }
   };
 
@@ -142,13 +141,13 @@ export default function GuidPage() {
       id: deleteId,
     };
 
-    const res = await deleteData(params);
+    const res = await deleteExcursionData(params);
     if (res === 500) {
       alert('Network Error.');
     } else {
       alert('A data deleted successfully.');
-      setGuidData(res.data);
-      setMaxGuidNo(res.max_num);
+      setExcursionData(res.data);
+      setMaxExcursionNo(res.max_num);
     }
   };
 
@@ -157,11 +156,11 @@ export default function GuidPage() {
   };
 
   const handlePdf = () => {
-    handleExportPdf(guidData);
+    handleExportPdf(excursionData);
   };
 
   const handleExcel = () => {
-    handleExportExcel(guidData);
+    handleExportExcel(excursionData);
   };
 
   const notFound = !dataFiltered.length && !!filterName;
@@ -169,14 +168,14 @@ export default function GuidPage() {
   return (
     <Container maxWidth={false}>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Guids</Typography>
+        <Typography variant="h4">Excursions</Typography>
       </Stack>
 
       <Card>
         <UserTableToolbar
           filterName={filterName}
           onFilterName={handleFilterByName}
-          onNewHotel={handleNewReservation}
+          onNewExcursion={handleNewReservation}
           pdfAction={handlePdf}
           excelAction={handleExcel}
         />
@@ -189,10 +188,11 @@ export default function GuidPage() {
                 orderBy={orderBy}
                 onRequestSort={handleSort}
                 headLabel={[
-                  { id: 'guid_id', label: 'Guid Id', align: 'center' },
-                  { id: 'name', label: 'Guid Name', align: 'center' },
-                  { id: 'language', label: 'Language Spoken', align: 'center' },
-                  { id: 'license', label: 'License No', align: 'center' },
+                  { id: 'excursion_id', label: 'Excursion Id' },
+                  { id: 'name', label: 'Excursion' },
+                  { id: 'type', label: 'Type' },
+                  { id: 'lunch', label: 'Lunch' },
+                  { id: 'remark', label: 'Remarks' },
                   { id: '', label: '' },
                 ]}
               />
@@ -203,10 +203,11 @@ export default function GuidPage() {
                     <UserTableRow
                       key={row._id}
                       id={row._id}
+                      excursion_id={row.excursion_id}
                       name={row.name}
-                      language={row.language}
-                      license={row.license}
-                      guid_id={row.guid_id}
+                      type={row.type}
+                      lunch={row.lunch}
+                      remark={row.remark}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
                     />
@@ -214,7 +215,7 @@ export default function GuidPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, guidData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, excursionData.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -226,7 +227,7 @@ export default function GuidPage() {
         <TablePagination
           page={page}
           component="div"
-          count={guidData.length}
+          count={excursionData.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
@@ -234,12 +235,12 @@ export default function GuidPage() {
         />
       </Card>
 
-      <GuidModal
+      <ExcursionModal
         open={isModalOpen}
         onClose={handleModalClose}
         onSave={handleModalSave}
         initialData={currentRow}
-        maxNumber={maxGuidNo}
+        maxNumber={maxExcursionNo}
       />
 
       <Dialog

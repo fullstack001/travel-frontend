@@ -15,8 +15,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useAuth } from 'src/hooks/use-auth';
-
 import { signIn } from 'src/lib/user';
 import { bgGradient } from 'src/theme/css';
 import userStore from 'src/store/userStroe';
@@ -31,7 +29,6 @@ export default function LoginView() {
 
   const router = useRouter();
   const { setUser } = userStore();
-  const user = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -40,8 +37,8 @@ export default function LoginView() {
   const handleClick = async () => {
     const data = { email, password };
     const res = await signIn(data);
-    if (res === 200) {
-      setUser({ ...user, isAuth: true });
+    if (res.status === 200) {
+      setUser(res.user);
       router.push('/');
       // navigate(`/${user.isAdmin ? 'admin-dashboard' : 'dashboard'}`);
     }

@@ -29,24 +29,42 @@ function formatDateToString(date) {
 export default function UserTableRow({
   selected,
   id,
-  client,
-  from,
-  hotel,
+  dossier_no,
+  by,
+  verified,
+  status,
+  service,
   service_type,
+  agency_ref,
+  client,
+  agency,
+  from,
+  to,
+  excursion,
   service_date,
-  arb_dep,
   flight_no,
   flight_time,
-  pickup_time,
-  agency,
   adult,
-  driver,
+  child,
+  infant,
+  teen,
+  resa_remark,
+  from_region,
+  to_region,
+  vehicle_type,
+  invoce_no,
+  amount,
+  adult_price,
+  child_price,
+  teen_price,
+  total_price,
+  cur,
+  last_update,
+  pickup_time,
   guid,
-  remarks,
+  driver,
   editAction,
   deleteAction,
-  type_vehicle,
-  child,
 }) {
   const [open, setOpen] = useState(null);
 
@@ -70,28 +88,34 @@ export default function UserTableRow({
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell>{client}</TableCell>
-        <TableCell>{from}</TableCell>
-        <TableCell>{hotel}</TableCell>
-        <TableCell>{service_type}</TableCell>
-        <TableCell>{formatDateToString(service_date)}</TableCell>
-        <TableCell>{arb_dep}</TableCell>
-        <TableCell>{flight_no}</TableCell>
-        <TableCell>{formatTime(flight_time)}</TableCell>
-        <TableCell>{formatTime(pickup_time)}</TableCell>
-        <TableCell>{agency}</TableCell>
-        <TableCell>{adult}</TableCell>
-        <TableCell>{child}</TableCell>
-        <TableCell>{type_vehicle}</TableCell>
-        <TableCell>{driver}</TableCell>
-        <TableCell>{guid}</TableCell>
-        <TableCell>{remarks}</TableCell>
-
-        <TableCell align="right">
+        <TableCell>
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
+        <TableCell>{dossier_no}</TableCell>
+        <TableCell>{client}</TableCell>
+        <TableCell>{agency_ref}</TableCell>
+        <TableCell>{agency}</TableCell>
+        <TableCell>{from}</TableCell>
+        <TableCell>{to}</TableCell>
+        <TableCell>{excursion}</TableCell>
+        <TableCell>{service}</TableCell>
+        <TableCell>{formatDateToString(service_date)}</TableCell>
+        <TableCell>{service_type}</TableCell>
+        <TableCell>{flight_no}</TableCell>
+        <TableCell>{formatTime(flight_time)}</TableCell>
+        <TableCell>{formatTime(pickup_time)}</TableCell>
+        <TableCell>{adult}</TableCell>
+        <TableCell>{child}</TableCell>
+        <TableCell>{infant}</TableCell>
+        <TableCell>{teen}</TableCell>
+        <TableCell>{vehicle_type}</TableCell>
+        <TableCell>{driver}</TableCell>
+        <TableCell>{guid}</TableCell>
+        <TableCell>{resa_remark}</TableCell>
+        <TableCell>{by}</TableCell>
+        <TableCell>{status}</TableCell>
       </TableRow>
 
       <Popover
@@ -120,23 +144,41 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   id: PropTypes.any,
-  client: PropTypes.any,
-  from: PropTypes.any,
-  hotel: PropTypes.any,
+  dossier_no: PropTypes.any,
+  verified: PropTypes.any,
+  status: PropTypes.any,
+  service: PropTypes.any,
   service_type: PropTypes.any,
+  pickup_time: PropTypes.any,
+  agency_ref: PropTypes.any,
+  client: PropTypes.any,
+  agency: PropTypes.any,
+  from: PropTypes.any,
+  to: PropTypes.any,
+  excursion: PropTypes.any,
   service_date: PropTypes.any,
-  arb_dep: PropTypes.any,
   flight_no: PropTypes.any,
   flight_time: PropTypes.any,
-  pickup_time: PropTypes.any,
-  agency: PropTypes.any,
   adult: PropTypes.any,
-  driver: PropTypes.any,
-  guid: PropTypes.any,
-  remarks: PropTypes.any,
-  selected: PropTypes.any,
-  type_vehicle: PropTypes.any,
   child: PropTypes.any,
+  infant: PropTypes.any,
+  teen: PropTypes.any,
+  resa_remark: PropTypes.any,
+  from_region: PropTypes.any,
+  to_region: PropTypes.any,
+  vehicle_type: PropTypes.any,
+  invoce_no: PropTypes.any,
+  amount: PropTypes.any,
+  adult_price: PropTypes.any,
+  child_price: PropTypes.any,
+  teen_price: PropTypes.any,
+  total_price: PropTypes.any,
+  cur: PropTypes.any,
+  selected: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
+  by: PropTypes.any,
+  guid: PropTypes.any,
+  driver: PropTypes.any,
+  last_update: PropTypes.any,
 };

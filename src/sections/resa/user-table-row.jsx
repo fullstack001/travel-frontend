@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Stack from '@mui/material/Stack';
 // import Avatar from '@mui/material/Avatar';
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
 // import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-// import Label from 'src/components/label';
+import userStore from 'src/store/userStroe'; // import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 
 import { formatTime } from './utils';
@@ -31,35 +29,40 @@ export default function UserTableRow({
   selected,
   id,
   dossier_no,
+  by,
+  verified,
+  status,
+  service,
   service_type,
-  arb_dep,
+  agency_ref,
   client,
-  agency_ref_no,
   agency,
   from,
-  hotel,
-  htl_region,
+  to,
+  excursion,
   service_date,
-  endofservice,
-  type_vehicle,
+  flight_no,
+  flight_time,
   adult,
   child,
   infant,
-  flight_no,
-  flight_time,
-  pickup_time,
+  teen,
   resa_remark,
-  service,
+  from_region,
+  to_region,
+  vehicle_type,
+  invoce_no,
+  amount,
   adult_price,
   child_price,
+  teen_price,
   total_price,
   cur,
-  invoce_on,
-  status,
-  effect_date,
+  last_update,
   editAction,
   deleteAction,
 }) {
+  const { role } = userStore();
   const [open, setOpen] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -87,47 +90,37 @@ export default function UserTableRow({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
-
-        <TableCell component="th" scope="row">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            <Typography variant="subtitle2" noWrap>
-              {dossier_no}
-            </Typography>
-          </Stack>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          <Stack direction="row" alignItems="center" spacing={2}>
-            {/* <Avatar alt={name} src={avatarUrl} /> */}
-            <Typography variant="subtitle2" noWrap>
-              {service_type}
-            </Typography>
-          </Stack>
-        </TableCell>
-        <TableCell>{arb_dep}</TableCell>
+        <TableCell>{dossier_no}</TableCell>
+        <TableCell>{by}</TableCell>
+        <TableCell>{verified ? 'Yes' : 'No'}</TableCell>
+        <TableCell>{status}</TableCell>
+        <TableCell>{service}</TableCell>
+        <TableCell>{service_type}</TableCell>
+        <TableCell>{agency_ref}</TableCell>
         <TableCell>{client}</TableCell>
-        <TableCell>{agency_ref_no}</TableCell>
         <TableCell>{agency}</TableCell>
         <TableCell>{from}</TableCell>
-        <TableCell>{hotel}</TableCell>
-        <TableCell>{htl_region}</TableCell>
+        <TableCell>{to}</TableCell>
+        <TableCell>{excursion}</TableCell>
         <TableCell>{formatDateToString(service_date)}</TableCell>
-        <TableCell>{formatDateToString(endofservice)}</TableCell>
+        <TableCell>{flight_no}</TableCell>
+        <TableCell>{formatTime(flight_time)}</TableCell>
         <TableCell>{adult}</TableCell>
         <TableCell>{child}</TableCell>
         <TableCell>{infant}</TableCell>
-        <TableCell>{flight_no}</TableCell>
-        <TableCell>{formatTime(flight_time)}</TableCell>
-        <TableCell>{formatTime(pickup_time)}</TableCell>
+        <TableCell>{teen}</TableCell>
         <TableCell>{resa_remark}</TableCell>
-        <TableCell>{service}</TableCell>
-        <TableCell>{type_vehicle}</TableCell>
+        <TableCell>{from_region}</TableCell>
+        <TableCell>{to_region}</TableCell>
+        <TableCell>{vehicle_type}</TableCell>
+        <TableCell>{invoce_no}</TableCell>
+        <TableCell>{amount}</TableCell>
         <TableCell>{adult_price}</TableCell>
         <TableCell>{child_price}</TableCell>
+        <TableCell>{teen_price}</TableCell>
         <TableCell>{total_price}</TableCell>
         <TableCell>{cur}</TableCell>
-        <TableCell>{invoce_on}</TableCell>
-        <TableCell>{status}</TableCell>
-        <TableCell>{formatDateToString(effect_date)}</TableCell>
+        <TableCell>{formatDateToString(last_update)}</TableCell>
       </TableRow>
 
       <Popover
@@ -144,11 +137,12 @@ export default function UserTableRow({
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           Edit
         </MenuItem>
-
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
-        </MenuItem>
+        {role === 'admin' && (
+          <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
+            <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
+            Delete
+          </MenuItem>
+        )}
       </Popover>
     </>
   );
@@ -157,33 +151,37 @@ export default function UserTableRow({
 UserTableRow.propTypes = {
   id: PropTypes.any,
   dossier_no: PropTypes.any,
+  verified: PropTypes.any,
+  status: PropTypes.any,
+  service: PropTypes.any,
   service_type: PropTypes.any,
-  arb_dep: PropTypes.any,
+  agency_ref: PropTypes.any,
   client: PropTypes.any,
-  agency_ref_no: PropTypes.any,
   agency: PropTypes.any,
   from: PropTypes.any,
-  hotel: PropTypes.any,
-  htl_region: PropTypes.any,
+  to: PropTypes.any,
+  excursion: PropTypes.any,
   service_date: PropTypes.any,
-  endofservice: PropTypes.any,
-  type_vehicle: PropTypes.any,
-  pickup_time: PropTypes.any,
+  flight_no: PropTypes.any,
+  flight_time: PropTypes.any,
   adult: PropTypes.any,
   child: PropTypes.any,
   infant: PropTypes.any,
-  flight_no: PropTypes.any,
-  flight_time: PropTypes.any,
+  teen: PropTypes.any,
   resa_remark: PropTypes.any,
-  service: PropTypes.any,
+  from_region: PropTypes.any,
+  to_region: PropTypes.any,
+  vehicle_type: PropTypes.any,
+  invoce_no: PropTypes.any,
+  amount: PropTypes.any,
   adult_price: PropTypes.any,
   child_price: PropTypes.any,
+  teen_price: PropTypes.any,
   total_price: PropTypes.any,
   cur: PropTypes.any,
-  invoce_on: PropTypes.any,
-  status: PropTypes.any,
-  effect_date: PropTypes.any,
   selected: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
+  by: PropTypes.any,
+  last_update: PropTypes.any,
 };

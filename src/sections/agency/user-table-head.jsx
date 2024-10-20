@@ -54,7 +54,7 @@ export default function UserTableHead({
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
-              padding: '4px',
+              padding: '10px',
               paddingTop: '10px',
               paddingBottom: '10px',
             }}

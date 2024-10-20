@@ -17,16 +17,15 @@ import {
 } from '@mui/material';
 
 const initData = {
-  hotel_id: '',
+  excursion_id: '',
   name: '',
-  h_group: '',
-  h_addr: '',
-  h_region: '',
-  h_plan_region: '',
+  type: '',
+  lunch: '',
+  remark: '',
   _id: '',
 };
 
-export default function Hotel({ open, onClose, onSave, initialData, maxNumber }) {
+export default function Excursion({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
         ...initialData,
       });
     } else {
-      setFormData({ ...initData, hotel_id: maxNumber + 1 });
+      setFormData({ ...initData, excursion_id: maxNumber + 1 });
     }
   }, [initialData, maxNumber]);
 
@@ -51,31 +50,21 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
     onClose();
   };
 
-  const regions = [
-    'Intra City',
-    'North',
-    'North East',
-    'North West',
-    'Not applicable',
-    'Pemba Island',
-    'South',
-    'South East',
-    'Tanzania',
-  ];
+  const types = ['Land', 'Sea', 'Land & Sea', 'Not Applicable'];
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
-        {initialData ? 'Edit Hotel' : 'New Hotel'}
+        {initialData ? 'Edit Excursion' : 'New Excursion'}
       </DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Hotel No"
-                name="hotel_id"
-                value={formData.hotel_id}
+                label="Excursion No"
+                name="excursion_id"
+                value={formData.excursion_id}
                 onChange={handleChange}
                 type="number"
                 fullWidth
@@ -84,7 +73,7 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Hotel Name"
+                label="Excursion Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -92,49 +81,45 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Hotel Group"
-                name="h_group"
-                value={formData.h_group}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Hotel Address"
-                name="h_addr"
-                value={formData.h_addr}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-              />
-            </Grid>
+
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth variant="outlined">
-                <InputLabel id="hotel-region-label">Hotel Region</InputLabel>
+                <InputLabel id="type-label">Type</InputLabel>
                 <Select
-                  labelId="hotel-region-label"
-                  label="Hotel Region"
-                  name="h_region"
-                  value={formData.h_region}
+                  labelId="type-label"
+                  label="Type"
+                  name="type"
+                  value={formData.type}
                   onChange={handleChange}
                 >
-                  {regions.map((region) => (
-                    <MenuItem key={region} value={region}>
-                      {region}
+                  {types.map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
                     </MenuItem>
                   ))}
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel id="lunch-label">Lunch</InputLabel>
+                <Select
+                  labelId="lunch-label"
+                  label="Lunch"
+                  name="lunch"
+                  value={formData.lunch}
+                  onChange={handleChange}
+                >
+                  <MenuItem value="Inclueded">Inclueded</MenuItem>
+                  <MenuItem value="Not Inclueded">Not Inclueded</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
-                label="Hotel Plan Region"
-                name="h_plan_region"
-                value={formData.h_plan_region}
+                label="Remark"
+                name="remark"
+                value={formData.remark}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -155,7 +140,7 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
   );
 }
 
-Hotel.propTypes = {
+Excursion.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   onSave: PropTypes.func,

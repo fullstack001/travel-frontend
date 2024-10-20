@@ -60,6 +60,7 @@ export default function ResaPage() {
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(null);
   const [currentEnd, setCurrentEnd] = useState(null);
+  const [searchOption, setSearchOption] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(15);
 
@@ -83,6 +84,10 @@ export default function ResaPage() {
     };
     getListData();
   }, []);
+
+  const handleSearchOptionChange = (event) => {
+    setSearchOption(event.target.value);
+  };
 
   const handleSort = (event, id) => {
     const isAsc = orderBy === id && order === 'asc';
@@ -113,6 +118,7 @@ export default function ResaPage() {
 
   const handleModalSave = async (formData) => {
     const params = {
+      filterOption: searchOption,
       filterData: filterName,
       orderKey: order,
       orderDirect: orderBy,
@@ -159,6 +165,7 @@ export default function ResaPage() {
   const handleConfirmDelete = async () => {
     setConfirmOpen(false);
     const params = {
+      filterOption: searchOption,
       filterData: filterName,
       orderKey: order,
       orderDirect: orderBy,
@@ -204,6 +211,7 @@ export default function ResaPage() {
       if (!current || !currentEnd) {
         const params = {
           filterData: filterName,
+          filterOption: searchOption,
           orderKey: order,
           orderDirect: orderBy,
           page: page + 1,
@@ -223,6 +231,7 @@ export default function ResaPage() {
             start: current,
             end: currentEnd,
             filterData: filterName,
+            filterOption: searchOption,
             orderKey: order,
             orderDirect: orderBy,
             page: page + 1,
@@ -243,7 +252,7 @@ export default function ResaPage() {
       }
     };
     confirmGetData();
-  }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName]);
+  }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
 
   const getExportData = async () => {
     const data = {
@@ -280,6 +289,8 @@ export default function ResaPage() {
           onGetEndDate={handleEndDailyDate}
           pdfAction={handlePdf}
           excelAction={handleExcel}
+          searchOption={searchOption}
+          onSearchOptionChange={handleSearchOptionChange}
         />
 
         <TableContainer sx={{ overflow: 'auto', height: '76vh' }}>
@@ -291,33 +302,37 @@ export default function ResaPage() {
               onRequestSort={handleSort}
               headLabel={[
                 { id: '' },
-                { id: 'dossier_no', label: 'Dossier No' },
+                { id: 'dossier_no', label: 'File No' },
+                { id: 'by', label: 'By' },
+                { id: 'verified', label: 'Verified' },
+                { id: 'status', label: 'Status' },
+                { id: 'service', label: 'Service' },
                 { id: 'service_type', label: 'Service Type' },
-                { id: 'arb_dep', label: 'Ar / Dep' },
+                { id: 'agency_ref', label: 'Agency Reference' },
                 { id: 'client', label: 'Client Name' },
-                { id: 'agency_ref_no', label: 'Agency Reference no' },
                 { id: 'agency', label: 'Agency' },
                 { id: 'from', label: 'From' },
-                { id: 'hotel', label: 'Hotel' },
-                { id: 'htl_region', label: 'Hotel Region' },
+                { id: 'to', label: 'To' },
+                { id: 'excursion', label: 'Excursion' },
                 { id: 'service_date', label: 'Service Date' },
-                { id: 'endofservice', label: 'End of Service' },
-                { id: 'adult', label: 'Adult' },
-                { id: 'child', label: 'Child' },
-                { id: 'infant', label: 'Infant' },
                 { id: 'flight_no', label: 'Flight No' },
                 { id: 'flight_time', label: 'Flight Time' },
-                { id: 'pickup_time', label: ' Pick-up Time' },
+                { id: 'adult', label: 'Adult' },
+                { id: 'child', label: 'Child(3-11)' },
+                { id: 'infant', label: 'Infant(0-2)' },
+                { id: 'teen', label: 'Teen(12-18)' },
                 { id: 'resa_remark', label: 'Remarks' },
-                { id: 'service', label: 'Service' },
+                { id: 'from_region', label: 'Region From' },
+                { id: 'to_region', label: 'Region To' },
                 { id: 'type_vehicle', label: 'Type of Vehicle' },
+                { id: 'invoce_no', label: 'Invoice No' },
+                { id: 'amount', label: 'Amount' },
                 { id: 'adult_price', label: 'Adult Price' },
                 { id: 'child_price', label: 'Child Price' },
+                { id: 'teen_price', label: 'Teen Price' },
                 { id: 'total_price', label: 'Total Price' },
                 { id: 'cur', label: 'Currency' },
-                { id: 'invoce_on', label: 'Invoice No' },
-                { id: 'status', label: 'Status' },
-                { id: 'effect_date', label: 'Effect_date' },
+                { id: 'last_update', label: 'Last Update' },
               ]}
             />
             <TableBody>
@@ -325,34 +340,37 @@ export default function ResaPage() {
                 <UserTableRow
                   key={row._id}
                   id={row._id}
+                  verified={row.verified}
                   dossier_no={row.dossier_no}
+                  by={row.by}
+                  status={row.status}
+                  service={row.service}
                   service_type={row.service_type}
-                  arb_dep={row.arb_dep}
+                  agency_ref={row.agency_ref}
                   client={row.client}
-                  agency_ref_no={row.agency_ref_no}
                   agency={row.agency}
                   from={row.from}
-                  hotel={row.hotel}
-                  htl_region={row.htl_region}
+                  to={row.to}
+                  excursion={row.excursion}
                   service_date={row.service_date}
-                  endofservice={row.endofservice}
+                  flight_no={row.flight_no}
+                  flight_time={row.flight_time}
                   adult={row.adult}
                   child={row.child}
                   infant={row.infant}
-                  flight_no={row.flight_no}
-                  flight_time={row.flight_time}
-                  pickup_time={row.pickup_time}
+                  teen={row.teen}
                   resa_remark={row.resa_remark}
-                  service={row.service}
-                  type_vehicle={row.type_vehicle}
+                  from_region={row.from_region}
+                  to_region={row.to_region}
+                  vehicle_type={row.vehicle_type}
+                  invoce_no={row.invoce_no}
+                  amount={row.amount}
                   adult_price={row.adult_price}
                   child_price={row.child_price}
+                  teen_price={row.teen_price}
                   total_price={row.total_price}
-                  cash_credit={row.cash_credit}
                   cur={row.cur}
-                  invoce_on={row.invoce_on}
-                  status={row.status}
-                  effect_date={row.effect_date}
+                  last_update={row.last_update}
                   deleteAction={() => handleDelete(row)}
                   editAction={() => handleEdit(row)}
                 />

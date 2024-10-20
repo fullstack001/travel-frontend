@@ -19,14 +19,12 @@ import Iconify from 'src/components/iconify';
 export default function UserTableRow({
   id,
   name,
+  reff,
   ageycy_id,
   country,
   tel,
-  name2,
   email,
   website,
-  status,
-  tax,
   editAction,
   deleteAction,
 }) {
@@ -64,14 +62,12 @@ export default function UserTableRow({
           </Stack>
         </TableCell> */}
         <TableCell>{ageycy_id}</TableCell>
-        <TableCell>{name}</TableCell>
+        <TableCell>{name.toUpperCase()}</TableCell>
+        <TableCell>{reff.toUpperCase()}</TableCell>
         <TableCell>{country}</TableCell>
         <TableCell>{tel}</TableCell>
-        <TableCell>{name2}</TableCell>
         <TableCell>{email}</TableCell>
         <TableCell>{website}</TableCell>
-        <TableCell>{status}</TableCell>
-        <TableCell>{tax}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -110,11 +106,9 @@ UserTableRow.propTypes = {
   name: PropTypes.any,
   country: PropTypes.any,
   tel: PropTypes.any,
-  name2: PropTypes.any,
   email: PropTypes.any,
   website: PropTypes.any,
-  status: PropTypes.any,
-  tax: PropTypes.any,
+  reff: PropTypes.any,
   deleteAction: PropTypes.func,
   editAction: PropTypes.func,
 };
