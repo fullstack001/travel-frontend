@@ -73,21 +73,15 @@ export const handleExportExcel = (resaData) => {
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
-    ['Agency Id', 'Agency Name', 'Country', 'Tel', 'Name2', 'Email', 'Website', 'Status', 'Tax'],
+    ['Agency Id', 'Agency Name', 'Agency Reference', 'Country', 'Tel', 'Email', 'Website'],
     ...resaData.map((row) => [
       row.ageycy_id,
       row.name,
+      row.ref,
       row.country,
       row.tel,
-      row.name2,
       row.email,
       row.website,
-      row.status,
-      row.tax,
-      row.adult,
-      row.driver,
-      row.guid,
-      row.resa_remark,
     ]),
   ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
@@ -109,26 +103,22 @@ export const handleExportPdf = (resaData) => {
   const columns = [
     { header: 'Agency Id', dataKey: 'ageycy_id' },
     { header: 'Agency Name', dataKey: 'name' },
+    { header: 'Agency Reference', dataKey: 'ref' },
     { header: 'Country', dataKey: 'country' },
     { header: 'Tel', dataKey: 'tel' },
-    { header: 'Name2', dataKey: 'name2' },
     { header: 'Email', dataKey: 'email' },
     { header: 'Website', dataKey: 'website' },
-    { header: 'Status', dataKey: 'status' },
-    { header: 'Tax', dataKey: 'tax' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
     ageycy_id: row.ageycy_id,
     name: row.name,
+    ref: row.ref,
     country: row.country,
     tel: row.tel,
-    name2: row.name2,
     email: row.email,
     website: row.website,
-    status: row.status,
-    tax: row.tax,
   }));
 
   // Add table to the PDF

@@ -81,7 +81,7 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
-                label="Service No"
+                label="Guid No"
                 name="guid_id"
                 value={formData.guid_id}
                 onChange={handleChange}
@@ -92,7 +92,7 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                label="Service Name"
+                label="Guid Name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}

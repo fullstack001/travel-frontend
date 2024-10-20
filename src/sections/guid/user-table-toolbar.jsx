@@ -51,7 +51,7 @@ export default function UserTableToolbar({
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
-          placeholder="Search Vehicle Type..."
+          placeholder="Search Guid..."
           startAdornment={
             <InputAdornment position="start">
               <Iconify

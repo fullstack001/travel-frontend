@@ -62,7 +62,15 @@ export function applyFilter({ inputData, comparator, filterName }) {
 export const handleExportExcel = (resaData) => {
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
-  const worksheetData = [['Guid Id', 'Guid'], ...resaData.map((row) => [row.guid_id, row.name])];
+  const worksheetData = [
+    ['Guid Id', 'Guid Name', 'Language Spoken', 'License No'],
+    ...resaData.map((row) => [
+      row.guid_id,
+      row.name,
+      row.language.join(', '),
+      row.license.join(', '),
+    ]),
+  ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
   // Append the worksheet to the workbook
@@ -81,12 +89,16 @@ export const handleExportPdf = (resaData) => {
   const columns = [
     { header: 'Guid Id', dataKey: 'guid_id' },
     { header: 'Guid', dataKey: 'name' },
+    { header: 'Language Spoken', dataKey: 'language' },
+    { header: 'License No', dataKey: 'license' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
     guid_id: row.guid_id,
     name: row.name,
+    language: row.language.join(', '),
+    license: row.license.join(', '),
   }));
 
   // Add table to the PDF

@@ -73,15 +73,8 @@ export const handleExportExcel = (resaData) => {
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
-    ['Hotel Id', 'Hotel Name', 'Hotel Group', 'Hotel Address', 'Hotel Region', 'Hotel Plan Region'],
-    ...resaData.map((row) => [
-      row.hotel_id,
-      row.name,
-      row.h_group,
-      row.h_addr,
-      row.h_region,
-      row.h_plan_region,
-    ]),
+    ['Excursion Id', 'Excursion', 'Type', 'Lunch', 'Remarks'],
+    ...resaData.map((row) => [row.excursion_id, row.name, row.type, row.lunch, row.remarks]),
   ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
@@ -89,7 +82,7 @@ export const handleExportExcel = (resaData) => {
   XLSX.utils.book_append_sheet(workbook, worksheet, 'hotel');
 
   // Export the workbook to Excel
-  XLSX.writeFile(workbook, `Hotels${Date.now()}.xlsx`);
+  XLSX.writeFile(workbook, `Excursions${Date.now()}.xlsx`);
 };
 
 export const handleExportPdf = (resaData) => {
@@ -99,22 +92,20 @@ export const handleExportPdf = (resaData) => {
   });
   // Define the columns
   const columns = [
-    { header: 'Hotel Id', dataKey: 'hotel_id' },
-    { header: 'Hotel Name', dataKey: 'name' },
-    { header: 'Hotel Group', dataKey: 'h_group' },
-    { header: 'Hotel Address', dataKey: 'h_addr' },
-    { header: 'Hotel Region', dataKey: 'h_region' },
-    { header: 'Hotel Plan Region', dataKey: 'h_plan_region' },
+    { header: 'Excursion Id', dataKey: 'excursion_id' },
+    { header: 'Excursion', dataKey: 'name' },
+    { header: 'Type', dataKey: 'type' },
+    { header: 'Lunch', dataKey: 'lunch' },
+    { header: 'Remarks', dataKey: 'remarks' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
-    hotel_id: row.hotel_id,
+    excursion_id: row.excursion_id,
     name: row.name,
-    h_group: row.h_group,
-    h_addr: row.h_addr,
-    h_region: row.h_region,
-    h_plan_region: row.h_plan_region,
+    type: row.type,
+    lunch: row.lunch,
+    remarks: row.remarks,
   }));
 
   // Add table to the PDF
@@ -124,5 +115,5 @@ export const handleExportPdf = (resaData) => {
   });
 
   // Save the PDF
-  doc.save(`Hotels${Date.now()}.pdf`);
+  doc.save(`Excursions${Date.now()}.pdf`);
 };
