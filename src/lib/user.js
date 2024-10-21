@@ -59,7 +59,7 @@ export const signIn = async (user) => {
     return { status: 200, user: response.data.user };
   } catch (error) {
     console.error('Sign In Error:', error.response?.data || error.message);
-    return error.response?.data || { error: 'An error occurred during sign in' };
+    return { status: 500, msg: error.response.data.msg || 'An error occurred during sign in' };
   }
 };
 

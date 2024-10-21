@@ -33,18 +33,45 @@ export default function LoginView() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Email is invalid';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleClick = async () => {
-    const data = { email, password };
-    const res = await signIn(data);
-    if (res.status === 200) {
-      setUser(res.user);
-      router.push('/');
-      // navigate(`/${user.isAdmin ? 'admin-dashboard' : 'dashboard'}`);
+    if (validateForm()) {
+      const data = { email, password };
+      const res = await signIn(data);
+      if (res.status === 200) {
+        setUser(res.user);
+        router.push('/');
+      } else if (res.status === 500) {
+        if (res.msg === 'email') {
+          setErrors({ ...errors, email: 'User does not exist' });
+        } else if (res.msg === 'password') {
+          setErrors({ ...errors, password: 'Wrong password' });
+        }
+      } else {
+        // Handle other errors
+        console.error('Login error:', res);
+      }
     }
-    // else if (res.msg == 'email') setEmailValid({ isvalid: false, msg: 'User not exist' });
-    // else if (res.msg == 'password') setPasswordValid({ isvalid: false, msg: 'Wrong Password' });
-    // else toast.info('Network Error.');
   };
 
   const renderForm = (
@@ -55,6 +82,8 @@ export default function LoginView() {
           label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          helperText={errors.email}
         />
 
         <TextField
@@ -63,6 +92,8 @@ export default function LoginView() {
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          error={!!errors.password}
+          helperText={errors.password}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -126,45 +157,6 @@ export default function LoginView() {
           <Typography variant="h4" alignItems="center" justifyContent="center">
             Sign in to Escapadezanzibar Booking management
           </Typography>
-
-          {/* <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
-            </Link>
-          </Typography> */}
-
-          <Stack direction="row" spacing={2}>
-            {/* <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button> */}
-          </Stack>
 
           <Divider sx={{ my: 3 }}>
             {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
