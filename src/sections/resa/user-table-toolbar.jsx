@@ -87,6 +87,7 @@ export default function UserTableToolbar({
             <MenuItem value="client">Client Name</MenuItem>
             <MenuItem value="by">By</MenuItem>
             <MenuItem value="agency">Agency</MenuItem>
+            <MenuItem value="agency_ref">Agency Reference</MenuItem>
             <MenuItem value="verified">Verified</MenuItem>
           </Select>
         </FormControl>
