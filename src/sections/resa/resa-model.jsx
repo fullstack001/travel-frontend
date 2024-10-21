@@ -81,6 +81,7 @@ export default function ResaModal({
   agency,
   service,
   vehicle,
+  excursion,
 }) {
   const [formData, setFormData] = useState(initData);
   const { name: userName } = userStore();
@@ -168,7 +169,7 @@ export default function ResaModal({
   }));
   const serviceOptions = service.map((item) => ({ label: item.name, value: item.name }));
   const vehicleOptions = vehicle.map((item) => ({ label: item.name, value: item.name }));
-
+  const excursionOptions = excursion.map((item) => ({ label: item.name, value: item.name }));
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
@@ -431,6 +432,27 @@ export default function ResaModal({
               />
             </Grid>
             <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={excursionOptions}
+                getOptionLabel={(option) => option.label}
+                value={
+                  excursionOptions.find((option) => option.value === formData.excursion) || null
+                }
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'excursion',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => (
+                  <TextField {...params} label="Excursion" variant="outlined" />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Remarks"
                 name="resa_remark"
@@ -609,4 +631,5 @@ ResaModal.propTypes = {
   agency: PropTypes.any,
   service: PropTypes.any,
   vehicle: PropTypes.any,
+  excursion: PropTypes.any,
 };

@@ -20,6 +20,7 @@ import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
+import { getExcursionData } from 'src/lib/excursion';
 import {
   deleteData,
   getResaData,
@@ -56,6 +57,7 @@ export default function ResaPage() {
   const [hotel, setHotel] = useState([]);
   const [agency, setAgency] = useState([]);
   const [service, setService] = useState([]);
+  const [excursion, setExcursion] = useState([]);
   const [vehicle, setVehicle] = useState([]);
   const [loading, setLoading] = useState(false);
   const [current, setCurrent] = useState(null);
@@ -71,10 +73,12 @@ export default function ResaPage() {
         const hotelres = await getHotelData();
         const agencyRes = await getAgencyData();
         const serviceRes = await getServiceData();
+        const excursionRes = await getExcursionData();
         const vehicleRes = await getVehicleData();
         setHotel(hotelres.data);
         setAgency(agencyRes.data);
         setService(serviceRes.data);
+        setExcursion(excursionRes.data);
         setVehicle(vehicleRes.data);
       } catch {
         alert('network Error. Refresh page');
@@ -404,6 +408,7 @@ export default function ResaPage() {
         agency={agency}
         service={service}
         vehicle={vehicle}
+        excursion={excursion}
       />
       <Dialog
         open={confirmOpen}
