@@ -19,7 +19,7 @@ import Iconify from 'src/components/iconify';
 export default function UserTableRow({
   id,
   name,
-  ref,
+  reff,
   ageycy_id,
   country,
   tel,
@@ -63,7 +63,7 @@ export default function UserTableRow({
         </TableCell> */}
         <TableCell>{ageycy_id}</TableCell>
         <TableCell>{name.toUpperCase()}</TableCell>
-        <TableCell>{ref.toUpperCase()}</TableCell>
+        <TableCell>{reff && reff.toUpperCase()}</TableCell>
         <TableCell>{country}</TableCell>
         <TableCell>{tel}</TableCell>
         <TableCell>{email}</TableCell>
@@ -108,7 +108,7 @@ UserTableRow.propTypes = {
   tel: PropTypes.any,
   email: PropTypes.any,
   website: PropTypes.any,
-  ref: PropTypes.any,
+  reff: PropTypes.any,
   deleteAction: PropTypes.func,
   editAction: PropTypes.func,
 };

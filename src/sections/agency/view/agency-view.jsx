@@ -207,7 +207,7 @@ export default function HotelPlanningPage() {
                       id={row._id}
                       ageycy_id={row.ageycy_id}
                       name={row.name}
-                      ref={row.ref}
+                      ref={row.reff}
                       country={row.country}
                       tel={row.tel}
                       email={row.email}

@@ -22,7 +22,7 @@ const setTokenWithExpiry = (key, token, expiryTimeInMinutes) => {
   localStorage.setItem(key, JSON.stringify(tokenObject));
 };
 
-const getTokenWithExpiry = (key) => {
+export const getTokenWithExpiry = (key) => {
   const tokenString = localStorage.getItem(key);
 
   if (!tokenString) {

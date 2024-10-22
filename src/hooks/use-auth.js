@@ -1,8 +1,9 @@
-import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 
+import { getTokenWithExpiry } from 'src/lib//user';
+
 export const useAuth = () => {
-  const token = Cookies.get('token');
+  const token = getTokenWithExpiry('token');
   let user;
   if (!token) {
     user = { isAuth: false };
