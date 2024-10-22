@@ -63,7 +63,7 @@ export default function UserTableRow({
         </TableCell> */}
         <TableCell>{ageycy_id}</TableCell>
         <TableCell>{name.toUpperCase()}</TableCell>
-        <TableCell>{reff.toUpperCase()}</TableCell>
+        <TableCell>{ref.toUpperCase()}</TableCell>
         <TableCell>{country}</TableCell>
         <TableCell>{tel}</TableCell>
         <TableCell>{email}</TableCell>
