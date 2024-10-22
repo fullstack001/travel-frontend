@@ -9,8 +9,9 @@ import Select from '@mui/material/Select';
 import Popover from '@mui/material/Popover';
 import Toolbar from '@mui/material/Toolbar';
 import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+// import TextField from '@mui/material/TextField';
 import InputLabel from '@mui/material/InputLabel';
+import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -35,16 +36,17 @@ export default function UserTableToolbar({
   pdfAction,
   searchOption,
   onSearchOptionChange,
+  onSearch,
 }) {
   const [open, setOpen] = useState(null);
 
   const handleDateChange = (newDate) => {
-    const date = dayjs(newDate).toDate();
+    const date = newDate ? dayjs(newDate).toDate() : null;
     onGetDate(date);
   };
 
   const handleEndDateChange = (newDate) => {
-    const date = dayjs(newDate).toDate();
+    const date = newDate ? dayjs(newDate).toDate() : null;
     onGetEndDate(date);
   };
 
@@ -66,6 +68,21 @@ export default function UserTableToolbar({
     setOpen(null);
   };
 
+  const handleClearSearch = () => {
+    onFilterName({ target: { value: '' } });
+    onSearch(''); // Pass an empty string to trigger search with no filter
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      onSearch(filterName);
+    }
+  };
+
+  const handleClearSearchOption = () => {
+    onSearchOptionChange({ target: { value: '' } });
+  };
+
   return (
     <>
       <Toolbar
@@ -83,6 +100,13 @@ export default function UserTableToolbar({
             value={searchOption}
             onChange={onSearchOptionChange}
             label="Search By"
+            endAdornment={
+              searchOption && (
+                <IconButton size="small" sx={{ mr: 2 }} onClick={handleClearSearchOption}>
+                  <Iconify icon="eva:close-fill" />
+                </IconButton>
+              )
+            }
           >
             <MenuItem value="client">Client Name</MenuItem>
             <MenuItem value="by">By</MenuItem>
@@ -94,6 +118,7 @@ export default function UserTableToolbar({
         <OutlinedInput
           value={filterName}
           onChange={onFilterName}
+          onKeyPress={handleKeyPress}
           placeholder="Search..."
           startAdornment={
             <InputAdornment position="start">
@@ -103,12 +128,27 @@ export default function UserTableToolbar({
               />
             </InputAdornment>
           }
+          endAdornment={
+            filterName && (
+              <InputAdornment position="end">
+                <IconButton onClick={handleClearSearch} edge="end">
+                  <Iconify icon="eva:close-fill" />
+                </IconButton>
+              </InputAdornment>
+            )
+          }
         />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
             label="Select Start Date"
             onChange={handleDateChange}
-            renderInput={(params) => <TextField {...params} />}
+            format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                clearable: true,
+                onClear: () => handleDateChange(null),
+              },
+            }}
           />
         </LocalizationProvider>
 
@@ -117,7 +157,13 @@ export default function UserTableToolbar({
             sx={{ ml: 4 }}
             label="Select End Date"
             onChange={handleEndDateChange}
-            renderInput={(params) => <TextField {...params} />}
+            format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                clearable: true,
+                onClear: () => handleEndDateChange(null),
+              },
+            }}
           />
         </LocalizationProvider>
 
@@ -170,4 +216,5 @@ UserTableToolbar.propTypes = {
   onGetEndDate: PropTypes.func,
   searchOption: PropTypes.string.isRequired,
   onSearchOptionChange: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };

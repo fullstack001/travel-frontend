@@ -21,6 +21,7 @@ import { getHotelData } from 'src/lib/hotel';
 import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
+import { getExcursionData } from 'src/lib/excursion';
 import { getDriverListData } from 'src/lib/driverList';
 import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
 
@@ -56,6 +57,7 @@ export default function DailyPlanningPage() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState('');
   const [maxDossierNo, setMaxDossierNo] = useState('');
+  const [excursion, setExcursion] = useState([]);
   const [hotel, setHotel] = useState([]);
   const [agency, setAgency] = useState([]);
   const [vehicle, setVehicle] = useState([]);
@@ -82,12 +84,14 @@ export default function DailyPlanningPage() {
         const vehicleRes = await getVehicleData();
         const guidRes = await getGuidData();
         const driverRes = await getDriverListData();
+        const excursionRes = await getExcursionData();
 
         setHotel(hotelres.data);
         setAgency(agencyRes.data);
         setService(serviceRes.data);
         setVehicle(vehicleRes.data);
         setGuid(guidRes.data);
+        setExcursion(excursionRes.data);
         setDriver(driverRes.data);
       } catch {
         alert('network Error. Refresh page');
@@ -279,7 +283,7 @@ export default function DailyPlanningPage() {
                   { id: 'child', label: 'Child(3-11)' },
                   { id: 'infant', label: 'Infant(0-2)' },
                   { id: 'teen', label: 'Teen(12-18)' },
-                  { id: 'type_vehicle', label: 'Type of Vehicle' },
+                  { id: 'vehicle_type', label: 'Type of Vehicle' },
                   { id: 'driver', label: 'Driver' },
                   { id: 'guid', label: 'Guid' },
                   { id: 'resa_remark', label: 'Remarks' },
@@ -367,6 +371,7 @@ export default function DailyPlanningPage() {
         vehicle={vehicle}
         guid={guid}
         driver={driver}
+        excursion={excursion}
       />
 
       <Dialog

@@ -109,6 +109,7 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
               onChange={(e) => setNewLanguage(e.target.value)}
               variant="outlined"
               size="small"
+              inputProps={{ style: { textTransform: 'uppercase' } }}
             />
             <Button onClick={handleAddLanguage} variant="contained" sx={{ ml: 1 }}>
               Add

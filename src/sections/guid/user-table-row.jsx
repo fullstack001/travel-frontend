@@ -21,7 +21,7 @@ export default function UserTableRow({
   name,
   guid_id,
   language,
-  license,
+  // license,
   editAction,
   deleteAction,
 }) {
@@ -61,7 +61,7 @@ export default function UserTableRow({
         <TableCell align="left">{guid_id}</TableCell>
         <TableCell align="left">{name}</TableCell>
         <TableCell align="left">{language.join(', ')}</TableCell>
-        <TableCell align="left">{license.join(', ')}</TableCell>
+        {/* <TableCell align="left">{license.join(', ')}</TableCell> */}
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
@@ -98,7 +98,7 @@ UserTableRow.propTypes = {
   guid_id: PropTypes.any,
   name: PropTypes.any,
   language: PropTypes.any,
-  license: PropTypes.any,
+  // license: PropTypes.any,
   editAction: PropTypes.func,
   deleteAction: PropTypes.func,
 };

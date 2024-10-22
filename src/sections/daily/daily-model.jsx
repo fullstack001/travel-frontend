@@ -34,7 +34,7 @@ const initData = {
   service: null,
   service_type: null,
   agency_ref: '',
-  client: null,
+  client: '',
   agency: null,
   from: null,
   to: null,
@@ -86,6 +86,7 @@ export default function DailyModal({
   vehicle,
   driver,
   guid,
+  excursion,
 }) {
   const [formData, setFormData] = useState(initData);
   const { name: userName } = userStore();
@@ -174,12 +175,11 @@ export default function DailyModal({
   const vehicleOptions = vehicle.map((item) => ({ label: item.name, value: item.name }));
   const driverOptions = driver.map((item) => ({ label: item.name, value: item.name }));
   const guidOptions = guid.map((item) => ({ label: item.name, value: item.name }));
+  const excursionOptions = excursion.map((item) => ({ label: item.name, value: item.name }));
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
-      <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>
-        {initialData ? 'Edit Reservation' : 'New Reservation'}
-      </DialogTitle>
+      <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>Daily Planning</DialogTitle>
       <DialogContent>
         <Stack spacing={3}>
           <Typography variant="h6" sx={{ mt: 2 }}>
@@ -244,10 +244,11 @@ export default function DailyModal({
               <TextField
                 label="Client"
                 name="client"
-                value={formData.client}
+                value={formData.client ? formData.client.toUpperCase() : ''}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -271,13 +272,13 @@ export default function DailyModal({
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Agency Ref"
+                label="Agency Reference"
                 name="agency_ref"
-                value={formData.agency_ref}
+                value={formData.agency_ref ? formData.agency_ref.toUpperCase() : ''}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
-                disabled
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
 
@@ -288,9 +289,13 @@ export default function DailyModal({
                   name="service_date"
                   value={dayjs(formData.service_date)}
                   onChange={(date) =>
-                    setFormData({ ...formData, service_date: date ? dayjs(date).toDate() : null })
+                    setFormData({
+                      ...formData,
+                      service_date: date ? dayjs(date).format('DD/MM/YYYY') : null,
+                    })
                   }
-                  minDate={dayjs()} // This sets the minimum selectable date to today
+                  minDate={dayjs()}
+                  format="DD/MM/YYYY"
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -337,13 +342,35 @@ export default function DailyModal({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={excursionOptions}
+                getOptionLabel={(option) => option.label}
+                value={
+                  excursionOptions.find((option) => option.value === formData.excursion) || null
+                }
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'excursion',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => (
+                  <TextField {...params} label="Excursion" variant="outlined" />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Flight No"
                 name="flight_no"
-                value={formData.flight_no}
+                value={formData.flight_no ? formData.flight_no.toUpperCase() : ''}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -387,17 +414,6 @@ export default function DailyModal({
                 renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Region From"
-                name="from_region"
-                value={formData.from_region || ''}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                disabled
-              />
-            </Grid>
 
             <Grid item xs={12} sm={6}>
               <Autocomplete
@@ -417,27 +433,16 @@ export default function DailyModal({
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                label="Region To"
-                name="to_region"
-                value={formData.to_region || ''}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                disabled
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
               <Autocomplete
                 options={vehicleOptions} // Array of options
                 getOptionLabel={(option) => option.label} // Determines the string to display
                 value={
-                  vehicleOptions.find((option) => option.value === formData.type_vehicle) || null
+                  vehicleOptions.find((option) => option.value === formData.vehicle_type) || null
                 }
                 onChange={(event, newValue) => {
                   handleChange({
                     target: {
-                      name: 'type_vehicle',
+                      name: 'vehicle_type',
                       value: newValue ? newValue.value : '',
                     },
                   });
@@ -460,37 +465,9 @@ export default function DailyModal({
                 rows={4}
               />
             </Grid>
-          </Grid>
-
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Pricing Information
-          </Typography>
-          <Grid container spacing={2}>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Adult"
-                name="adult"
-                value={formData.adult}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Adult Price"
-                name="adult_price"
-                value={formData.adult_price}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Child"
+                label="Child (3-11)"
                 name="child"
                 value={formData.child}
                 onChange={handleChange}
@@ -501,9 +478,9 @@ export default function DailyModal({
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Child Price"
-                name="child_price"
-                value={formData.child_price}
+                label="Infant (0-2)"
+                name="infant"
+                value={formData.infant}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
@@ -521,85 +498,14 @@ export default function DailyModal({
                 type="number"
               />
             </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Teen Price"
-                name="teen_price"
-                value={formData.teen_price}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Infant"
-                name="infant"
-                value={formData.infant}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={3}>
-              <TextField
-                label="Total Price"
-                name="total_price"
-                value={
-                  formData.adult_price * formData.adult +
-                  formData.child_price * formData.child +
-                  formData.teen_price * formData.teen
-                }
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
-                disabled
-              />
-            </Grid>
-          </Grid>
-
-          <Typography variant="h6" sx={{ mt: 2 }}>
-            Additional Information
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="currency-label">Currency</InputLabel>
-                <Select
-                  labelId="currency-label"
-                  label="Currency"
-                  name="cur"
-                  value={formData.cur}
-                  onChange={handleChange}
-                >
-                  <MenuItem value="USD">USD</MenuItem>
-                  <MenuItem value="EUR">EUR</MenuItem>
-                  <MenuItem value="TZS">TZS</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Invoice No"
-                name="inv_no"
-                value={formData.inv_no}
+                label="Excursion"
+                name="excursion"
+                value={formData.excursion}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Amount"
-                name="amount"
-                value={formData.amount}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
-                type="number"
               />
             </Grid>
           </Grid>
@@ -607,39 +513,43 @@ export default function DailyModal({
           <Typography variant="h6" sx={{ mt: 2 }}>
             Driver Information
           </Typography>
-          <Grid item xs={12} sm={6}>
-            <Autocomplete
-              options={driverOptions} // Array of options
-              getOptionLabel={(option) => option.label} // Determines the string to display
-              value={driverOptions.find((option) => option.value === formData.driver) || null}
-              onChange={(event, newValue) => {
-                handleChange({
-                  target: {
-                    name: 'driver',
-                    value: newValue ? newValue.value : '',
-                  },
-                });
-              }}
-              fullWidth
-              renderInput={(params) => <TextField {...params} label="Driver" variant="outlined" />}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Autocomplete
-              options={guidOptions} // Array of options
-              getOptionLabel={(option) => option.label} // Determines the string to display
-              value={guidOptions.find((option) => option.value === formData.guid) || null}
-              onChange={(event, newValue) => {
-                handleChange({
-                  target: {
-                    name: 'guid',
-                    value: newValue ? newValue.value : '',
-                  },
-                });
-              }}
-              fullWidth
-              renderInput={(params) => <TextField {...params} label="Guid" variant="outlined" />}
-            />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={driverOptions} // Array of options
+                getOptionLabel={(option) => option.label} // Determines the string to display
+                value={driverOptions.find((option) => option.value === formData.driver) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'driver',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => (
+                  <TextField {...params} label="Driver" variant="outlined" />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Autocomplete
+                options={guidOptions}
+                getOptionLabel={(option) => option.label}
+                value={guidOptions.find((option) => option.value === formData.guid) || null}
+                onChange={(event, newValue) => {
+                  handleChange({
+                    target: {
+                      name: 'guid',
+                      value: newValue ? newValue.value : '',
+                    },
+                  });
+                }}
+                fullWidth
+                renderInput={(params) => <TextField {...params} label="Guide" variant="outlined" />}
+              />
+            </Grid>
           </Grid>
         </Stack>
       </DialogContent>
@@ -667,4 +577,5 @@ DailyModal.propTypes = {
   vehicle: PropTypes.any,
   driver: PropTypes.any,
   guid: PropTypes.any,
+  excursion: PropTypes.any,
 };
