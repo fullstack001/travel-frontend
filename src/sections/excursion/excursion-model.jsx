@@ -41,7 +41,11 @@ export default function Excursion({ open, onClose, onSave, initialData, maxNumbe
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === 'name') {
+      setFormData({ ...formData, [name]: value.toUpperCase() });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSave = () => {
@@ -79,6 +83,7 @@ export default function Excursion({ open, onClose, onSave, initialData, maxNumbe
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
 
@@ -111,7 +116,7 @@ export default function Excursion({ open, onClose, onSave, initialData, maxNumbe
                   onChange={handleChange}
                 >
                   <MenuItem value="Inclueded">Inclueded</MenuItem>
-                  <MenuItem value="Not Inclueded">Not Inclueded</MenuItem>
+                  <MenuItem value="Not inclueded">Not inclueded</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

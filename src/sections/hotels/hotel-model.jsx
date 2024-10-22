@@ -14,6 +14,7 @@ import {
   FormControl,
   DialogContent,
   DialogActions,
+  FormHelperText,
 } from '@mui/material';
 
 const initData = {
@@ -28,6 +29,7 @@ const initData = {
 
 export default function Hotel({ open, onClose, onSave, initialData, maxNumber }) {
   const [formData, setFormData] = useState(initData);
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     console.log(maxNumber);
@@ -43,10 +45,19 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
+    // Clear error when field is filled
+    if (name === 'h_region' && value) {
+      setFormErrors({ ...formErrors, h_region: '' });
+    }
   };
 
   const handleSave = () => {
-    const savedData = { ...formData }; // Ensure immutability by copying formData
+    // Validate hotel region
+    if (!formData.h_region) {
+      setFormErrors({ ...formErrors, h_region: 'Hotel Region is required' });
+      return;
+    }
+    const savedData = { ...formData };
     onSave(savedData);
     onClose();
   };
@@ -113,7 +124,7 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" error={!!formErrors.h_region} required>
                 <InputLabel id="hotel-region-label">Hotel Region</InputLabel>
                 <Select
                   labelId="hotel-region-label"
@@ -128,6 +139,7 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
                     </MenuItem>
                   ))}
                 </Select>
+                {formErrors.h_region && <FormHelperText>{formErrors.h_region}</FormHelperText>}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>

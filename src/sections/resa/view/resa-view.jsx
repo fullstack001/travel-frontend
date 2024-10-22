@@ -25,7 +25,7 @@ import {
   deleteData,
   getResaData,
   putResaData,
-  getExportResa,
+  // getExportResa,
   getResaDataWithDate,
 } from 'src/lib/resa';
 
@@ -190,6 +190,10 @@ export default function ResaPage() {
   };
 
   const handleDailyData = async (dateStr) => {
+    if (!dateStr) {
+      setCurrent(null);
+      return;
+    }
     const date = new Date(dateStr);
     const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
@@ -201,6 +205,10 @@ export default function ResaPage() {
   };
 
   const handleEndDailyDate = async (dateStr) => {
+    if (!dateStr) {
+      setCurrentEnd(null);
+      return;
+    }
     const date = new Date(dateStr);
     const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
@@ -258,23 +266,23 @@ export default function ResaPage() {
     confirmGetData();
   }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
 
-  const getExportData = async () => {
-    const data = {
-      start: current,
-      end: currentEnd,
-    };
-    const res = await getExportResa(data);
-    return res.data;
-  };
+  // const getExportData = async () => {
+  //   const data = {
+  //     start: current,
+  //     end: currentEnd,
+  //   };
+  //   const res = await getExportResa(data);
+  //   return res.data;
+  // };
 
   const handlePdf = async () => {
-    const exportData = await getExportData();
-    handleExportPdf(exportData);
+    // const exportData = await getExportData();
+    handleExportPdf(resaData);
   };
 
   const handleExcel = async () => {
-    const exportData = await getExportData();
-    handleExportExcel(exportData);
+    // const exportData = await getExportData();
+    handleExportExcel(resaData);
   };
 
   return (
@@ -328,7 +336,7 @@ export default function ResaPage() {
                 { id: 'resa_remark', label: 'Remarks' },
                 { id: 'from_region', label: 'Region From' },
                 { id: 'to_region', label: 'Region To' },
-                { id: 'type_vehicle', label: 'Type of Vehicle' },
+                { id: 'vehicle_type', label: 'Type of Vehicle' },
                 { id: 'invoce_no', label: 'Invoice No' },
                 { id: 'amount', label: 'Amount' },
                 { id: 'adult_price', label: 'Adult Price' },

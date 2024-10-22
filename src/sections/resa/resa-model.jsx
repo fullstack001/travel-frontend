@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  FormHelperText,
 } from '@mui/material';
 
 import userStore from 'src/store/userStroe';
@@ -34,7 +35,7 @@ const initData = {
   service: null,
   service_type: null,
   agency_ref: '',
-  client: null,
+  client: '',
   agency: null,
   from: null,
   to: null,
@@ -84,6 +85,7 @@ export default function ResaModal({
   excursion,
 }) {
   const [formData, setFormData] = useState(initData);
+  const [errors, setErrors] = useState({});
   const { name: userName } = userStore();
   console.log(userName);
 
@@ -106,9 +108,43 @@ export default function ResaModal({
     }
   }, [initialData, maxNumber, userName]);
 
+  const validateForm = () => {
+    const newErrors = {};
+    const requiredFields = [
+      'status',
+      'service',
+      'service_type',
+      'agency_ref',
+      'client',
+      'agency',
+      'from',
+      'to',
+      'service_date',
+      'vehicle_type',
+    ];
+
+    requiredFields.forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = 'This field is required';
+      }
+    });
+
+    console.log(newErrors);
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    let formattedValue = value;
+
+    if (name === 'client' || name === 'agency_ref' || name === 'flight_no' || name === 'inv_no') {
+      formattedValue = value.toUpperCase();
+    }
+
+    setFormData({ ...formData, [name]: formattedValue });
+    setErrors({ ...errors, [name]: '' }); // Clear error when field is changed
 
     // Update region when "from" or "to" changes
     if (name === 'from' || name === 'to') {
@@ -121,42 +157,32 @@ export default function ResaModal({
         }));
       }
     }
-
-    // Update agency_ref when agency changes
-    if (name === 'agency') {
-      console.log(value);
-      const selectedAgency = agency.find((item) => item.name === value);
-      console.log('---------------', selectedAgency);
-      if (selectedAgency) {
-        setFormData((prevData) => ({
-          ...prevData,
-          agency: value,
-          agency_ref: selectedAgency.ref,
-        }));
-      }
-    }
   };
 
   const handleSave = () => {
-    const savedData = { ...formData }; // Ensure immutability by copying formData
-    Object.entries(savedData).forEach(([key, value]) => {
-      if (value instanceof Date) {
-        const date = new Date(value);
-        const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+    if (validateForm()) {
+      const savedData = { ...formData };
+      Object.entries(savedData).forEach(([key, value]) => {
+        if (value instanceof Date) {
+          const date = new Date(value);
+          const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-        const newDate =
-          timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : value;
+          const newDate =
+            timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : value;
 
-        savedData[key] = newDate;
-      } else {
-        const time = Date.parse(`1970-01-01T${value}`);
-        if (!Number.isNaN(time)) {
-          savedData[key] = formatTimeToString(time);
+          savedData[key] = newDate;
+        } else {
+          const time = Date.parse(`1970-01-01T${value}`);
+          if (!Number.isNaN(time)) {
+            savedData[key] = formatTimeToString(time);
+          }
         }
-      }
-    });
-    onSave(savedData);
-    onClose();
+      });
+      onSave(savedData);
+      onClose();
+    } else {
+      console.log('Form validation failed');
+    }
   };
 
   const agencyOptions = agency.map((item) => ({
@@ -220,7 +246,7 @@ export default function ResaModal({
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" error={!!errors.status} required>
                 <InputLabel id="status-label">Status</InputLabel>
                 <Select
                   labelId="status-label"
@@ -228,10 +254,12 @@ export default function ResaModal({
                   name="status"
                   value={formData.status}
                   onChange={handleChange}
+                  required
                 >
                   <MenuItem value="OK">Confirmed</MenuItem>
                   <MenuItem value="No">Cancelled</MenuItem>
                 </Select>
+                {errors.status && <FormHelperText>{errors.status}</FormHelperText>}
               </FormControl>
             </Grid>
 
@@ -243,6 +271,10 @@ export default function ResaModal({
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                required
+                error={!!errors.client}
+                helperText={errors.client}
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -260,7 +292,14 @@ export default function ResaModal({
                 }}
                 fullWidth
                 renderInput={(params) => (
-                  <TextField {...params} label="Agency" variant="outlined" />
+                  <TextField
+                    {...params}
+                    label="Agency"
+                    variant="outlined"
+                    required
+                    error={!!errors.agency}
+                    helperText={errors.agency}
+                  />
                 )}
               />
             </Grid>
@@ -272,7 +311,10 @@ export default function ResaModal({
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
-                disabled
+                required
+                error={!!errors.agency_ref}
+                helperText={errors.agency_ref}
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
 
@@ -282,11 +324,22 @@ export default function ResaModal({
                   label="Service Date"
                   name="service_date"
                   value={dayjs(formData.service_date)}
-                  onChange={(date) =>
-                    setFormData({ ...formData, service_date: date ? dayjs(date).toDate() : null })
-                  }
-                  minDate={dayjs()} // This sets the minimum selectable date to today
-                  renderInput={(params) => <TextField {...params} />}
+                  onChange={(date) => {
+                    const formattedDate = date ? dayjs(date).format('DD/MM/YYYY') : '';
+                    setFormData({
+                      ...formData,
+                      service_date: formattedDate,
+                    });
+                    setErrors({ ...errors, service_date: '' });
+                  }}
+                  minDate={dayjs()}
+                  format="DD/MM/YYYY"
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      required: true,
+                    },
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
@@ -298,8 +351,8 @@ export default function ResaModal({
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <Autocomplete
-                options={serviceOptions} // Array of options
-                getOptionLabel={(option) => option.label.toUpperCase()} // Determines the string to display
+                options={serviceOptions}
+                getOptionLabel={(option) => option.label.toUpperCase()}
                 value={serviceOptions.find((option) => option.value === formData.service) || null}
                 onChange={(event, newValue) => {
                   handleChange({
@@ -311,12 +364,19 @@ export default function ResaModal({
                 }}
                 fullWidth
                 renderInput={(params) => (
-                  <TextField {...params} label="Service" variant="outlined" />
+                  <TextField
+                    {...params}
+                    label="Service"
+                    variant="outlined"
+                    required
+                    error={!!errors.service}
+                    helperText={errors.service}
+                  />
                 )}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" error={!!errors.service_type} required>
                 <InputLabel id="service-type-label">Service Type</InputLabel>
                 <Select
                   labelId="service-type-label"
@@ -324,11 +384,13 @@ export default function ResaModal({
                   name="service_type"
                   value={formData.service_type}
                   onChange={handleChange}
+                  required
                 >
                   <MenuItem value="Arv">Arv</MenuItem>
                   <MenuItem value="Dep">Dep</MenuItem>
                   <MenuItem value="Inh">Inh</MenuItem>
                 </Select>
+                {errors.service_type && <FormHelperText>{errors.service_type}</FormHelperText>}
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -339,6 +401,7 @@ export default function ResaModal({
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -367,7 +430,16 @@ export default function ResaModal({
                   });
                 }}
                 fullWidth
-                renderInput={(params) => <TextField {...params} label="From" variant="outlined" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="From"
+                    variant="outlined"
+                    required
+                    error={!!errors.from}
+                    helperText={errors.from}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -396,7 +468,16 @@ export default function ResaModal({
                   });
                 }}
                 fullWidth
-                renderInput={(params) => <TextField {...params} label="To" variant="outlined" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="To"
+                    variant="outlined"
+                    required
+                    error={!!errors.to}
+                    helperText={errors.to}
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -412,22 +493,29 @@ export default function ResaModal({
             </Grid>
             <Grid item xs={12} sm={6}>
               <Autocomplete
-                options={vehicleOptions} // Array of options
-                getOptionLabel={(option) => option.label} // Determines the string to display
+                options={vehicleOptions}
+                getOptionLabel={(option) => option.label}
                 value={
-                  vehicleOptions.find((option) => option.value === formData.type_vehicle) || null
+                  vehicleOptions.find((option) => option.value === formData.vehicle_type) || null
                 }
                 onChange={(event, newValue) => {
                   handleChange({
                     target: {
-                      name: 'type_vehicle',
+                      name: 'vehicle_type',
                       value: newValue ? newValue.value : '',
                     },
                   });
                 }}
                 fullWidth
                 renderInput={(params) => (
-                  <TextField {...params} label="Type of Vehicle" variant="outlined" />
+                  <TextField
+                    {...params}
+                    label="Type of Vehicle"
+                    variant="outlined"
+                    required
+                    error={!!errors.vehicle_type}
+                    helperText={errors.vehicle_type}
+                  />
                 )}
               />
             </Grid>
@@ -477,8 +565,11 @@ export default function ResaModal({
                 value={formData.adult}
                 onChange={handleChange}
                 fullWidth
+                error={!!errors.adult}
+                helperText={errors.adult}
                 variant="outlined"
                 type="number"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -487,6 +578,8 @@ export default function ResaModal({
                 name="adult_price"
                 value={formData.adult_price}
                 onChange={handleChange}
+                error={!!errors.adult_price}
+                helperText={errors.adult_price}
                 fullWidth
                 variant="outlined"
                 type="number"
@@ -494,13 +587,16 @@ export default function ResaModal({
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Child"
+                label="Child (3-11)"
                 name="child"
                 value={formData.child}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
                 type="number"
+                required
+                error={!!errors.child}
+                helperText={errors.child}
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -516,13 +612,14 @@ export default function ResaModal({
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Teen"
+                label="Teen (12-18)"
                 name="teen"
                 value={formData.teen}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
                 type="number"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -538,13 +635,14 @@ export default function ResaModal({
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Infant"
+                label="Infant (0-2)"
                 name="infant"
                 value={formData.infant}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
                 type="number"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={3}>
@@ -593,6 +691,7 @@ export default function ResaModal({
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
+                inputProps={{ style: { textTransform: 'uppercase' } }}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
