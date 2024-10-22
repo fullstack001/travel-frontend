@@ -19,7 +19,7 @@ import Iconify from 'src/components/iconify';
 export default function UserTableRow({
   id,
   name,
-  reff,
+  ref,
   ageycy_id,
   country,
   tel,
@@ -108,7 +108,7 @@ UserTableRow.propTypes = {
   tel: PropTypes.any,
   email: PropTypes.any,
   website: PropTypes.any,
-  reff: PropTypes.any,
+  ref: PropTypes.any,
   deleteAction: PropTypes.func,
   editAction: PropTypes.func,
 };
