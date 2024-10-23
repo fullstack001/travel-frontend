@@ -124,22 +124,22 @@ export default function DailyPlanningPage() {
 
   const handleDailyData = async (dateStr) => {
     const date = new Date(dateStr);
-    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    const newDate =
-      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+    // const newDate =
+    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
 
-    setCurrent(newDate);
+    setCurrent(date);
   };
 
   const handleEndDailyDate = async (dateStr) => {
     const date = new Date(dateStr);
-    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    const newDate =
-      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+    // const newDate =
+    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
 
-    setCurrentEnd(newDate);
+    setCurrentEnd(date);
   };
 
   useEffect(() => {
@@ -285,7 +285,7 @@ export default function DailyPlanningPage() {
                   { id: 'teen', label: 'Teen(12-18)' },
                   { id: 'vehicle_type', label: 'Type of Vehicle' },
                   { id: 'driver', label: 'Driver' },
-                  { id: 'guid', label: 'Guid' },
+                  { id: 'guid', label: 'Guide' },
                   { id: 'resa_remark', label: 'Remarks' },
                   { id: 'by', label: 'By' },
                   { id: 'status', label: 'Status' },

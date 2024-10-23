@@ -25,7 +25,7 @@ import {
   deleteData,
   getResaData,
   putResaData,
-  // getExportResa,
+  getExportResa,
   getResaDataWithDate,
 } from 'src/lib/resa';
 
@@ -195,13 +195,13 @@ export default function ResaPage() {
       return;
     }
     const date = new Date(dateStr);
-    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    const newDate =
-      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
-    console.log(newDate);
+    // const newDate =
+    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+    // console.log(newDate);
 
-    setCurrent(newDate);
+    setCurrent(date);
   };
 
   const handleEndDailyDate = async (dateStr) => {
@@ -210,12 +210,12 @@ export default function ResaPage() {
       return;
     }
     const date = new Date(dateStr);
-    const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-    const newDate =
-      timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
+    // const newDate =
+    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
 
-    setCurrentEnd(newDate);
+    setCurrentEnd(date);
   };
 
   useEffect(() => {
@@ -266,23 +266,25 @@ export default function ResaPage() {
     confirmGetData();
   }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
 
-  // const getExportData = async () => {
-  //   const data = {
-  //     start: current,
-  //     end: currentEnd,
-  //   };
-  //   const res = await getExportResa(data);
-  //   return res.data;
-  // };
+  const getExportData = async () => {
+    const data = {
+      start: current,
+      end: currentEnd,
+      filterData: filterName,
+      filterOption: searchOption,
+    };
+    const res = await getExportResa(data);
+    return res.data;
+  };
 
   const handlePdf = async () => {
-    // const exportData = await getExportData();
-    handleExportPdf(resaData);
+    const exportData = await getExportData();
+    handleExportPdf(exportData);
   };
 
   const handleExcel = async () => {
-    // const exportData = await getExportData();
-    handleExportExcel(resaData);
+    const exportData = await getExportData();
+    handleExportExcel(exportData);
   };
 
   return (

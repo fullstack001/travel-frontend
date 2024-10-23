@@ -126,6 +126,7 @@ export const handleExportExcel = (resaData) => {
       'Total Price',
       'Currency',
       'Last modified',
+      'License',
     ],
     ...resaData.map((row) => [
       row.dossier_no,
@@ -158,6 +159,7 @@ export const handleExportExcel = (resaData) => {
       row.total_price,
       row.currency,
       row.last_update,
+      row.license.join(', '),
     ]),
   ];
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
@@ -208,6 +210,7 @@ export const handleExportPdf = (resaData) => {
     { datakey: 'total_price', header: 'Total Price' },
     { datakey: 'currency', header: 'Currency' },
     { datakey: 'last_update', header: 'Last Modified' },
+    { datakey: 'license', header: 'License' },
   ];
 
   // Map data to rows
@@ -221,7 +224,7 @@ export const handleExportPdf = (resaData) => {
     client: row.client,
     agency: row.agency,
     from: row.from,
-    to:   row.to,
+    to: row.to,
     excursion: row.excursion,
     service_date: formatDate(row.service_date),
     flight_no: row.flight_no,
@@ -242,6 +245,7 @@ export const handleExportPdf = (resaData) => {
     total_price: row.total_price,
     currency: row.currency,
     last_update: row.last_update,
+    license: row.license.join(', '),
   }));
 
   // Add table to the PDF

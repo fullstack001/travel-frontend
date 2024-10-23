@@ -60,6 +60,7 @@ const initData = {
   last_update: '',
   pickup_time: '',
   driver: '',
+  license: [],
   guid: '',
 };
 
@@ -136,6 +137,18 @@ export default function DailyModal({
           ...prevData,
           agency: value,
           agency_ref: selectedAgency.ref,
+        }));
+      }
+    }
+
+    // Update license when guid changes
+    if (name === 'guid') {
+      const selectedGuid = guid.find((item) => item.name === value);
+      if (selectedGuid) {
+        setFormData((prevData) => ({
+          ...prevData,
+          guid: value,
+          license: selectedGuid.license || [], // Assuming the license is stored in the guid object
         }));
       }
     }
@@ -465,6 +478,18 @@ export default function DailyModal({
                 rows={4}
               />
             </Grid>
+
+            <Grid item xs={12} sm={3}>
+              <TextField
+                label=" ult"
+                name="adult"
+                value={formData.adult}
+                onChange={handleChange}
+                fullWidth
+                variant="outlined"
+                type="number"
+              />
+            </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
                 label="Child (3-11)"
@@ -489,23 +514,13 @@ export default function DailyModal({
             </Grid>
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Teen"
+                label="Teen (12-18)"
                 name="teen"
                 value={formData.teen}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"
                 type="number"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Excursion"
-                name="excursion"
-                value={formData.excursion}
-                onChange={handleChange}
-                fullWidth
-                variant="outlined"
               />
             </Grid>
           </Grid>
@@ -548,6 +563,18 @@ export default function DailyModal({
                 }}
                 fullWidth
                 renderInput={(params) => <TextField {...params} label="Guide" variant="outlined" />}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="License"
+                name="license"
+                value={
+                  Array.isArray(formData.license) ? formData.license.join(', ') : formData.license
+                }
+                disabled
+                fullWidth
+                variant="outlined"
               />
             </Grid>
           </Grid>

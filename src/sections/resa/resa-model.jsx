@@ -59,6 +59,7 @@ const initData = {
   total_price: '',
   currency: 'USD',
   last_update: '',
+  license: [],
 };
 
 const verifyUserList = [
