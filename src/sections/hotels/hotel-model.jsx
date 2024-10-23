@@ -44,7 +44,8 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    const updatedValue = name === 'name' ? value.toUpperCase() : value;
+    setFormData({ ...formData, [name]: updatedValue });
     // Clear error when field is filled
     if (name === 'h_region' && value) {
       setFormErrors({ ...formErrors, h_region: '' });
@@ -98,9 +99,13 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
                 label="Hotel Name"
                 name="name"
                 value={formData.name}
-                onChange={handleChange}
+                onChange={(e) => {
+                  const uppercaseName = e.target.value.toUpperCase();
+                  setFormData({ ...formData, name: uppercaseName });
+                }}
                 fullWidth
                 variant="outlined"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={6}>

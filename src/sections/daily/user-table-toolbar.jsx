@@ -81,6 +81,7 @@ export default function UserTableToolbar({
           <DatePicker
             sx={{ ml: 4 }}
             label="Select End Date"
+            format="DD/MM/YYYY"
             onChange={handleEndDateChange}
             renderInput={(params) => <TextField {...params} />}
           />
@@ -90,6 +91,7 @@ export default function UserTableToolbar({
           <Button
             variant="contained"
             onClick={NewAction}
+            format="DD/MM/YYYY"
             color="inherit"
             startIcon={<Iconify icon="eva:plus-fill" />}
             disabled={loading}
