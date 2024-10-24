@@ -158,7 +158,7 @@ export const handleExportExcel = (resaData) => {
       row.teen_price,
       row.total_price,
       row.currency,
-      row.last_update,
+      formatDate(row.last_update),
       row.license.join(', '),
     ]),
   ];
@@ -244,7 +244,7 @@ export const handleExportPdf = (resaData) => {
     teen_price: row.teen_price,
     total_price: row.total_price,
     currency: row.currency,
-    last_update: row.last_update,
+    last_update: formatDate(row.last_update),
     license: row.license.join(', '),
   }));
 
