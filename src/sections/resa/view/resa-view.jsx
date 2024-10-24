@@ -190,31 +190,14 @@ export default function ResaPage() {
   };
 
   const handleDailyData = async (dateStr) => {
-    if (!dateStr) {
-      setCurrent(null);
-      return;
-    }
     const date = new Date(dateStr);
-    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
-
-    // const newDate =
-    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
-    // console.log(newDate);
-
+    date.setDate(date.getDate() + 1); // Set to the previous day
     setCurrent(date);
   };
 
   const handleEndDailyDate = async (dateStr) => {
-    if (!dateStr) {
-      setCurrentEnd(null);
-      return;
-    }
     const date = new Date(dateStr);
-    // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
-
-    // const newDate =
-    //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : dateStr;
-
+    date.setDate(date.getDate() + 1); // Set to the previous day
     setCurrentEnd(date);
   };
 
