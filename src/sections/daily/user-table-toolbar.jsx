@@ -73,6 +73,7 @@ export default function UserTableToolbar({
           <DatePicker
             label="Select Start Date"
             onChange={handleDateChange}
+            format="DD/MM/YYYY"
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
