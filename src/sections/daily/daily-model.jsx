@@ -129,18 +129,6 @@ export default function DailyModal({
       }
     }
 
-    // Update agency_ref when agency changes
-    if (name === 'agency') {
-      const selectedAgency = agency.find((item) => item.name === value);
-      if (selectedAgency) {
-        setFormData((prevData) => ({
-          ...prevData,
-          agency: value,
-          agency_ref: selectedAgency.ref,
-        }));
-      }
-    }
-
     // Update license when guid changes
     if (name === 'guid') {
       const selectedGuid = guid.find((item) => item.name === value);
@@ -301,15 +289,21 @@ export default function DailyModal({
                   label="Service Date"
                   name="service_date"
                   value={dayjs(formData.service_date)}
-                  onChange={(date) =>
+                  onChange={(date) => {
+                    const formattedDate = date ? date.toDate() : null;
                     setFormData({
                       ...formData,
-                      service_date: date ? dayjs(date).format('DD/MM/YYYY') : null,
-                    })
-                  }
+                      service_date: formattedDate, // Set as Date object
+                    });
+                  }}
                   minDate={dayjs()}
                   format="DD/MM/YYYY"
-                  renderInput={(params) => <TextField {...params} />}
+                  slotProps={{
+                    textField: {
+                      fullWidth: true,
+                      required: true,
+                    },
+                  }}
                 />
               </LocalizationProvider>
             </Grid>
@@ -481,7 +475,7 @@ export default function DailyModal({
 
             <Grid item xs={12} sm={3}>
               <TextField
-                label=" ult"
+                label="Ault"
                 name="adult"
                 value={formData.adult}
                 onChange={handleChange}

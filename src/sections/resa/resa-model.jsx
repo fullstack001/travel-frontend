@@ -33,7 +33,7 @@ const initData = {
   verified: 'false',
   status: 'OK',
   service: null,
-  service_type: null,
+  service_type: 'Arv',
   agency_ref: '',
   client: '',
   agency: null,
@@ -88,7 +88,6 @@ export default function ResaModal({
   const [formData, setFormData] = useState(initData);
   const [errors, setErrors] = useState({});
   const { name: userName } = userStore();
-  console.log(userName);
 
   function formatTimeToString(time) {
     const d = new Date(time);
@@ -166,12 +165,12 @@ export default function ResaModal({
       Object.entries(savedData).forEach(([key, value]) => {
         if (value instanceof Date) {
           const date = new Date(value);
-          const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
+          // const timezoneOffsetHours = -date.getTimezoneOffset() / 60;
 
-          const newDate =
-            timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : value;
+          // const newDate =
+          //   timezoneOffsetHours === 2 ? new Date(date.getTime() + 10800000).toString() : value;
 
-          savedData[key] = newDate;
+          savedData[key] = date;
         } else {
           const time = Date.parse(`1970-01-01T${value}`);
           if (!Number.isNaN(time)) {
@@ -326,10 +325,10 @@ export default function ResaModal({
                   name="service_date"
                   value={dayjs(formData.service_date)}
                   onChange={(date) => {
-                    const formattedDate = date ? dayjs(date).format('DD/MM/YYYY') : '';
+                    const formattedDate = date ? date.toDate() : null;
                     setFormData({
                       ...formData,
-                      service_date: formattedDate,
+                      service_date: formattedDate, // Set as Date object
                     });
                     setErrors({ ...errors, service_date: '' });
                   }}
@@ -687,8 +686,8 @@ export default function ResaModal({
             <Grid item xs={12} sm={6}>
               <TextField
                 label="Invoice No"
-                name="inv_no"
-                value={formData.inv_no}
+                name="invoice_no"
+                value={formData.invoice_no}
                 onChange={handleChange}
                 fullWidth
                 variant="outlined"

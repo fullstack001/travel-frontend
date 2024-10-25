@@ -51,7 +51,7 @@ export default function UserTableRow({
   from_region,
   to_region,
   vehicle_type,
-  invoce_no,
+  invoice_no,
   amount,
   adult_price,
   child_price,
@@ -113,7 +113,7 @@ export default function UserTableRow({
         <TableCell>{from_region}</TableCell>
         <TableCell>{to_region}</TableCell>
         <TableCell>{vehicle_type}</TableCell>
-        <TableCell>{invoce_no}</TableCell>
+        <TableCell>{invoice_no}</TableCell>
         <TableCell>{amount}</TableCell>
         <TableCell>{adult_price}</TableCell>
         <TableCell>{child_price}</TableCell>
@@ -172,7 +172,7 @@ UserTableRow.propTypes = {
   from_region: PropTypes.any,
   to_region: PropTypes.any,
   vehicle_type: PropTypes.any,
-  invoce_no: PropTypes.any,
+  invoice_no: PropTypes.any,
   amount: PropTypes.any,
   adult_price: PropTypes.any,
   child_price: PropTypes.any,

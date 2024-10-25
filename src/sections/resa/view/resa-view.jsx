@@ -322,7 +322,7 @@ export default function ResaPage() {
                 { id: 'from_region', label: 'Region From' },
                 { id: 'to_region', label: 'Region To' },
                 { id: 'vehicle_type', label: 'Type of Vehicle' },
-                { id: 'invoce_no', label: 'Invoice No' },
+                { id: 'invoice_no', label: 'Invoice No' },
                 { id: 'amount', label: 'Amount' },
                 { id: 'adult_price', label: 'Adult Price' },
                 { id: 'child_price', label: 'Child Price' },
@@ -360,7 +360,7 @@ export default function ResaPage() {
                   from_region={row.from_region}
                   to_region={row.to_region}
                   vehicle_type={row.vehicle_type}
-                  invoce_no={row.invoce_no}
+                  invoice_no={row.invoice_no}
                   amount={row.amount}
                   adult_price={row.adult_price}
                   child_price={row.child_price}
