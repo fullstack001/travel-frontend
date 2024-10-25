@@ -115,8 +115,8 @@ export default function Excursion({ open, onClose, onSave, initialData, maxNumbe
                   value={formData.lunch}
                   onChange={handleChange}
                 >
-                  <MenuItem value="Inclueded">Inclueded</MenuItem>
-                  <MenuItem value="Not inclueded">Not inclueded</MenuItem>
+                  <MenuItem value="Included">Included</MenuItem>
+                  <MenuItem value="Not included">Not included</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
