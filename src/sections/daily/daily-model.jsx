@@ -295,7 +295,6 @@ export default function DailyModal({
                       ...formData,
                       service_date: formattedDate, // Set as Date object
                     });
-                    setErrors({ ...errors, service_date: '' });
                   }}
                   minDate={dayjs()}
                   format="DD/MM/YYYY"
