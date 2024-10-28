@@ -475,7 +475,7 @@ export default function DailyModal({
 
             <Grid item xs={12} sm={3}>
               <TextField
-                label="Ault"
+                label="Adult"
                 name="adult"
                 value={formData.adult}
                 onChange={handleChange}
