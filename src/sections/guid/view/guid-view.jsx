@@ -192,7 +192,7 @@ export default function GuidPage() {
                   { id: 'guid_id', label: 'Guid Id', align: 'center' },
                   { id: 'name', label: 'Guid Name', align: 'center' },
                   { id: 'language', label: 'Language Spoken', align: 'center' },
-                  // { id: 'license', label: 'License No', align: 'center' },
+                  { id: 'license', label: 'License No', align: 'center' },
                   { id: '', label: '' },
                 ]}
               />
@@ -205,7 +205,7 @@ export default function GuidPage() {
                       id={row._id}
                       name={row.name}
                       language={row.language}
-                      // license={row.license}
+                      license={row.license}
                       guid_id={row.guid_id}
                       deleteAction={() => handleDelete(row)}
                       editAction={() => handleEdit(row)}
