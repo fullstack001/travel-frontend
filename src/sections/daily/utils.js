@@ -97,6 +97,7 @@ export const handleExportExcel = (resaData) => {
   const workbook = XLSX.utils.book_new();
   const worksheetData = [
     [
+      'By',
       'Client Name',
       'From',
       'To',
@@ -113,6 +114,7 @@ export const handleExportExcel = (resaData) => {
       'Remarks',
     ],
     ...resaData.map((row) => [
+      row.by,
       row.client,
       row.from,
       row.hotel,
@@ -147,6 +149,7 @@ export const handleExportPdf = (resaData) => {
   });
   // Define the columns
   const columns = [
+    { header: 'By', dataKey: 'by' },
     { header: 'Client Name', dataKey: 'client' },
     { header: 'From', dataKey: 'from' },
     { header: 'To', dataKey: 'hotel' },
@@ -165,6 +168,7 @@ export const handleExportPdf = (resaData) => {
 
   // Map data to rows
   const rows = resaData.map((row) => ({
+    by: row.by,
     client: row.client,
     from: row.from,
     hotel: row.hotel,
