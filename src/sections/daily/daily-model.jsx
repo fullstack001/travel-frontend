@@ -235,8 +235,8 @@ export default function DailyModal({
                   value={formData.status}
                   onChange={handleChange}
                 >
-                  <MenuItem value="OK">Confirmed</MenuItem>
-                  <MenuItem value="No">Cancelled</MenuItem>
+                  <MenuItem value="OK">OK</MenuItem>
+                  <MenuItem value="Cancelled">Cancelled</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
