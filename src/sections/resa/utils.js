@@ -97,6 +97,7 @@ export const handleExportExcel = (resaData) => {
   const worksheetData = [
     [
       'File No',
+      'By',
       'Verified',
       'Status',
       'Service',
@@ -130,6 +131,7 @@ export const handleExportExcel = (resaData) => {
     ],
     ...resaData.map((row) => [
       row.dossier_no,
+      row.by,
       row.verified,
       row.status,
       row.service,
@@ -181,6 +183,7 @@ export const handleExportPdf = (resaData) => {
   // Define the columns
   const columns = [
     { datakey: 'dossier_no', header: 'File No' },
+    { datakey: 'by', header: 'By' },
     { datakey: 'verified', header: 'Verified' },
     { datakey: 'status', header: 'Status' },
     { datakey: 'service', header: 'Service' },
@@ -216,6 +219,7 @@ export const handleExportPdf = (resaData) => {
   // Map data to rows
   const rows = resaData.map((row) => ({
     dossier_no: row.dossier_no,
+    by: row.by,
     verified: row.verified,
     status: row.status,
     service: row.service,
