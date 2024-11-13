@@ -236,7 +236,7 @@ export default function DailyModal({
                   onChange={handleChange}
                 >
                   <MenuItem value="OK">OK</MenuItem>
-                  <MenuItem value="Cancelled">Cancelled</MenuItem>
+                  <MenuItem value="CXL">CXL</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

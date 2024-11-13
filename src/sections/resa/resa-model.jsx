@@ -256,8 +256,8 @@ export default function ResaModal({
                   onChange={handleChange}
                   required
                 >
-                  <MenuItem value="OK">Confirmed</MenuItem>
-                  <MenuItem value="No">Cancelled</MenuItem>
+                  <MenuItem value="OK">OK</MenuItem>
+                  <MenuItem value="CXL">CXL</MenuItem>
                 </Select>
                 {errors.status && <FormHelperText>{errors.status}</FormHelperText>}
               </FormControl>
