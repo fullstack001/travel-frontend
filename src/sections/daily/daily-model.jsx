@@ -164,19 +164,39 @@ export default function DailyModal({
     onClose();
   };
 
-  const agencyOptions = agency.map((item) => ({
-    label: item.name,
-    value: item.name,
-  }));
-  const hotelOptions = hotel.map((item) => ({
-    label: item.name,
-    value: item.name,
-  }));
-  const serviceOptions = service.map((item) => ({ label: item.name, value: item.name }));
-  const vehicleOptions = vehicle.map((item) => ({ label: item.name, value: item.name }));
-  const driverOptions = driver.map((item) => ({ label: item.name, value: item.name }));
-  const guidOptions = guid.map((item) => ({ label: item.name, value: item.name }));
-  const excursionOptions = excursion.map((item) => ({ label: item.name, value: item.name }));
+  const agencyOptions = agency
+    .map((item) => ({
+      label: item.name,
+      value: item.name,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const hotelOptions = hotel
+    .map((item) => ({
+      label: item.name,
+      value: item.name,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const serviceOptions = service
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const vehicleOptions = vehicle
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const driverOptions = driver
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const guidOptions = guid
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const excursionOptions = excursion
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>

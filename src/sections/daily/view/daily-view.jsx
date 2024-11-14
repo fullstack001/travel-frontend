@@ -23,7 +23,7 @@ import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
 import { getExcursionData } from 'src/lib/excursion';
 import { getDriverListData } from 'src/lib/driverList';
-import { getDailyData, putDailyData, deleteDailyData } from 'src/lib/resa';
+import { getAlldata, putDailyData, deleteDailyData } from 'src/lib/resa';
 
 import Scrollbar from 'src/components/scrollbar';
 
@@ -78,21 +78,24 @@ export default function DailyPlanningPage() {
     const getListData = async () => {
       try {
         setLoading(true);
+        const originData = await getAlldata();
+        setResaData(originData);
+        const max = Math.max(...originData.map((item) => item.dossier_no)); // Calculate max dossier_no
+        setMaxDossierNo(max);
         const hotelres = await getHotelData();
-        const agencyRes = await getAgencyData();
-        const serviceRes = await getServiceData();
-        const vehicleRes = await getVehicleData();
-        const guidRes = await getGuidData();
-        const driverRes = await getDriverListData();
-        const excursionRes = await getExcursionData();
-
         setHotel(hotelres.data);
+        const agencyRes = await getAgencyData();
         setAgency(agencyRes.data);
+        const serviceRes = await getServiceData();
         setService(serviceRes.data);
+        const vehicleRes = await getVehicleData();
         setVehicle(vehicleRes.data);
+        const guidRes = await getGuidData();
         setGuid(guidRes.data);
-        setExcursion(excursionRes.data);
+        const driverRes = await getDriverListData();
         setDriver(driverRes.data);
+        const excursionRes = await getExcursionData();
+        setExcursion(excursionRes.data);
       } catch {
         alert('network Error. Refresh page');
       } finally {
@@ -120,42 +123,17 @@ export default function DailyPlanningPage() {
     inputData: resaData,
     comparator: getComparator(order, orderBy),
     filterName,
+    current,
+    currentEnd,
   });
 
   const handleDailyData = async (dateStr) => {
-    const date = new Date(dateStr);
-    date.setDate(date.getDate() + 1); // Set to the previous day
-    setCurrent(date);
+    setCurrent(dateStr);
   };
 
   const handleEndDailyDate = async (dateStr) => {
-    const date = new Date(dateStr);
-    date.setDate(date.getDate() + 1); // Set to the previous day
-    setCurrentEnd(date);
+    setCurrentEnd(dateStr);
   };
-
-  useEffect(() => {
-    const confirmGetData = async () => {
-      if (!current || !currentEnd) return;
-
-      setPage(0);
-
-      try {
-        const data = { start: current, end: currentEnd };
-        const resa = await getDailyData(data);
-        if (resa === 500) {
-          alert('Network Error');
-        } else {
-          setResaData(resa.data);
-          setMaxDossierNo(resa.max_num);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        alert('An unexpected error occurred');
-      }
-    };
-    confirmGetData();
-  }, [current, currentEnd]);
 
   const handleNewReservation = () => {
     setCurrentRow(null); // Clear current row data
@@ -173,8 +151,6 @@ export default function DailyPlanningPage() {
 
   const handleModalSave = async (formData) => {
     const params = {
-      start: current,
-      end: currentEnd,
       newData: formData,
     };
 
@@ -201,11 +177,8 @@ export default function DailyPlanningPage() {
   const handleConfirmDelete = async () => {
     setConfirmOpen(false);
     const params = {
-      start: current,
-      end: currentEnd,
       id: deleteId,
     };
-
     const res = await deleteDailyData(params);
     if (res === 500) {
       alert('Network Error.');
@@ -331,7 +304,7 @@ export default function DailyPlanningPage() {
 
                 <TableEmptyRows
                   height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, resaData.length)}
+                  emptyRows={emptyRows(page, rowsPerPage, dataFiltered.length)}
                 />
 
                 {notFound && <TableNoData query={filterName} />}
@@ -343,7 +316,7 @@ export default function DailyPlanningPage() {
         <TablePagination
           page={page}
           component="div"
-          count={resaData.length}
+          count={dataFiltered.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}

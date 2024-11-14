@@ -21,13 +21,7 @@ import { getAgencyData } from 'src/lib/agency';
 import { getServiceData } from 'src/lib/service';
 import { getVehicleData } from 'src/lib/vehicle';
 import { getExcursionData } from 'src/lib/excursion';
-import {
-  deleteData,
-  getResaData,
-  putResaData,
-  getExportResa,
-  getResaDataWithDate,
-} from 'src/lib/resa';
+import { getAlldata, deleteData, putResaData } from 'src/lib/resa';
 
 // import Iconify from 'src/components/iconify';
 // import Scrollbar from 'src/components/scrollbar';
@@ -38,14 +32,19 @@ import UserTableRow from '../user-table-row';
 import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
-import { emptyRows, handleExportPdf, handleExportExcel } from '../utils';
+import {
+  emptyRows,
+  applyFilter,
+  getComparator,
+  handleExportPdf,
+  handleExportExcel,
+} from '../utils';
 
 // ----------------------------------------------------------------------
 
 export default function ResaPage() {
   const [resaData, setResaData] = useState([]);
   const [page, setPage] = useState(0);
-  const [totalItems, setTotalItems] = useState(0);
   const [order, setOrder] = useState('desc');
   const [orderBy, setOrderBy] = useState('_id');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,22 +62,25 @@ export default function ResaPage() {
   const [current, setCurrent] = useState(null);
   const [currentEnd, setCurrentEnd] = useState(null);
   const [searchOption, setSearchOption] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(15);
 
   useEffect(() => {
     const getListData = async () => {
+      setLoading(true);
       try {
-        setLoading(true);
+        const originData = await getAlldata();
+        const max = Math.max(...originData.map((item) => item.dossier_no)); // Calculate max dossier_no
+        setMaxDossierNo(max);
+        setResaData(originData);
         const hotelres = await getHotelData();
-        const agencyRes = await getAgencyData();
-        const serviceRes = await getServiceData();
-        const excursionRes = await getExcursionData();
-        const vehicleRes = await getVehicleData();
         setHotel(hotelres.data);
+        const agencyRes = await getAgencyData();
         setAgency(agencyRes.data);
+        const serviceRes = await getServiceData();
         setService(serviceRes.data);
+        const excursionRes = await getExcursionData();
         setExcursion(excursionRes.data);
+        const vehicleRes = await getVehicleData();
         setVehicle(vehicleRes.data);
       } catch {
         alert('network Error. Refresh page');
@@ -106,6 +108,15 @@ export default function ResaPage() {
     setFilterName(event.target.value);
   };
 
+  const dataFiltered = applyFilter({
+    inputData: resaData,
+    comparator: getComparator(order, orderBy),
+    searchOption,
+    filterName,
+    current,
+    currentEnd,
+  });
+
   const handleNewReservation = () => {
     setCurrentRow(null); // Clear current row data
     setIsModalOpen(true); // Open modal
@@ -122,13 +133,7 @@ export default function ResaPage() {
 
   const handleModalSave = async (formData) => {
     const params = {
-      filterOption: searchOption,
-      filterData: filterName,
-      orderKey: order,
-      orderDirect: orderBy,
       newData: formData,
-      page: page + 1, // Adjust page number for the backend (1-based index)
-      limit: rowsPerPage,
     };
 
     const res = await putResaData(params);
@@ -142,7 +147,6 @@ export default function ResaPage() {
       }
       setMaxDossierNo(res.maxDossierNo);
       setResaData(res.data);
-      setTotalItems(res.totalItems);
     }
   };
 
@@ -169,13 +173,7 @@ export default function ResaPage() {
   const handleConfirmDelete = async () => {
     setConfirmOpen(false);
     const params = {
-      filterOption: searchOption,
-      filterData: filterName,
-      orderKey: order,
-      orderDirect: orderBy,
       id: deleteId,
-      page: page + 1, // Adjust page number for the backend (1-based index)
-      limit: rowsPerPage,
     };
 
     const res = await deleteData(params);
@@ -185,89 +183,69 @@ export default function ResaPage() {
       alert('A data deleted successfully.');
       setMaxDossierNo(res.maxDossierNo);
       setResaData(res.data);
-      setTotalItems(res.totalItems);
     }
   };
 
   const handleDailyData = async (dateStr) => {
-    const date = new Date(dateStr);
-    date.setDate(date.getDate() + 1); // Set to the previous day
-    setCurrent(date);
+    setCurrent(dateStr);
   };
 
   const handleEndDailyDate = async (dateStr) => {
-    const date = new Date(dateStr);
-    date.setDate(date.getDate() + 1); // Set to the previous day
-    setCurrentEnd(date);
+    setCurrentEnd(dateStr);
   };
 
-  useEffect(() => {
-    const confirmGetData = async () => {
-      if (!current || !currentEnd) {
-        const params = {
-          filterData: filterName,
-          filterOption: searchOption,
-          orderKey: order,
-          orderDirect: orderBy,
-          page: page + 1,
-          limit: rowsPerPage,
-        };
-        const resa = await getResaData(params);
-        if (resa.status === 500) {
-          alert('Network Error');
-        } else {
-          setMaxDossierNo(resa.maxDossierNo);
-          setResaData(resa.data);
-          setTotalItems(resa.totalItems);
-        }
-      } else {
-        try {
-          const data = {
-            start: current,
-            end: currentEnd,
-            filterData: filterName,
-            filterOption: searchOption,
-            orderKey: order,
-            orderDirect: orderBy,
-            page: page + 1,
-            limit: rowsPerPage,
-          };
-          const res = await getResaDataWithDate(data);
-          if (res === 500) {
-            alert('Network Error');
-          } else {
-            setMaxDossierNo(res.maxDossierNo);
-            setResaData(res.data);
-            setTotalItems(res.totalItems);
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          alert('An unexpected error occurred');
-        }
-      }
-    };
-    confirmGetData();
-  }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
-
-  const getExportData = async () => {
-    const data = {
-      start: current,
-      end: currentEnd,
-      filterData: filterName,
-      filterOption: searchOption,
-    };
-    const res = await getExportResa(data);
-    return res.data;
-  };
+  // useEffect(() => {
+  //   const confirmGetData = async () => {
+  //     if (!current || !currentEnd) {
+  //       const params = {
+  //         filterData: filterName,
+  //         filterOption: searchOption,
+  //         orderKey: order,
+  //         orderDirect: orderBy,
+  //         page: page + 1,
+  //         limit: rowsPerPage,
+  //       };
+  //       const resa = await getResaData(params);
+  //       if (resa.status === 500) {
+  //         alert('Network Error');
+  //       } else {
+  //         setMaxDossierNo(resa.maxDossierNo);
+  //         setResaData(resa.data);
+  //       }
+  //     } else {
+  //       try {
+  //         const data = {
+  //           start: current,
+  //           end: currentEnd,
+  //           filterData: filterName,
+  //           filterOption: searchOption,
+  //           orderKey: order,
+  //           orderDirect: orderBy,
+  //           page: page + 1,
+  //           limit: rowsPerPage,
+  //         };
+  //         const res = await getResaDataWithDate(data);
+  //         if (res === 500) {
+  //           alert('Network Error');
+  //         } else {
+  //           setMaxDossierNo(res.maxDossierNo);
+  //           setResaData(res.data);
+  //         }
+  //       } catch (error) {
+  //         console.error('Error fetching data:', error);
+  //         alert('An unexpected error occurred');
+  //       }
+  //     }
+  //   };
+  //   confirmGetData();
+  // }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
 
   const handlePdf = async () => {
-    const exportData = await getExportData();
-    handleExportPdf(exportData);
+    handleExportPdf(dataFiltered);
   };
 
   const handleExcel = async () => {
-    const exportData = await getExportData();
-    handleExportExcel(exportData);
+    handleExportExcel(dataFiltered);
   };
 
   return (
@@ -333,47 +311,52 @@ export default function ResaPage() {
               ]}
             />
             <TableBody>
-              {resaData.map((row) => (
-                <UserTableRow
-                  key={row._id}
-                  id={row._id}
-                  verified={row.verified}
-                  dossier_no={row.dossier_no}
-                  by={row.by}
-                  status={row.status}
-                  service={row.service}
-                  service_type={row.service_type}
-                  agency_ref={row.agency_ref}
-                  client={row.client}
-                  agency={row.agency}
-                  from={row.from}
-                  to={row.to}
-                  excursion={row.excursion}
-                  service_date={row.service_date}
-                  flight_no={row.flight_no}
-                  flight_time={row.flight_time}
-                  adult={row.adult}
-                  child={row.child}
-                  infant={row.infant}
-                  teen={row.teen}
-                  resa_remark={row.resa_remark}
-                  from_region={row.from_region}
-                  to_region={row.to_region}
-                  vehicle_type={row.vehicle_type}
-                  invoice_no={row.invoice_no}
-                  amount={row.amount}
-                  adult_price={row.adult_price}
-                  child_price={row.child_price}
-                  teen_price={row.teen_price}
-                  total_price={row.total_price}
-                  cur={row.cur}
-                  last_update={row.last_update}
-                  deleteAction={() => handleDelete(row)}
-                  editAction={() => handleEdit(row)}
-                />
-              ))}
+              {dataFiltered
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <UserTableRow
+                    key={row._id}
+                    id={row._id}
+                    verified={row.verified}
+                    dossier_no={row.dossier_no}
+                    by={row.by}
+                    status={row.status}
+                    service={row.service}
+                    service_type={row.service_type}
+                    agency_ref={row.agency_ref}
+                    client={row.client}
+                    agency={row.agency}
+                    from={row.from}
+                    to={row.to}
+                    excursion={row.excursion}
+                    service_date={row.service_date}
+                    flight_no={row.flight_no}
+                    flight_time={row.flight_time}
+                    adult={row.adult}
+                    child={row.child}
+                    infant={row.infant}
+                    teen={row.teen}
+                    resa_remark={row.resa_remark}
+                    from_region={row.from_region}
+                    to_region={row.to_region}
+                    vehicle_type={row.vehicle_type}
+                    invoice_no={row.invoice_no}
+                    amount={row.amount}
+                    adult_price={row.adult_price}
+                    child_price={row.child_price}
+                    teen_price={row.teen_price}
+                    total_price={row.total_price}
+                    cur={row.cur}
+                    last_update={row.last_update}
+                    deleteAction={() => handleDelete(row)}
+                    editAction={() => handleEdit(row)}
+                  />
+                ))}
 
-              <TableEmptyRows height={77} emptyRows={emptyRows(page, rowsPerPage, totalItems)} />
+              <TableEmptyRows
+                height={77}
+                emptyRows={emptyRows(page, rowsPerPage, dataFiltered.length)}
+              />
 
               {/* {notFound && <TableNoData query={filterName} />} */}
             </TableBody>
@@ -384,7 +367,7 @@ export default function ResaPage() {
         <TablePagination
           page={page}
           component="div"
-          count={totalItems}
+          count={dataFiltered.length}
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
