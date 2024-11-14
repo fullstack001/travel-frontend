@@ -71,7 +71,23 @@ export function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-export function applyFilter({ inputData, comparator, filterName }) {
+
+function isDateInRange(serviceDateStr, startDateStr, endDateStr) {
+  const serviceDate = new Date(serviceDateStr);
+  const startDate = new Date(startDateStr);
+  const endDate = new Date(endDateStr);
+
+  const serviceDateOnly = new Date(serviceDate.getFullYear(), serviceDate.getMonth(), serviceDate.getDate());
+  const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+
+  return serviceDateOnly >= startDateOnly && serviceDateOnly <= endDateOnly;
+}
+
+function getMatchingServices(services, startDateStr, endDateStr) {
+  return services.filter(service => isDateInRange(service.service_date, startDateStr, endDateStr));
+}
+export function applyFilter({ inputData, comparator, filterName, current, currentEnd }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
@@ -81,6 +97,9 @@ export function applyFilter({ inputData, comparator, filterName }) {
   });
 
   inputData = stabilizedThis.map((el) => el[0]);
+  if (current && currentEnd) {
+    inputData = getMatchingServices(inputData, current, currentEnd);
+  }
 
   if (filterName) {
     inputData = inputData.filter(

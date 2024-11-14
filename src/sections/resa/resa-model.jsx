@@ -185,17 +185,32 @@ export default function ResaModal({
     }
   };
 
-  const agencyOptions = agency.map((item) => ({
-    label: item.name,
-    value: item.name,
-  }));
-  const hotelOptions = hotel.map((item) => ({
-    label: item.name,
-    value: item.name,
-  }));
-  const serviceOptions = service.map((item) => ({ label: item.name, value: item.name }));
-  const vehicleOptions = vehicle.map((item) => ({ label: item.name, value: item.name }));
-  const excursionOptions = excursion.map((item) => ({ label: item.name, value: item.name }));
+  const agencyOptions = agency
+    .map((item) => ({
+      label: item.name,
+      value: item.name,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const hotelOptions = hotel
+    .map((item) => ({
+      label: item.name,
+      value: item.name,
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const serviceOptions = service
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const vehicleOptions = vehicle
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
+  const excursionOptions = excursion
+    .map((item) => ({ label: item.name, value: item.name }))
+    .sort((a, b) => a.label.localeCompare(b.label)); // Sort alphabetically
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xl" fullWidth>
       <DialogTitle sx={{ bgcolor: 'primary.main', color: 'white' }}>

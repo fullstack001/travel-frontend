@@ -5,6 +5,16 @@ import axios from 'axios';
 
 const requestAddress = import.meta.env.VITE_API_URL_ADDRESS;
 
+
+export const getAlldata = async () => {
+  try {
+    const records = await axios.get(`${requestAddress}/api/resa/getalldata`);
+    return records.data;
+  } catch (error) {
+    return 500;
+  }
+};
+
 export const getResaData = async (params) => {
   try {
     const records = await axios.post(`${requestAddress}/api/resa/getresadata`, params);
