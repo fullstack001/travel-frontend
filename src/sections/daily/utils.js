@@ -172,6 +172,7 @@ export const handleExportExcel = (resaData) => {
       row.driver,
       row.guid,
       row.resa_remark,
+      row.by,
       row.status,
     ]),
   ];
@@ -244,6 +245,7 @@ export const handleExportPdf = (resaData) => {
     driver: row.driver,
     guid: row.guid,
     resa_remark: row.resa_remark,
+    by: row.by,
     status: row.status,
   }));
 
