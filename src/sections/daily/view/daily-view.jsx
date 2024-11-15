@@ -195,11 +195,11 @@ export default function DailyPlanningPage() {
   };
 
   const handlePdf = () => {
-    handleExportPdf(resaData);
+    handleExportPdf(dataFiltered);
   };
 
   const handleExcel = () => {
-    handleExportExcel(resaData);
+    handleExportExcel(dataFiltered);
   };
 
   const notFound = !dataFiltered.length && !!filterName;

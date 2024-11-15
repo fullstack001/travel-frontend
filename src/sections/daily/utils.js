@@ -71,21 +71,30 @@ export function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-
 function isDateInRange(serviceDateStr, startDateStr, endDateStr) {
   const serviceDate = new Date(serviceDateStr);
   const startDate = new Date(startDateStr);
   const endDate = new Date(endDateStr);
 
-  const serviceDateOnly = new Date(serviceDate.getFullYear(), serviceDate.getMonth(), serviceDate.getDate());
-  const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const serviceDateOnly = new Date(
+    serviceDate.getFullYear(),
+    serviceDate.getMonth(),
+    serviceDate.getDate()
+  );
+  const startDateOnly = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
+  );
   const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
   return serviceDateOnly >= startDateOnly && serviceDateOnly <= endDateOnly;
 }
 
 function getMatchingServices(services, startDateStr, endDateStr) {
-  return services.filter(service => isDateInRange(service.service_date, startDateStr, endDateStr));
+  return services.filter((service) =>
+    isDateInRange(service.service_date, startDateStr, endDateStr)
+  );
 }
 export function applyFilter({ inputData, comparator, filterName, current, currentEnd }) {
   const stabilizedThis = inputData.map((el, index) => [el, index]);
@@ -114,42 +123,59 @@ export const handleExportExcel = (resaData) => {
   resaData.sort((a, b) => new Date(b.service_date) - new Date(a.service_date));
   // Create a new workbook and a new worksheet
   const workbook = XLSX.utils.book_new();
+
   const worksheetData = [
     [
-      'By',
+      'File No',
       'Client Name',
+      'Agency Reference',
+      'Agency',
       'From',
       'To',
+      'Excursion',
+      'Service',
+      'Service Date',
       'Service Type',
-      'Date Service',
-      'Arv / Dep',
       'Flight No',
       'Flight Time',
       'Pick up Time',
-      'Agency',
       'Adult',
+      'Child(3-11)',
+      'Infant(0,2)',
+      'Teen(12-18)',
+      'Type of Vehicle',
       'Driver',
-      'Guid',
+      'Guide',
       'Remarks',
+      'By',
+      'Status',
     ],
     ...resaData.map((row) => [
-      row.by,
+      row.dossier_no,
       row.client,
-      row.from,
-      row.hotel,
-      row.service_type,
-      formatDate(row.service_date),
-      row.arb_dep,
-      row.flight_no,
-      row.flight_time,
-      row.pickup_time,
+      row.agency_ref,
       row.agency,
+      row.from,
+      row.to,
+      row.excursion,
+      row.service,
+      formatDate(row.service_date),
+      row.service_type,
+      row.flight_no,
+      formatTime(row.flight_time),
+      formatTime(row.pickup_time),
       row.adult,
+      row.child,
+      row.infant,
+      row.teen,
+      row.vehicle_type,
       row.driver,
       row.guid,
       row.resa_remark,
+      row.status,
     ]),
   ];
+
   const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
 
   // Append the worksheet to the workbook
@@ -166,42 +192,59 @@ export const handleExportPdf = (resaData) => {
     unit: 'pt', // Unit: 'pt' (points), 'mm', 'cm', 'in'
     format: [1500, 600], // Custom width and height in points
   });
+
   // Define the columns
   const columns = [
-    { header: 'By', dataKey: 'by' },
+    { header: 'File No', dataKey: 'dossier_no' },
     { header: 'Client Name', dataKey: 'client' },
+    { header: 'Agency Reference', dataKey: 'agency_ref' },
+    { header: 'Agency', dataKey: 'agency' },
     { header: 'From', dataKey: 'from' },
-    { header: 'To', dataKey: 'hotel' },
+    { header: 'To', dataKey: 'to' },
+    { header: 'To', dataKey: 'excursion' },
+    { header: 'Excursion', dataKey: 'service_type' },
+    { header: 'Service', dataKey: 'service' },
+    { header: 'Service Date', dataKey: 'service_date' },
     { header: 'Service Type', dataKey: 'service_type' },
-    { header: 'Date Service', dataKey: 'service_date' },
-    { header: 'Arv / Dep', dataKey: 'arb_dep' },
     { header: 'Flight No', dataKey: 'flight_no' },
     { header: 'Flight Time', dataKey: 'flight_time' },
     { header: 'Pick up Time', dataKey: 'pickup_time' },
-    { header: 'Agency', dataKey: 'agency' },
     { header: 'Adult', dataKey: 'adult' },
+    { header: 'Child(3-11)', dataKey: 'child' },
+    { header: 'Infant(0-2)', dataKey: 'infant' },
+    { header: 'Teen(12-18)', dataKey: 'teen' },
+    { header: 'Type of Vehicle', dataKey: 'vehicle_type' },
     { header: 'Driver', dataKey: 'driver' },
-    { header: 'Guid', dataKey: 'guid' },
+    { header: 'Guide', dataKey: 'guid' },
     { header: 'Remarks', dataKey: 'remarks' },
+    { header: 'By', dataKey: 'by' },
+    { header: 'Status', dataKey: 'status' },
   ];
 
   // Map data to rows
   const rows = resaData.map((row) => ({
-    by: row.by,
+    dossier_no: row.dossier_no,
     client: row.client,
-    from: row.from,
-    hotel: row.hotel,
-    service_type: row.service_type,
-    service_date: formatDate(row.service_date),
-    arb_dep: row.arb_dep,
-    flight_no: row.flight_no,
-    flight_time: row.flight_time,
-    pickup_time: row.pickup_time,
+    agency_ref: row.agency_ref,
     agency: row.agency,
+    from: row.from,
+    to: row.to,
+    excursion: row.excursion,
+    service: row.service,
+    service_date: formatDate(row.service_date),
+    service_type: row.service_type,
+    flight_no: row.flight_no,
+    flight_time: formatTime(row.flight_time),
+    pickup_time: formatTime(row.pickup_time),
     adult: row.adult,
+    child: row.child,
+    infant: row.infant,
+    teen: row.teen,
+    vehicle_type: row.vehicle_type,
     driver: row.driver,
     guid: row.guid,
-    remarks: row.resa_remark,
+    resa_remark: row.resa_remark,
+    status: row.status,
   }));
 
   // Add table to the PDF
