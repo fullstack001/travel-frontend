@@ -74,6 +74,12 @@ export default function UserTableToolbar({
             label="Select Start Date"
             onChange={handleDateChange}
             format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                clearable: true,
+                onClear: () => handleDateChange(null),
+              },
+            }}
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
@@ -83,6 +89,12 @@ export default function UserTableToolbar({
             sx={{ ml: 4 }}
             label="Select End Date"
             format="DD/MM/YYYY"
+            slotProps={{
+              textField: {
+                clearable: true,
+                onClear: () => handleEndDateChange(null),
+              },
+            }}
             onChange={handleEndDateChange}
             renderInput={(params) => <TextField {...params} />}
           />
