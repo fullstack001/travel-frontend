@@ -125,7 +125,7 @@ export default function ResaModal({
     ];
 
     requiredFields.forEach((field) => {
-      if (!formData[field]) {
+      if (!formData[field] || formData[field] === '') {
         newErrors[field] = 'This field is required';
       }
     });
@@ -149,7 +149,8 @@ export default function ResaModal({
       name === 'flight_no' ||
       name === 'inv_no' ||
       name === 'invoice_no' ||
-      name === 'amount'
+      name === 'amount' ||
+      name === 'name'
     ) {
       formattedValue = value.replace(/\s+/g, ''); // Remove spaces
     }
