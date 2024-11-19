@@ -115,7 +115,20 @@ export default function DailyModal({
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    let formattedValue = value;
+
+    // Disable spaces for specific fields
+    if (
+      name === 'client' ||
+      name === 'agency_ref' ||
+      name === 'flight_no' ||
+      name === 'inv_no' ||
+      name === 'invoice_no' ||
+      name === 'amount'
+    ) {
+      formattedValue = value.replace(/\s+/g, ''); // Remove spaces
+    }
+    setFormData({ ...formData, [name]: formattedValue });
 
     // Update region when "from" or "to" changes
     if (name === 'from' || name === 'to') {
@@ -502,6 +515,7 @@ export default function DailyModal({
                 fullWidth
                 variant="outlined"
                 type="number"
+                required
               />
             </Grid>
             <Grid item xs={12} sm={3}>
