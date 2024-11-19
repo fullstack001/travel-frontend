@@ -121,6 +121,7 @@ export default function ResaModal({
       'to',
       'service_date',
       'vehicle_type',
+      'adult',
     ];
 
     requiredFields.forEach((field) => {
@@ -129,7 +130,9 @@ export default function ResaModal({
       }
     });
 
-    console.log(newErrors);
+    if (formData.service_date < new Date()) {
+      newErrors.service_date = 'Service date can not be in the past';
+    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -139,6 +142,19 @@ export default function ResaModal({
     const { name, value } = event.target;
     let formattedValue = value;
 
+    // Disable spaces for specific fields
+    if (
+      name === 'client' ||
+      name === 'agency_ref' ||
+      name === 'flight_no' ||
+      name === 'inv_no' ||
+      name === 'invoice_no' ||
+      name === 'amount'
+    ) {
+      formattedValue = value.replace(/\s+/g, ''); // Remove spaces
+    }
+
+    // Convert to uppercase for specific fields
     if (name === 'client' || name === 'agency_ref' || name === 'flight_no' || name === 'inv_no') {
       formattedValue = value.toUpperCase();
     }
@@ -339,6 +355,8 @@ export default function ResaModal({
                   label="Service Date"
                   name="service_date"
                   value={dayjs(formData.service_date)}
+                  error={!!errors.service_date}
+                  helperText={errors.service_date}
                   onChange={(date) => {
                     const formattedDate = date ? date.toDate() : null;
                     setFormData({
