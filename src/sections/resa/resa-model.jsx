@@ -152,12 +152,12 @@ export default function ResaModal({
       name === 'amount' ||
       name === 'name'
     ) {
-      formattedValue = value.replace(/\s+/g, ''); // Remove spaces
+      formattedValue = formattedValue.replace(/\s+/g, ''); // Remove spaces
     }
 
     // Convert to uppercase for specific fields
     if (name === 'client' || name === 'agency_ref' || name === 'flight_no' || name === 'inv_no') {
-      formattedValue = value.toUpperCase();
+      formattedValue = formattedValue.toUpperCase();
     }
 
     setFormData({ ...formData, [name]: formattedValue });
