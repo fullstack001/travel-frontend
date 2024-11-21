@@ -127,6 +127,8 @@ export default function ResaModal({
     requiredFields.forEach((field) => {
       if (!formData[field] || formData[field] === '') {
         newErrors[field] = 'This field is required';
+      } else if (typeof formData[field] === 'string' && formData[field].trim() === '') {
+        newErrors[field] = 'Can not be empty string';
       }
     });
 
@@ -143,17 +145,6 @@ export default function ResaModal({
     let formattedValue = value;
 
     // Disable spaces for specific fields
-    if (
-      name === 'client' ||
-      name === 'agency_ref' ||
-      name === 'flight_no' ||
-      name === 'inv_no' ||
-      name === 'invoice_no' ||
-      name === 'amount' ||
-      name === 'name'
-    ) {
-      formattedValue = formattedValue.replace(/\s+/g, ''); // Remove spaces
-    }
 
     // Convert to uppercase for specific fields
     if (name === 'client' || name === 'agency_ref' || name === 'flight_no' || name === 'inv_no') {
@@ -179,6 +170,11 @@ export default function ResaModal({
   const handleSave = () => {
     if (validateForm()) {
       const savedData = { ...formData };
+
+      savedData.client = savedData.client.trim();
+      savedData.agency_ref = savedData.agency_ref.trim();
+      savedData.flight_no = savedData.flight_no.trim();
+      savedData.invoice_no = savedData.invoice_no ? savedData.invoice_no.trim() : '';
       Object.entries(savedData).forEach(([key, value]) => {
         if (value instanceof Date) {
           const date = new Date(value);
@@ -195,6 +191,7 @@ export default function ResaModal({
           }
         }
       });
+      console.log(savedData);
       onSave(savedData);
       onClose();
     } else {
