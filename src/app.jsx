@@ -8,7 +8,7 @@ import Router from 'src/routes/sections';
 import ThemeProvider from 'src/theme';
 
 import { useAuth } from 'src/hooks/use-auth';
-import userStore from './store/userStroe';
+import userStore from './store/userStore';
 
 // ----------------------------------------------------------------------
 

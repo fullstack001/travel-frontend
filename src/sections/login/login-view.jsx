@@ -17,7 +17,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { signIn } from 'src/lib/user';
 import { bgGradient } from 'src/theme/css';
-import userStore from 'src/store/userStroe';
+import userStore from 'src/store/userStore';
 
 // import Logo from 'src/components/logo';
 import Iconify from 'src/components/iconify';

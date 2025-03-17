@@ -1,24 +1,24 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-
 // import Avatar from '@mui/material/Avatar';
+// import Label from 'src/components/label';
+// import IconButton from '@mui/material/IconButton';
+
 import Popover from '@mui/material/Popover';
 import TableRow from '@mui/material/TableRow';
-// import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
-import userStore from '../../store/userStore.js'; // import Label from 'src/components/label';
-import Iconify from '../../components/iconify';
-
 import { formatTime } from './utils';
+import userStore from '../../store/userStore';
+import Iconify from '../../components/iconify';
 
 function formatDateToString(date) {
   if (!date) return '';
 
   const d = new Date(date);
-  d.setUTCHours(d.getUTCHours() + 4); // Convert to GMT+4
+  d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
 
   const day = String(d.getUTCDate()).padStart(2, '0');
   const month = String(d.getUTCMonth() + 1).padStart(2, '0');
