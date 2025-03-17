@@ -12,15 +12,18 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
 // import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-
 import { formatTime } from './utils';
+import Iconify from '../../components/iconify';
 
 function formatDateToString(date) {
+  if (!date) return '';
+
   const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = d.getFullYear();
+  d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
+
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const year = d.getUTCFullYear();
   return `${day}/${month}/${year}`;
 }
 

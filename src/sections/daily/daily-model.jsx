@@ -22,7 +22,7 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import userStore from 'src/store/userStroe';
+import userStore from 'src/store/userStore';
 
 import { formatTime } from './utils';
 

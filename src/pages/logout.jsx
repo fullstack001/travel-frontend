@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 
-import userStore from 'src/store/userStroe';
+import userStore from 'src/store/userStore';
 
 export default function Signout() {
   const { setUser } = userStore();

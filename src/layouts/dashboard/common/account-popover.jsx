@@ -10,8 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
-import userStore from 'src/store/userStroe';
-import { account } from 'src/_mock/account';
+import userStore from '../../../store/userStore';
+import { account } from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
 
