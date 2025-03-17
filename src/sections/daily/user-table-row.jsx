@@ -17,10 +17,14 @@ import Iconify from 'src/components/iconify';
 import { formatTime } from './utils';
 
 function formatDateToString(date) {
+  if (!date) return '';
+
   const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const year = d.getFullYear();
+  d.setUTCHours(d.getUTCHours() + 4); // Convert to GMT+4
+
+  const day = String(d.getUTCDate()).padStart(2, '0');
+  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  const year = d.getUTCFullYear();
   return `${day}/${month}/${year}`;
 }
 
