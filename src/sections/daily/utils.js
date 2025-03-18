@@ -3,12 +3,14 @@ import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
 function formatDate(dateString) {
-  const date = new Date(dateString);
-  console.log(date);
+  const d = new Date(dateString);
+  d.setUTCHours(d.getUTCHours());
+  // const date = new Date(dateString);
+  // console.log(date);
   const days = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = date.getDate();
-  const month = days[date.getMonth()];
-  const year = date.getFullYear();
+  const day = d.getDate();
+  const month = days[d.getMonth()];
+  const year = d.getFullYear();
   return `${day}/${month}/${year}`;
 }
 
