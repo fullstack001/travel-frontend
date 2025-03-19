@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 // import Avatar from '@mui/material/Avatar';
@@ -16,14 +17,16 @@ import Iconify from '../../components/iconify';
 
 function formatDateToString(date) {
   if (!date) return '';
+  console.log(dayjs(date).format('DD/MM/YYYY'));
+  return dayjs(date).format('DD/MM/YYYY');
 
-  const d = new Date(date);
-  d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
+  // const d = new Date(date);
+  // d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
 
-  const day = String(d.getUTCDate()).padStart(2, '0');
-  const month = String(d.getUTCMonth() + 1).padStart(2, '0');
-  const year = d.getUTCFullYear();
-  return `${day}/${month}/${year}`;
+  // const day = String(d.getUTCDate()).padStart(2, '0');
+  // const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+  // const year = d.getUTCFullYear();
+  // return `${day}/${month}/${year}`;
 }
 
 // ----------------------------------------------------------------------
