@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import PropTypes from 'prop-types';
+import timezone from 'dayjs/plugin/timezone';
 import React, { useState, useEffect } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
@@ -22,9 +24,11 @@ import {
   DialogActions,
 } from '@mui/material';
 
-import userStore from 'src/store/userStore';
-
 import { formatTime } from './utils';
+import userStore from '../../store/userStore';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const initData = {
   _id: '',
@@ -321,7 +325,7 @@ export default function DailyModal({
                 <DatePicker
                   label="Service Date"
                   name="service_date"
-                  value={dayjs(formData.service_date)}
+                  value={dayjs.utc(formData.service_date).tz('Asia/Dubai')}
                   onChange={(date) => {
                     const formattedDate = date ? date.toDate() : null;
                     setFormData({
