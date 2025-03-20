@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import utc from 'dayjs/plugin/utc';
 import PropTypes from 'prop-types';
+import timezone from 'dayjs/plugin/timezone';
 // import Avatar from '@mui/material/Avatar';
 // import Label from 'src/components/label';
 // import IconButton from '@mui/material/IconButton';
@@ -15,10 +17,17 @@ import { formatTime } from './utils';
 import userStore from '../../store/userStore';
 import Iconify from '../../components/iconify';
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 function formatDateToString(date) {
   if (!date) return '';
-  console.log(dayjs(date).format('DD/MM/YYYY'));
-  return dayjs(date).format('DD/MM/YYYY');
+  // Convert date to UTC+4 (e.g., 'Asia/Dubai' for UTC+4)
+  const formattedDate = dayjs.utc(date).tz('Asia/Dubai').format('DD/MM/YYYY');
+
+  console.log(date);
+  console.log(formattedDate);
+  return formattedDate;
 
   // const d = new Date(date);
   // d.setUTCHours(d.getUTCHours()); // Convert to GMT+4

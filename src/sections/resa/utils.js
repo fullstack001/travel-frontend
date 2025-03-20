@@ -1,14 +1,40 @@
 import 'jspdf-autotable';
 import jsPDF from 'jspdf';
+import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 function formatDate(dateString) {
-  const d = new Date(dateString);
-  d.setUTCHours(d.getUTCHours());
-  const days = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = d.getDate();
-  const month = days[d.getMonth()];
-  const year = d.getFullYear();
+  if (!dateString) return '';
+
+  // Convert to UTC+4 (e.g., 'Asia/Dubai' for UTC+4 timezone)
+  const d = dayjs.utc(dateString).tz('Asia/Dubai');
+
+  // Month abbreviations
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+
+  // Extract date components correctly
+  const day = d.date(); // Use `.date()` instead of `.getDate()`
+  const month = months[d.month()]; // Use `.month()` instead of `.getMonth()`
+  const year = d.year(); // Use `.year()` instead of `.getFullYear()`
+
   return `${day}/${month}/${year}`;
 }
 
@@ -71,26 +97,42 @@ export function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-
 function isDateInRange(serviceDateStr, startDateStr, endDateStr) {
   const serviceDate = new Date(serviceDateStr);
   const startDate = new Date(startDateStr);
   const endDate = new Date(endDateStr);
 
-  const serviceDateOnly = new Date(serviceDate.getFullYear(), serviceDate.getMonth(), serviceDate.getDate());
-  const startDateOnly = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+  const serviceDateOnly = new Date(
+    serviceDate.getFullYear(),
+    serviceDate.getMonth(),
+    serviceDate.getDate()
+  );
+  const startDateOnly = new Date(
+    startDate.getFullYear(),
+    startDate.getMonth(),
+    startDate.getDate()
+  );
   const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
   return serviceDateOnly >= startDateOnly && serviceDateOnly <= endDateOnly;
 }
 
 function getMatchingServices(services, startDateStr, endDateStr) {
-  return services.filter(service => isDateInRange(service.service_date, startDateStr, endDateStr));
+  return services.filter((service) =>
+    isDateInRange(service.service_date, startDateStr, endDateStr)
+  );
 }
 
-export function applyFilter({ inputData, comparator, searchOption, filterName, current, currentEnd }) {
-  console.log(inputData[0])
-  console.log(current, currentEnd)
+export function applyFilter({
+  inputData,
+  comparator,
+  searchOption,
+  filterName,
+  current,
+  currentEnd,
+}) {
+  console.log(inputData[0]);
+  console.log(current, currentEnd);
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {
