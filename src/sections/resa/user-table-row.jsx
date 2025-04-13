@@ -20,22 +20,30 @@ import Iconify from '../../components/iconify';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+// function formatDateToString(date) {
+//   if (!date) return '';
+//   // Convert date to UTC+4 (e.g., 'Asia/Dubai' for UTC+4)
+//   const formattedDate = dayjs.utc(date).tz('Asia/Dubai').format('DD/MM/YYYY');
+
+//   return formattedDate;
+
+//   // const d = new Date(date);
+//   // d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
+
+//   // const day = String(d.getUTCDate()).padStart(2, '0');
+//   // const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+//   // const year = d.getUTCFullYear();
+//   // return `${day}/${month}/${year}`;
+// }
 function formatDateToString(date) {
   if (!date) return '';
-  // Convert date to UTC+4 (e.g., 'Asia/Dubai' for UTC+4)
-  const formattedDate = dayjs.utc(date).tz('Asia/Dubai').format('DD/MM/YYYY');
 
-  console.log(date);
-  console.log(formattedDate);
-  return formattedDate;
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // months are zero-indexed
+  const year = d.getFullYear();
 
-  // const d = new Date(date);
-  // d.setUTCHours(d.getUTCHours()); // Convert to GMT+4
-
-  // const day = String(d.getUTCDate()).padStart(2, '0');
-  // const month = String(d.getUTCMonth() + 1).padStart(2, '0');
-  // const year = d.getUTCFullYear();
-  // return `${day}/${month}/${year}`;
+  return `${day}/${month}/${year}`;
 }
 
 // ----------------------------------------------------------------------

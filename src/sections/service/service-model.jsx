@@ -22,7 +22,6 @@ export default function ServiceModal({ open, onClose, onSave, initialData, maxNu
   const [formData, setFormData] = useState(initData);
 
   useEffect(() => {
-    console.log(maxNumber);
     if (initialData) {
       setFormData({
         ...initialData,

@@ -32,7 +32,6 @@ export default function Hotel({ open, onClose, onSave, initialData, maxNumber })
   const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
-    console.log(maxNumber);
     if (initialData) {
       setFormData({
         ...initialData,

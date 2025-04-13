@@ -29,7 +29,6 @@ export default function AgencyModal({ open, onClose, onSave, initialData, maxNum
   const [formData, setFormData] = useState(initData);
 
   useEffect(() => {
-    console.log(maxNumber);
     if (initialData) {
       setFormData({
         ...initialData,

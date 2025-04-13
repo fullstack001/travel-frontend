@@ -85,7 +85,6 @@ export default function VehiclePage() {
           alert('Network Error');
         } else {
           setVehicleData(res.data);
-          console.log(res.max_num);
           setMaxVehicleNo(res.max_num);
         }
       } catch (error) {
@@ -111,7 +110,6 @@ export default function VehiclePage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };

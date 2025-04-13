@@ -10,10 +10,7 @@ dayjs.extend(timezone);
 
 function formatDate(dateString) {
   if (!dateString) return '';
-
-  // Convert to UTC+4 (e.g., 'Asia/Dubai' for UTC+4 timezone)
-  const d = dayjs.utc(dateString).tz('Asia/Dubai');
-
+  const date = dayjs(dateString);
   // Month abbreviations
   const months = [
     'Jan',
@@ -31,9 +28,9 @@ function formatDate(dateString) {
   ];
 
   // Extract date components correctly
-  const day = d.date(); // Use `.date()` instead of `.getDate()`
-  const month = months[d.month()]; // Use `.month()` instead of `.getMonth()`
-  const year = d.year(); // Use `.year()` instead of `.getFullYear()`
+  const day = date.date(); // Use `.date()` instead of `.getDate()`
+  const month = months[date.month()]; // Use `.month()` instead of `.getMonth()`
+  const year = date.year(); // Use `.year()` instead of `.getFullYear()`
 
   return `${day}/${month}/${year}`;
 }

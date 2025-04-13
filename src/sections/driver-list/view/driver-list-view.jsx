@@ -85,7 +85,6 @@ export default function DriverListPage() {
           alert('Network Error');
         } else {
           setDriverData(res.data);
-          console.log(res.max_num);
           setMaxDriverNo(res.max_num);
         }
       } catch (error) {
@@ -111,7 +110,6 @@ export default function DriverListPage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };
