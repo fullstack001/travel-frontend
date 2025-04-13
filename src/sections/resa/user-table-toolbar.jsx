@@ -42,12 +42,16 @@ export default function UserTableToolbar({
 
   const handleDateChange = (newDate) => {
     const date = newDate ? dayjs(newDate).toDate() : null;
-    onGetDate(date);
+    const formattedDate = dayjs.utc(date).tz('Asia/Dubai');
+
+    onGetDate(formattedDate);
   };
 
   const handleEndDateChange = (newDate) => {
     const date = newDate ? dayjs(newDate).toDate() : null;
-    onGetEndDate(date);
+    const formattedDate = dayjs.utc(date).tz('Asia/Dubai');
+
+    onGetEndDate(formattedDate);
   };
 
   const handleOpenMenu = (event) => {

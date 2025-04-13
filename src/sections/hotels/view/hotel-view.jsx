@@ -85,7 +85,6 @@ export default function HotelPlanningPage() {
           alert('Network Error');
         } else {
           setHotelData(res.data);
-          console.log(res.max_num);
           setMaxHotelrNo(res.max_num);
         }
       } catch (error) {
@@ -111,7 +110,6 @@ export default function HotelPlanningPage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };

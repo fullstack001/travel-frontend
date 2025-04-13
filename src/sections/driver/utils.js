@@ -88,7 +88,6 @@ export function applyFilter({ inputData, comparator, filterName }) {
 }
 
 export const handleExportPdf = (row) => {
-  console.log(row);
   const doc = new jsPDF({
     orientation: 'landscape', // Change orientation to landscape
     unit: 'mm', // Unit: 'pt' (points), 'mm', 'cm', 'in'

@@ -95,7 +95,6 @@ export default function DailyModal({
 }) {
   const [formData, setFormData] = useState(initData);
   const { name: userName } = userStore();
-  console.log(userName);
 
   function formatTimeToString(time) {
     const d = new Date(time);

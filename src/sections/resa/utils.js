@@ -2,17 +2,10 @@ import 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import dayjs from 'dayjs';
 import * as XLSX from 'xlsx';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-
-dayjs.extend(utc);
-dayjs.extend(timezone);
 
 function formatDate(dateString) {
   if (!dateString) return '';
-
-  // Convert to UTC+4 (e.g., 'Asia/Dubai' for UTC+4 timezone)
-  const d = dayjs.utc(dateString).tz('Asia/Dubai');
+  const date = dayjs(dateString);
 
   // Month abbreviations
   const months = [
@@ -31,9 +24,9 @@ function formatDate(dateString) {
   ];
 
   // Extract date components correctly
-  const day = d.date(); // Use `.date()` instead of `.getDate()`
-  const month = months[d.month()]; // Use `.month()` instead of `.getMonth()`
-  const year = d.year(); // Use `.year()` instead of `.getFullYear()`
+  const day = date.date(); // Use `.date()` instead of `.getDate()`
+  const month = months[date.month()]; // Use `.month()` instead of `.getMonth()`
+  const year = date.year(); // Use `.year()` instead of `.getFullYear()`
 
   return `${day}/${month}/${year}`;
 }
@@ -114,7 +107,9 @@ function isDateInRange(serviceDateStr, startDateStr, endDateStr) {
   );
   const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
 
-  return serviceDateOnly >= startDateOnly && serviceDateOnly <= endDateOnly;
+  if (serviceDateOnly >= startDateOnly && serviceDateOnly <= endDateOnly) {
+    return true;
+  }
 }
 
 function getMatchingServices(services, startDateStr, endDateStr) {
@@ -131,8 +126,6 @@ export function applyFilter({
   current,
   currentEnd,
 }) {
-  console.log(inputData[0]);
-  console.log(current, currentEnd);
   const stabilizedThis = inputData.map((el, index) => [el, index]);
 
   stabilizedThis.sort((a, b) => {

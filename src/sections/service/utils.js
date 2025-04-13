@@ -2,16 +2,6 @@ import 'jspdf-autotable';
 import jsPDF from 'jspdf';
 import * as XLSX from 'xlsx';
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  console.log(date);
-  const days = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-  const day = date.getDate();
-  const month = days[date.getMonth()];
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-}
-
 export const visuallyHidden = {
   border: 0,
   margin: -1,

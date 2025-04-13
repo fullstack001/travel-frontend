@@ -85,7 +85,6 @@ export default function GuidPage() {
           alert('Network Error');
         } else {
           setGuidData(res.data);
-          console.log(res.max_num);
           setMaxGuidNo(res.max_num);
         }
       } catch (error) {
@@ -111,7 +110,6 @@ export default function GuidPage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };

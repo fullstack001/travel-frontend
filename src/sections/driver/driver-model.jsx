@@ -63,7 +63,6 @@ export default function DriverModal({
   }
 
   useEffect(() => {
-    console.log(maxNumber);
     if (initialData) {
       setFormData({
         ...initialData,

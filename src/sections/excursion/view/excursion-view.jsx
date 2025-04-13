@@ -95,7 +95,6 @@ export default function ExcursionPage() {
   }, []);
 
   const handleNewReservation = () => {
-    console.log('click new button');
     setCurrentRow(null); // Clear current row data
     setIsModalOpen(true); // Open modal
   };
@@ -110,7 +109,6 @@ export default function ExcursionPage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };

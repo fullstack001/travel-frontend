@@ -195,11 +195,8 @@ export default function ResaModal({
           }
         }
       });
-      console.log(savedData);
       onSave(savedData);
       onClose();
-    } else {
-      console.log('Form validation failed');
     }
   };
 

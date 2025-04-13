@@ -28,7 +28,6 @@ export default function GuidModal({ open, onClose, onSave, initialData, maxNumbe
   const [newLicense, setNewLicense] = useState('');
 
   useEffect(() => {
-    console.log(maxNumber);
     if (initialData) {
       setFormData({
         ...initialData,

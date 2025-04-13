@@ -85,7 +85,6 @@ export default function ServicePage() {
           alert('Network Error');
         } else {
           setServiceData(res.data);
-          console.log(res.max_num);
           setMaxServicerNo(res.max_num);
         }
       } catch (error) {
@@ -111,7 +110,6 @@ export default function ServicePage() {
   };
 
   const handleModalSave = async (formData) => {
-    console.log(formData);
     const params = {
       newData: formData,
     };
