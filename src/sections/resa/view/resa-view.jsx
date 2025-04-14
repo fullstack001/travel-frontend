@@ -194,52 +194,6 @@ export default function ResaPage() {
     setCurrentEnd(dateStr);
   };
 
-  // useEffect(() => {
-  //   const confirmGetData = async () => {
-  //     if (!current || !currentEnd) {
-  //       const params = {
-  //         filterData: filterName,
-  //         filterOption: searchOption,
-  //         orderKey: order,
-  //         orderDirect: orderBy,
-  //         page: page + 1,
-  //         limit: rowsPerPage,
-  //       };
-  //       const resa = await getResaData(params);
-  //       if (resa.status === 500) {
-  //         alert('Network Error');
-  //       } else {
-  //         setMaxDossierNo(resa.maxDossierNo);
-  //         setResaData(resa.data);
-  //       }
-  //     } else {
-  //       try {
-  //         const data = {
-  //           start: current,
-  //           end: currentEnd,
-  //           filterData: filterName,
-  //           filterOption: searchOption,
-  //           orderKey: order,
-  //           orderDirect: orderBy,
-  //           page: page + 1,
-  //           limit: rowsPerPage,
-  //         };
-  //         const res = await getResaDataWithDate(data);
-  //         if (res === 500) {
-  //           alert('Network Error');
-  //         } else {
-  //           setMaxDossierNo(res.maxDossierNo);
-  //           setResaData(res.data);
-  //         }
-  //       } catch (error) {
-  //         console.error('Error fetching data:', error);
-  //         alert('An unexpected error occurred');
-  //       }
-  //     }
-  //   };
-  //   confirmGetData();
-  // }, [current, currentEnd, page, rowsPerPage, order, orderBy, filterName, searchOption]);
-
   const handlePdf = async () => {
     handleExportPdf(dataFiltered);
   };

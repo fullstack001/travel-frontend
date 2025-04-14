@@ -353,7 +353,7 @@ export default function ResaModal({
                 <DatePicker
                   label="Service Date"
                   name="service_date"
-                  value={dayjs.utc(formData.service_date).tz('Asia/Dubai')}
+                  value={dayjs(formData.service_date)}
                   error={!!errors.service_date}
                   helperText={errors.service_date}
                   onChange={(date) => {
